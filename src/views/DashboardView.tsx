@@ -1,18 +1,19 @@
-import { Link } from "react-router-dom";
+
 
 export default function DashboardView() {
   return (
-    <>
-      <h1 className="text-5xl font-black">Mis Productos</h1>
-      <p className="text-2xl font-light text-gray-500">Maneja y Administra tus productos</p>
+    <div className="container mx-auto mt-10">
+      <div className="bg-white shadow-lg rounded-lg p-6">
+        <div className="mb-8">
+          <h1 className="text-4xl font-black text-gray-800 mb-2">Mis Productos</h1>
+          <p className="text-xl font-light text-gray-500">Maneja y Administra tus productos</p>
+        </div>
 
-        <nav className="my-5">
-                  <Link 
-                    className="bg-purple-400 hover:bg-purple-500 px-10 py-3 text-white text-xl font-bold cursor-pointer transition-colors"
-                    to="/products/create"
-                >Nuevo Producto</Link>
-
-        </nav>
-    </>
+        {/* Aquí puedes agregar una tabla o grid de productos */}
+        <div className="bg-gray-50 p-4 rounded-md">
+          {/* Contenido de productos irá aquí */}
+        </div>
+      </div>
+    </div>
   )
 }
