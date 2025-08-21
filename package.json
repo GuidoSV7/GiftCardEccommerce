@@ -8,8 +8,8 @@
     "server": "json-server --watch db.json --port 3000",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview",
-    "server": "json-server --watch db.json --port 3000"
+    "preview": "vite preview"
+
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.12",
