@@ -58,6 +58,64 @@
                 }
             ]
         }
+
+        ,
+        {
+            "id": 3,
+            "title": "Games",
+            "viewAllLink": "/games",
+            "items": [
+                {
+                    "image": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
+                    "title": "Roblox Digital Gift Card",
+                    "alt": "Roblox"
+                },
+                {
+                    "image": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
+                    "title": "PUBG Mobile",
+                    "alt": "PUBG Mobile"
+                },
+                {
+                    "image": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
+                    "title": "CrossFire",
+                    "alt": "CrossFire"
+                },
+                {
+                    "image": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
+                    "title": "Yareel Gift Cards",
+                    "alt": "Yareel Gift Cards"
+                }
+            ]
+        },
+
+    
+        {
+            "id": 4,
+            "title": "Games",
+            "viewAllLink": "/games",
+            "items": [
+                {
+                    "image": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
+                    "title": "Roblox Digital Gift Card",
+                    "alt": "Roblox"
+                },
+                {
+                    "image": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
+                    "title": "PUBG Mobile",
+                    "alt": "PUBG Mobile"
+                },
+                {
+                    "image": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
+                    "title": "CrossFire",
+                    "alt": "CrossFire"
+                },
+                {
+                    "image": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
+                    "title": "Yareel Gift Cards",
+                    "alt": "Yareel Gift Cards"
+                }
+            ]
+        }
     ],
     "gameCards": [
         {
@@ -346,7 +404,7 @@
         {
             "id": 1,
             "title": "Identity V x Frieren: Beyond Journey's End Lucky Draw",
-            "image": "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=200&fit=crop",
+            "image": "https://images.unsplash.com/photo-1566576912321-d58ddd7a6088?w=400&h=200&fit=crop",
             "category": "gaming"
         },
         {
@@ -358,7 +416,7 @@
         {
             "id": 3,
             "title": "SEA2M is Gauging Interest in Doing a Nintendo Switch 2 Giveaway",
-            "image": "https://images.unsplash.com/photo-1606318313825-2532e54bdd3d?w=400&h=200&fit=crop",
+            "image": "https://images.unsplash.com/photo-1566576912321-d58ddd7a6088?w=400&h=200&fit=crop",
             "category": "news"
         },
         {
@@ -382,7 +440,7 @@
         {
             "id": 7,
             "title": "The Best Nintendo Switch 2 Games that Run at 60fps",
-            "image": "https://images.unsplash.com/photo-1606318313825-2532e54bdd3d?w=400&h=200&fit=crop",
+            "image": "https://images.unsplash.com/photo-1566576912321-d58ddd7a6088?w=400&h=200&fit=crop",
             "category": "gaming"
         },
         {

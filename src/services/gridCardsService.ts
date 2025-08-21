@@ -14,11 +14,11 @@ export interface GridSection {
     items: GridCardItem[];
 }
 
-const API_URL = 'http://localhost:3000';
+const baseURL = import.meta.env.VITE_API_URL;
 
 export const getGridSections = async (): Promise<GridSection[]> => {
     try {
-        const response = await axios.get(`${API_URL}/gridSections`);
+        const response = await axios.get(`${baseURL}/gridSections`);
         return response.data;
     } catch (error) {
         console.error('Error fetching grid sections:', error);

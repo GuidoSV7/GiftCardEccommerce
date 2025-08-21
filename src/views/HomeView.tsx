@@ -4,6 +4,7 @@ import { Carousel } from '../components/carousel/Carousel';
 import { GameSection } from '../components/games/GameSection';
 import { NewsAndPromotions } from '../components/news/NewsAndPromotions';
 import { CardGridSection } from '../components/cards/CardGridSection';
+import { HomeFooter } from '../components/home/HomeFooter';
 import { getOffers } from '../services/offerService';
 import { getCarouselItems } from '../services/carouselService';
 import { getGameCards } from '../services/gameCardService';
@@ -14,6 +15,8 @@ import type { GameCardData } from '../services/gameCardService';
 import type { GridSection } from '../services/gridCardsService';
 import { getNewsAndPromotions } from '../services/newsService';
 import type { NewsItem } from '../services/newsService';
+
+import { HomeHeader } from '../components/home/HomeHeader';
 
 export const HomeView = () => {
     const [offers, setOffers] = useState<Offer[]>([]);
@@ -53,6 +56,7 @@ export const HomeView = () => {
 
     return (
         <div className="min-h-screen">
+            <HomeHeader />
             {/* Dark Section - Carrusel and Offers */}
             <div className="mx-10 md:mx-16 mt-12 bg-gray-900  overflow-hidden">
                 {/* Carrusel Section */}
@@ -129,11 +133,21 @@ export const HomeView = () => {
                     </div>
                 </div>
             ) : (
-                <CardGridSection sections={gridSections} />
+                <div className="px-16 md:px-24 py-6 bg-white">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        {gridSections.map((section, index) => (
+                            <CardGridSection
+                                key={index}
+                                title={section.title}
+                                items={section.items}
+                            />
+                        ))}
+                    </div>
+                </div>
             )}
 
-            /*
-            <div className="bg-white pt-12">
+            
+            <div className="bg-white pt-6">
                 {/* Game Cards Sections */}
                 <div className="px-10 md:px-16 pb-12">
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-12">
@@ -151,9 +165,11 @@ export const HomeView = () => {
                             isLoading={isLoading}
                             error={error}
                         />
+
+                        
                     </div>
                 </div>
-                */
+                
 
                 {/* Noticias & Promociones Section */}
                 <div className="pb-12">
@@ -163,6 +179,9 @@ export const HomeView = () => {
                         error={error}
                     />
                 </div>
+                
+                {/* Footer específico para Home */}
+                <HomeFooter />
             </div>
         </div>
     );
