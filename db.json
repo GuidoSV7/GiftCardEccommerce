@@ -1,0 +1,395 @@
+{
+    "gridSections": [
+        {
+            "id": 1,
+            "title": "Gift Cards",
+            "viewAllLink": "/gift-cards",
+            "items": [
+                {
+                    "image": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
+                    "title": "iTunes Gift Card",
+                    "alt": "iTunes Gift Card",
+                    "bgClass": "bg-gradient-to-br from-purple-400 to-pink-500"
+                },
+                {
+                    "image": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
+                    "title": "Steam Wallet Codes",
+                    "alt": "Steam Wallet Codes",
+                    "bgClass": "bg-gray-900"
+                },
+                {
+                    "image": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
+                    "title": "PlayStation™Store Gift Cards",
+                    "alt": "PlayStation Store Gift Cards",
+                    "bgClass": "bg-blue-600"
+                },
+                {
+                    "image": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
+                    "title": "Google Play Code",
+                    "alt": "Google Play Code",
+                    "bgClass": "bg-gradient-to-r from-green-400 to-blue-500"
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "title": "Games",
+            "viewAllLink": "/games",
+            "items": [
+                {
+                    "image": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
+                    "title": "Roblox Digital Gift Card",
+                    "alt": "Roblox"
+                },
+                {
+                    "image": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
+                    "title": "PUBG Mobile",
+                    "alt": "PUBG Mobile"
+                },
+                {
+                    "image": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
+                    "title": "CrossFire",
+                    "alt": "CrossFire"
+                },
+                {
+                    "image": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
+                    "title": "Yareel Gift Cards",
+                    "alt": "Yareel Gift Cards"
+                }
+            ]
+        }
+    ],
+    "gameCards": [
+        {
+            "id": 1,
+            "title": "PlayStation",
+            "subtitle": "Network Card (HK)",
+            "icon": "https://upload.wikimedia.org/wikipedia/commons/0/00/PlayStation_logo.svg",
+            "category": "tarjeta",
+            "region": "Hong Kong"
+        },
+        {
+            "id": 2,
+            "title": "Free Fire",
+            "subtitle": "Diamonds",
+            "icon": "https://cdn.cloudflare.steamstatic.com/steam/apps/582010/header.jpg",
+            "category": "tarjeta",
+            "region": "Global"
+        },
+        {
+            "id": 3,
+            "title": "PUBG Mobile",
+            "subtitle": "UC",
+            "icon": "https://cdn.cloudflare.steamstatic.com/steam/apps/582010/header.jpg",
+            "category": "tarjeta",
+            "region": "Global"
+        },
+        {
+            "id": 4,
+            "title": "Mobile Legends",
+            "subtitle": "Diamonds",
+            "icon": "https://cdn.cloudflare.steamstatic.com/steam/apps/582010/header.jpg",
+            "category": "recarga",
+            "region": "Global"
+        },
+        {
+            "id": 5,
+            "title": "Age of Empires",
+            "subtitle": "Mobile Top Up",
+            "icon": "https://cdn.cloudflare.steamstatic.com/steam/apps/582010/header.jpg",
+            "category": "recarga",
+            "region": "Global"
+        },
+        {
+            "id": 6,
+            "title": "Cherry Credits",
+            "subtitle": "CC",
+            "icon": "https://cdn.cloudflare.steamstatic.com/steam/apps/582010/header.jpg",
+            "category": "tarjeta",
+            "region": "Global"
+        },
+        {
+            "id": 7,
+            "title": "iTunes Gift Card",
+            "subtitle": "US",
+            "icon": "https://cdn.cloudflare.steamstatic.com/steam/apps/582010/header.jpg",
+            "category": "tarjeta",
+            "region": "United States"
+        },
+        {
+            "id": 8,
+            "title": "iTunes Gift Card",
+            "subtitle": "CN",
+            "icon": "https://cdn.cloudflare.steamstatic.com/steam/apps/582010/header.jpg",
+            "category": "tarjeta",
+            "region": "China"
+        },
+        {
+            "id": 9,
+            "title": "Marvel Strike",
+            "subtitle": "Top Up",
+            "icon": "https://cdn.cloudflare.steamstatic.com/steam/apps/582010/header.jpg",
+            "category": "recarga",
+            "region": "Global"
+        },
+        {
+            "id": 10,
+            "title": "MyCard",
+            "subtitle": "TW",
+            "icon": "https://cdn.cloudflare.steamstatic.com/steam/apps/582010/header.jpg",
+            "category": "tarjeta",
+            "region": "Taiwan"
+        },
+        {
+            "id": 11,
+            "title": "iTunes Gift Card",
+            "subtitle": "JP",
+            "icon": "https://cdn.cloudflare.steamstatic.com/steam/apps/582010/header.jpg",
+            "category": "tarjeta",
+            "region": "Japan"
+        },
+        {
+            "id": 12,
+            "title": "PlayStation",
+            "subtitle": "Network Card (US)",
+            "icon": "https://upload.wikimedia.org/wikipedia/commons/0/00/PlayStation_logo.svg",
+            "category": "tarjeta",
+            "region": "United States"
+        },
+        {
+            "id": 13,
+            "title": "Identity V",
+            "subtitle": "Echoes",
+            "icon": "https://cdn.cloudflare.steamstatic.com/steam/apps/582010/header.jpg",
+            "category": "recarga",
+            "region": "Global"
+        },
+        {
+            "id": 14,
+            "title": "BIGO Live",
+            "subtitle": "Diamonds",
+            "icon": "https://cdn.cloudflare.steamstatic.com/steam/apps/582010/header.jpg",
+            "category": "recarga",
+            "region": "Global"
+        },
+        {
+            "id": 15,
+            "title": "Honkai: Star Rail",
+            "subtitle": "Top Up",
+            "icon": "https://cdn.cloudflare.steamstatic.com/steam/apps/582010/header.jpg",
+            "category": "recarga",
+            "region": "Global"
+        },
+        {
+            "id": 16,
+            "title": "Honor of Kings",
+            "subtitle": "Tokens & Packages",
+            "icon": "https://cdn.cloudflare.steamstatic.com/steam/apps/582010/header.jpg",
+            "category": "recarga",
+            "region": "Global"
+        },
+        {
+            "id": 17,
+            "title": "TikTok",
+            "subtitle": "Diamonds (Douyin)",
+            "icon": "https://cdn.cloudflare.steamstatic.com/steam/apps/582010/header.jpg",
+            "category": "recarga",
+            "region": "China"
+        },
+        {
+            "id": 2,
+            "title": "Free Fire Diamonds",
+            "subtitle": "Pins (Garena)",
+            "icon": "https://play-lh.googleusercontent.com/ClAOLcaXz-7JsrJKHJl-r8-QhHSfk_3KvWCu7KGlZ9Q",
+            "category": "Free Fire",
+            "region": "Global"
+        },
+        {
+            "id": 3,
+            "title": "PUBG Mobile UC",
+            "subtitle": "Redeem Code...",
+            "icon": "https://play-lh.googleusercontent.com/JRd05pyBH41qjgsJuWduRJpDeZG0Hnb0yjf2nWqO7VaGKL_5uLafLQDeQ8itibQqpog",
+            "category": "PUBG",
+            "region": "Global"
+        },
+        {
+            "id": 4,
+            "title": "Cherry Credits CC",
+            "subtitle": "Malaysia",
+            "icon": "https://www.cherrycredits.com/favicon.ico",
+            "category": "Cherry Credits",
+            "region": "Malaysia"
+        },
+        {
+            "id": 5,
+            "title": "iTunes Gift Card",
+            "subtitle": "(US)",
+            "icon": "https://developer.apple.com/assets/elements/icons/app-store/app-store-96x96_2x.png",
+            "category": "iTunes",
+            "region": "United States"
+        },
+        {
+            "id": 6,
+            "title": "iTunes Gift Card",
+            "subtitle": "(CN)",
+            "icon": "https://developer.apple.com/assets/elements/icons/app-store/app-store-96x96_2x.png",
+            "category": "iTunes",
+            "region": "China"
+        },
+        {
+            "id": 7,
+            "title": "MyCard (TW)",
+            "subtitle": "Taiwan",
+            "icon": "https://www.mycard520.com.tw/favicon.ico",
+            "category": "MyCard",
+            "region": "Taiwan"
+        },
+        {
+            "id": 8,
+            "title": "iTunes Gift Card",
+            "subtitle": "(JP)",
+            "icon": "https://developer.apple.com/assets/elements/icons/app-store/app-store-96x96_2x.png",
+            "category": "iTunes",
+            "region": "Japan"
+        },
+        {
+            "id": 9,
+            "title": "PlayStation",
+            "subtitle": "Network Card (US)",
+            "icon": "https://upload.wikimedia.org/wikipedia/commons/0/00/PlayStation_logo.svg",
+            "category": "PlayStation",
+            "region": "United States"
+        }
+    ],
+    "carousel": [
+        {
+            "id": 1,
+            "image": "https://images.unsplash.com/photo-1511512578047-dfb367046420?w=800&h=300&fit=crop",
+            "title": "HONOR OF KINGS × コナン COLLAB SKIN!",
+            "subtitle": "UP TO 18% OFF",
+            "brand": "S54CM"
+        },
+        {
+            "id": 2,
+            "image": "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=800&h=300&fit=crop",
+            "title": "SPECIAL GAMING OFFER",
+            "subtitle": "LIMITED TIME DEAL",
+            "brand": "GAMING"
+        },
+        {
+            "id": 3,
+            "image": "https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=800&h=300&fit=crop",
+            "title": "EXCLUSIVE REWARDS",
+            "subtitle": "GET BONUS ITEMS",
+            "brand": "BONUS"
+        }
+    ],
+    "offers": [
+        {
+            "id": 1,
+            "image": "https://www.trecebits.com/wp-content/uploads/2020/05/google-juegos-trucos.jpg",
+            "price": "6252 Diamonds + 1250...",
+            "title": "Mobile Legends Diamonds",
+            "discount": "-18.0%"
+        },
+        {
+            "id": 2,
+            "image": "https://cdn.cloudflare.steamstatic.com/steam/apps/582010/header.jpg",
+            "price": "PSN Card 60 EURO IT",
+            "title": "PlayStation Network Card (IT)",
+            "discount": "-3.0%"
+        },
+        {
+            "id": 3,
+            "image": "https://cdn.cloudflare.steamstatic.com/steam/apps/1085660/header.jpg",
+            "price": "Starfield Standard Edit...",
+            "title": "Starfield (Global)",
+            "discount": "-5.0%"
+        },
+        {
+            "id": 4,
+            "image": "https://www.trecebits.com/wp-content/uploads/2020/05/google-juegos-trucos.jpg",
+            "price": "6279 Diamonds",
+            "title": "Garena Speed Drifter Diamonds",
+            "discount": "-4.0%"
+        },
+        {
+            "id": 5,
+            "image": "https://cdn.cloudflare.steamstatic.com/steam/apps/582010/header.jpg",
+            "price": "Monster Hunter Wilds...",
+            "title": "Monster Hunter Wilds Steam C...",
+            "discount": "-7.0%"
+        },
+        {
+            "id": 6,
+            "image": "https://cdn.cloudflare.steamstatic.com/steam/apps/582010/header.jpg",
+            "price": "Monster Hunter Wilds...",
+            "title": "Monster Hunter Wilds Steam C...",
+            "discount": "-25.0%"
+        },
+        {
+            "id": 7,
+            "image": "https://www.trecebits.com/wp-content/uploads/2020/05/google-juegos-trucos.jpg",
+            "price": "690 + 69 Extra Echoes",
+            "title": "Identity V Echoes (Global) Top...",
+            "discount": "-17.0%"
+        },
+        {
+            "id": 8,
+            "image": "https://www.trecebits.com/wp-content/uploads/2020/05/google-juegos-trucos.jpg",
+            "price": "28,000,000 Coins",
+            "title": "Poppo Live Coins",
+            "discount": "-24.0%"
+        }
+    ],
+    "newsAndPromotions": [
+        {
+            "id": 1,
+            "title": "Identity V x Frieren: Beyond Journey's End Lucky Draw",
+            "image": "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=200&fit=crop",
+            "category": "gaming"
+        },
+        {
+            "id": 2,
+            "title": "Enjoy 30% off Diamonds with MLBB's Metro Zero Update!",
+            "image": "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=400&h=200&fit=crop",
+            "category": "promotion"
+        },
+        {
+            "id": 3,
+            "title": "SEA2M is Gauging Interest in Doing a Nintendo Switch 2 Giveaway",
+            "image": "https://images.unsplash.com/photo-1606318313825-2532e54bdd3d?w=400&h=200&fit=crop",
+            "category": "news"
+        },
+        {
+            "id": 4,
+            "title": "Nintendo Super Mario Party Jamboree is Out on Switch 2!",
+            "image": "https://images.unsplash.com/photo-1566576912321-d58ddd7a6088?w=400&h=200&fit=crop",
+            "category": "gaming"
+        },
+        {
+            "id": 5,
+            "title": "Silver and Blood - The Gothic Vampire Real-Time Strategy RPG",
+            "image": "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=200&fit=crop",
+            "category": "gaming"
+        },
+        {
+            "id": 6,
+            "title": "Remamento: White Shadow - an open-world strategy RPG",
+            "image": "https://images.unsplash.com/photo-1511512578047-dfb367046420?w=400&h=200&fit=crop",
+            "category": "gaming"
+        },
+        {
+            "id": 7,
+            "title": "The Best Nintendo Switch 2 Games that Run at 60fps",
+            "image": "https://images.unsplash.com/photo-1606318313825-2532e54bdd3d?w=400&h=200&fit=crop",
+            "category": "gaming"
+        },
+        {
+            "id": 8,
+            "title": "Crystal of Atlan Giveaway is Coming your Way!",
+            "image": "https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=400&h=200&fit=crop",
+            "category": "giveaway"
+        }
+    ]
+}
