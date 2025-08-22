@@ -36,10 +36,10 @@ export const Carousel: React.FC<CarouselProps> = ({ items }) => {
     return (
         <div className="relative w-full h-64 md:h-80 lg:h-96 mb-8">
             <div className="absolute inset-0 flex justify-center items-center">
-                <div className="w-[90%] h-full relative">
-                    {/* Slides laterales */}
+                <div className="w-[95%] md:w-[90%] h-full relative">
+                    {/* Slides laterales - solo visibles en desktop */}
                     <div
-                        className="absolute left-0 w-[20%] h-[90%] top-[5%] opacity-30 overflow-hidden rounded-lg"
+                        className="hidden md:block absolute left-0 w-[20%] h-[90%] top-[5%] opacity-30 overflow-hidden rounded-lg"
                         style={{
                             backgroundImage: `url(${items[getPrevIndex()].image})`,
                             backgroundSize: 'cover',
@@ -48,7 +48,7 @@ export const Carousel: React.FC<CarouselProps> = ({ items }) => {
                         }}
                     />
                     <div
-                        className="absolute right-0 w-[20%] h-[90%] top-[5%] opacity-30 overflow-hidden rounded-lg"
+                        className="hidden md:block absolute right-0 w-[20%] h-[90%] top-[5%] opacity-30 overflow-hidden rounded-lg"
                         style={{
                             backgroundImage: `url(${items[getNextIndex()].image})`,
                             backgroundSize: 'cover',
@@ -58,7 +58,7 @@ export const Carousel: React.FC<CarouselProps> = ({ items }) => {
                     />
 
                     {/* Slide principal */}
-                    <div className="absolute left-[20%] w-[60%] h-full">
+                    <div className="absolute w-full md:left-[20%] md:w-[60%] h-full">
                         <div className="w-full h-full overflow-hidden rounded-xl shadow-lg">
                             <div 
                                 className="flex transition-transform duration-1000 ease-in-out h-full"
@@ -98,7 +98,7 @@ export const Carousel: React.FC<CarouselProps> = ({ items }) => {
                     {/* Botones de navegación */}
                     <button 
                         onClick={prevSlide}
-                        className="absolute left-[18%] top-1/2 transform -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-colors z-10"
+                        className="absolute left-2 md:left-[18%] top-1/2 transform -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-colors z-10"
                         aria-label="Slide anterior"
                     >
                         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -108,7 +108,7 @@ export const Carousel: React.FC<CarouselProps> = ({ items }) => {
                     
                     <button 
                         onClick={nextSlide}
-                        className="absolute right-[18%] top-1/2 transform -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-colors z-10"
+                        className="absolute right-2 md:right-[18%] top-1/2 transform -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-colors z-10"
                         aria-label="Siguiente slide"
                     >
                         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
