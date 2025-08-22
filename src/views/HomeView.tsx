@@ -14,9 +14,10 @@ import type { CarouselItem } from '../services/carouselService';
 import type { GameCardData } from '../services/gameCardService';
 import type { GridSection } from '../services/gridCardsService';
 import { getNewsAndPromotions } from '../services/newsService';
+import HomeHeader from '../components/home/HomeHeader';
 
 
-import { HomeHeader } from '../components/home/HomeHeader';
+
 
 export const HomeView = () => {
     const [offers, setOffers] = useState<Offer[]>([]);
@@ -58,7 +59,7 @@ export const HomeView = () => {
         <div className="min-h-screen bg-gradient-to-b from-gray-700 via-gray-800 to-gray-900">
             <HomeHeader />
             {/* Carousel and Offers Section */}
-            <div className="w-full pt-16">
+            <div className="w-full pt-24">
                 {/* Carousel Section */}
                 <div className="w-full">
                     <div className="container mx-auto px-6 sm:px-12 md:px-16 lg:px-24 xl:px-32">
