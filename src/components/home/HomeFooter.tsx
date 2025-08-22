@@ -1,18 +1,84 @@
+import { useState } from 'react';
+
 export const HomeFooter = () => {
+    const [openSection, setOpenSection] = useState<string | null>(null);
+
+    const toggleSection = (section: string) => {
+        setOpenSection(openSection === section ? null : section);
+    };
+
     return (
-        <footer className="bg-[#080b14] text-gray-300 py-12">
-            <div className="container mx-auto px-6 sm:px-12 md:px-16 lg:px-24 xl:px-32">
+        <footer className="bg-[#080b14] text-gray-300 py-8 md:py-12">
+            <div className="container mx-auto px-4 md:px-6 lg:px-8">
                 {/* Métodos de pago */}
-                <div className="flex flex-wrap gap-4 mb-12">
-                    <img src="https://www.shutterstock.com/image-illustration/paypal-logo-on-transparent-background-260nw-2311643717.jpg" alt="PayPal" className="h-8" />
-                    <img src="https://cdn.visa.com/v2/assets/images/logos/visa/blue/logo.png" alt="Visa" className="h-8" />
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/b/b7/MasterCard_Logo.svg" alt="Mastercard" className="h-8" />
-                    <img src="https://www.cryptocompare.com/media/37746251/btc.png" alt="Bitcoin" className="h-8" />
-                    <img src="https://webshoptiger.com/wp-content/uploads/2023/09/American-Express-Color.png" alt="American Express" className="h-8" />
+                <div className="grid grid-cols-3 md:flex md:flex-wrap gap-4 mb-8 md:mb-12">
+                    <img src="https://www.paypalobjects.com/webstatic/mktg/Logo/pp-logo-100px.png" alt="PayPal" className="h-6 md:h-8 object-contain" />
+                    <img src="https://brand.mastercard.com/content/dam/mccom/brand-center/brand-mark/assets/MC_Symbol_Opt_Pos_RGB_SVG.svg" alt="Mastercard" className="h-6 md:h-8 object-contain" />
+                    <img src="https://www.cryptocompare.com/media/37746251/btc.png" alt="Bitcoin" className="h-6 md:h-8 object-contain" />
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/Apple_Pay_logo.svg/2560px-Apple_Pay_logo.svg.png" alt="Apple Pay" className="h-6 md:h-8 object-contain" />
+                    <img src="https://cdn.visa.com/v2/assets/images/logos/visa/blue/logo.png" alt="Visa" className="h-6 md:h-8 object-contain" />
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/American_Express_logo_%282018%29.svg/1200px-American_Express_logo_%282018%29.svg.png" alt="American Express" className="h-6 md:h-8 object-contain" />
                 </div>
 
-                {/* Enlaces y redes sociales */}
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+                {/* Enlaces y redes sociales - Vista Móvil */}
+                <div className="md:hidden space-y-4 mb-8">
+                    {/* Acerca de GiftCard */}
+                    <div className="border-b border-gray-800">
+                        <button 
+                            className="w-full py-4 flex justify-between items-center text-left"
+                            onClick={() => toggleSection('about')}
+                        >
+                            <span className="text-white font-semibold">Acerca de GiftCard</span>
+                            <span className="text-xl">{openSection === 'about' ? '-' : '+'}</span>
+                        </button>
+                        {openSection === 'about' && (
+                            <ul className="space-y-2 py-4">
+                                <li><a href="#" className="block hover:text-white transition-colors">Acerca de Nosotros</a></li>
+                                <li><a href="#" className="block hover:text-white transition-colors">Noticias GiftCard</a></li>
+                                <li><a href="#" className="block hover:text-white transition-colors">Apoyo</a></li>
+                                <li><a href="#" className="block hover:text-white transition-colors">Contáctanos</a></li>
+                            </ul>
+                        )}
+                    </div>
+
+                    {/* Legal */}
+                    <div className="border-b border-gray-800">
+                        <button 
+                            className="w-full py-4 flex justify-between items-center text-left"
+                            onClick={() => toggleSection('legal')}
+                        >
+                            <span className="text-white font-semibold">Legal</span>
+                            <span className="text-xl">{openSection === 'legal' ? '-' : '+'}</span>
+                        </button>
+                        {openSection === 'legal' && (
+                            <ul className="space-y-2 py-4">
+                                <li><a href="#" className="block hover:text-white transition-colors">Términos de uso</a></li>
+                                <li><a href="#" className="block hover:text-white transition-colors">Términos de venta</a></li>
+                                <li><a href="#" className="block hover:text-white transition-colors">Política de privacidad</a></li>
+                                <li><a href="#" className="block hover:text-white transition-colors">Política de Contenido Prohibido</a></li>
+                            </ul>
+                        )}
+                    </div>
+
+                    {/* Socios */}
+                    <div className="border-b border-gray-800">
+                        <button 
+                            className="w-full py-4 flex justify-between items-center text-left"
+                            onClick={() => toggleSection('partners')}
+                        >
+                            <span className="text-white font-semibold">Socios</span>
+                            <span className="text-xl">{openSection === 'partners' ? '-' : '+'}</span>
+                        </button>
+                        {openSection === 'partners' && (
+                            <ul className="space-y-2 py-4">
+                                <li><a href="#" className="block hover:text-white transition-colors">Asociación socio de negocios</a></li>
+                            </ul>
+                        )}
+                    </div>
+                </div>
+
+                {/* Enlaces y redes sociales - Vista Desktop */}
+                <div className="hidden md:grid md:grid-cols-4 gap-8 mb-12">
                     {/* Acerca de GiftCard */}
                     <div>
                         <h3 className="text-white font-semibold mb-4">Acerca de GiftCard</h3>
@@ -46,7 +112,7 @@ export const HomeFooter = () => {
                     {/* Mantente actualizado */}
                     <div>
                         <h3 className="text-white font-semibold mb-4">Mantente actualizado con nosotros</h3>
-                        <div className="flex gap-4">
+                        <div className="flex gap-4 items-center">
                             <a href="#" className="text-gray-400 hover:text-white transition-colors">
                                 <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
                                     <path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"/>
@@ -77,7 +143,7 @@ export const HomeFooter = () => {
                 </div>
 
                 {/* Copyright */}
-                <div className="pt-8 border-t border-gray-800 flex items-center justify-between">
+                <div className="pt-8 border-t border-gray-800 text-center space-y-4">
                     <div className="text-2xl font-bold text-white">
                         GiftCard
                     </div>
