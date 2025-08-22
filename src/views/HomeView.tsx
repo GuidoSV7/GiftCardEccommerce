@@ -61,7 +61,7 @@ export const HomeView = () => {
             <div className="w-full pt-16">
                 {/* Carousel Section */}
                 <div className="w-full">
-                    <div className="container mx-auto px-0">
+                    <div className="container mx-auto px-6 sm:px-12 md:px-16 lg:px-24 xl:px-32">
                         {!isLoading && !error && <Carousel items={carouselItems} />}
                         {isLoading && (
                             <div className="relative w-full h-64 md:h-80 lg:h-96 overflow-hidden mb-8 bg-gray-800">
@@ -74,7 +74,7 @@ export const HomeView = () => {
                 </div>
 
                 {/* Ofertas Section */}
-                <div className="container mx-auto px-4 sm:px-8 md:px-10 pb-8">
+                <div className="container mx-auto px-6 sm:px-12 md:px-16 lg:px-24 xl:px-32 pb-8">
                     {/* Header Section */}
                     <div className="flex justify-between items-center mb-6">
                         <div>
@@ -135,7 +135,7 @@ export const HomeView = () => {
                     </div>
                 </div>
             ) : (
-                <div className="px-16 md:px-24 py-6">
+                <div className="container mx-auto px-6 sm:px-12 md:px-16 lg:px-24 xl:px-32 py-6">
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                         {gridSections.map((section, index) => (
                             <CardGridSection
@@ -151,7 +151,7 @@ export const HomeView = () => {
             
             <div className="pt-6">
                 {/* Game Cards Sections */}
-                <div className="px-10 md:px-16 pb-12">
+                <div className="container mx-auto px-6 sm:px-12 md:px-16 lg:px-24 xl:px-32 pb-12">
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-12">
                         <GameSection
                             title="TARJETA DE JUEGO POPULAR"

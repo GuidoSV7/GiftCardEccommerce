@@ -47,7 +47,7 @@ export const GameSection = ({ title, games, isLoading, error }: GameSectionProps
             )}
 
             {!isLoading && !error && (
-                <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-[1px] bg-white/5">
+                <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3">
                     {games.map((game) => (
                         <GameCard
                             key={game.id}

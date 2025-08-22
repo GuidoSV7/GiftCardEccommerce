@@ -16,4 +16,9 @@
   .animate-gradient {
     animation: gradient 15s ease infinite;
   }
+
+  .perspective {
+    perspective: 1000px;
+    transform-style: preserve-3d;
+  }
 }
