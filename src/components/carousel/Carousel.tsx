@@ -15,11 +15,11 @@ interface CarouselProps {
 export const Carousel = ({ items }: CarouselProps) => {
     const [currentSlide, setCurrentSlide] = useState(0);
 
-    // Auto-slide cada 5 segundos
+    // Auto-slide cada 8 segundos
     useEffect(() => {
         const timer = setInterval(() => {
             setCurrentSlide((prev) => (prev + 1) % items.length);
-        }, 5000);
+        }, 8000);
         return () => clearInterval(timer);
     }, [items.length]);
 
@@ -35,29 +35,31 @@ export const Carousel = ({ items }: CarouselProps) => {
         <div className="relative w-full h-64 md:h-80 lg:h-96 rounded-xl overflow-hidden mb-8">
             {/* Slides */}
             <div 
-                className="flex transition-transform duration-500 ease-in-out h-full"
+                className="flex transition-transform duration-1000 ease-in-out h-full"
                 style={{ transform: `translateX(-${currentSlide * 100}%)` }}
             >
-                {items.map((slide) => (
-                    <div key={slide.id} className="w-full h-full flex-shrink-0 relative">
+                {items.map((slide, index) => (
+                    <div key={slide.id} className="w-full h-full flex-shrink-0 relative overflow-hidden group">
                         <img 
                             src={slide.image}
                             alt={slide.title}
-                            className="w-full h-full object-cover"
+                            className={`w-full h-full object-cover transform transition-transform duration-[8000ms] ease-linear ${
+                                currentSlide === index ? 'scale-110' : 'scale-100'
+                            }`}
                         />
                         {/* Overlay con gradiente */}
-                        <div className="absolute inset-0 bg-gradient-to-r from-black/60 to-transparent"></div>
+                        <div className="absolute inset-0 bg-gradient-to-r from-black/60 to-transparent opacity-80 transition-opacity duration-500 group-hover:opacity-70"></div>
                         
                         {/* Contenido del slide */}
-                        <div className="absolute top-4 right-4 bg-black/50 text-white px-3 py-1 rounded text-sm font-bold">
+                        <div className="absolute top-4 right-4 bg-black/50 backdrop-blur-sm text-white px-3 py-1 rounded-lg text-sm font-bold transform transition-transform duration-500 translate-y-0 group-hover:translate-y-1">
                             {slide.brand}
                         </div>
                         
-                        <div className="absolute bottom-6 left-6 text-white">
+                        <div className="absolute bottom-6 left-6 text-white transform transition-all duration-500 translate-y-0 group-hover:translate-y-[-4px]">
                             <h3 className="text-2xl md:text-3xl font-bold mb-2 drop-shadow-lg">
                                 {slide.title}
                             </h3>
-                            <p className="text-lg md:text-xl font-semibold text-blue-300 drop-shadow-lg">
+                            <p className="text-lg md:text-xl font-semibold text-blue-300 drop-shadow-lg opacity-90 group-hover:opacity-100">
                                 {slide.subtitle}
                             </p>
                         </div>

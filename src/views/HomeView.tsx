@@ -2,7 +2,7 @@ import { OfferCard } from '../components/offers/OfferCard';
 import { useState, useEffect } from 'react';
 import { Carousel } from '../components/carousel/Carousel';
 import { GameSection } from '../components/games/GameSection';
-import { NewsAndPromotions } from '../components/news/NewsAndPromotions';
+
 import { CardGridSection } from '../components/cards/CardGridSection';
 import { HomeFooter } from '../components/home/HomeFooter';
 import { getOffers } from '../services/offerService';
@@ -23,7 +23,7 @@ export const HomeView = () => {
     const [carouselItems, setCarouselItems] = useState<CarouselItem[]>([]);
     const [gameCards, setGameCards] = useState<GameCardData[]>([]);
     const [gridSections, setGridSections] = useState<GridSection[]>([]);
-    const [newsAndPromotions, setNewsAndPromotions] = useState<NewsItem[]>([]);
+
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
@@ -41,7 +41,7 @@ export const HomeView = () => {
                 setCarouselItems(carouselData);
                 setGameCards(gameCardsData);
                 setGridSections(gridSectionsData);
-                setNewsAndPromotions(newsData);
+
                 setError(null);
             } catch (e) {
                 setError('Error al cargar los datos');
@@ -55,24 +55,26 @@ export const HomeView = () => {
     }, []);
 
     return (
-        <div className="min-h-screen">
+        <div className="min-h-screen bg-gradient-to-b from-gray-700 via-gray-800 to-gray-900">
             <HomeHeader />
-            {/* Dark Section - Carrusel and Offers */}
-            <div className="mx-10 md:mx-16 mt-12 bg-gray-900  overflow-hidden">
-                {/* Carrusel Section */}
-                <div className="px-8 md:px-10 pt-8">
-                    {!isLoading && !error && <Carousel items={carouselItems} />}
-                    {isLoading && (
-                        <div className="relative w-full h-64 md:h-80 lg:h-96 rounded-xl overflow-hidden mb-8 bg-gray-800">
-                            <div className="flex items-center justify-center h-full">
-                                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white"></div>
+            {/* Carousel and Offers Section */}
+            <div className="w-full pt-16">
+                {/* Carousel Section */}
+                <div className="w-full">
+                    <div className="container mx-auto px-0">
+                        {!isLoading && !error && <Carousel items={carouselItems} />}
+                        {isLoading && (
+                            <div className="relative w-full h-64 md:h-80 lg:h-96 overflow-hidden mb-8 bg-gray-800">
+                                <div className="flex items-center justify-center h-full">
+                                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white"></div>
+                                </div>
                             </div>
-                        </div>
-                    )}
+                        )}
+                    </div>
                 </div>
 
                 {/* Ofertas Section */}
-                <div className="px-8 md:px-10 pb-8">
+                <div className="container mx-auto px-4 sm:px-8 md:px-10 pb-8">
                     {/* Header Section */}
                     <div className="flex justify-between items-center mb-6">
                         <div>
@@ -121,19 +123,19 @@ export const HomeView = () => {
 
             {/* Cards Grid Sections */}
             {isLoading ? (
-                <div className="px-10 md:px-16 py-12 bg-white">
+                <div className="px-10 md:px-16 py-12">
                     <div className="flex items-center justify-center">
-                        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900"></div>
+                        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white"></div>
                     </div>
                 </div>
             ) : error ? (
-                <div className="px-10 md:px-16 py-12 bg-white">
+                <div className="px-10 md:px-16 py-12">
                     <div className="text-center text-red-500">
                         {error}
                     </div>
                 </div>
             ) : (
-                <div className="px-16 md:px-24 py-6 bg-white">
+                <div className="px-16 md:px-24 py-6">
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                         {gridSections.map((section, index) => (
                             <CardGridSection
@@ -147,7 +149,7 @@ export const HomeView = () => {
             )}
 
             
-            <div className="bg-white pt-6">
+            <div className="pt-6">
                 {/* Game Cards Sections */}
                 <div className="px-10 md:px-16 pb-12">
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-12">
@@ -171,15 +173,7 @@ export const HomeView = () => {
                 </div>
                 
 
-                {/* Noticias & Promociones Section */}
-                <div className="pb-12">
-                    <NewsAndPromotions
-                        news={newsAndPromotions}
-                        isLoading={isLoading}
-                        error={error}
-                    />
-                </div>
-                
+
                 {/* Footer específico para Home */}
                 <HomeFooter />
             </div>
