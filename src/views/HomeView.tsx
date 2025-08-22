@@ -14,7 +14,7 @@ import type { CarouselItem } from '../services/carouselService';
 import type { GameCardData } from '../services/gameCardService';
 import type { GridSection } from '../services/gridCardsService';
 import { getNewsAndPromotions } from '../services/newsService';
-import type { NewsItem } from '../services/newsService';
+
 
 import { HomeHeader } from '../components/home/HomeHeader';
 
@@ -30,7 +30,7 @@ export const HomeView = () => {
     useEffect(() => {
         const loadData = async () => {
             try {
-                const [offersData, carouselData, gameCardsData, gridSectionsData, newsData] = await Promise.all([
+                const [offersData, carouselData, gameCardsData, gridSectionsData] = await Promise.all([
                     getOffers(),
                     getCarouselItems(),
                     getGameCards(),
