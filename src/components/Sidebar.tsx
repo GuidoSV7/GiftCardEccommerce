@@ -11,7 +11,7 @@ export default function Sidebar() {
           {/* Dashboard */}
           <li>
             <Link
-              to="/"
+              to="/dashboard"
               className="flex items-center hover:bg-gray-700 rounded-lg p-3 transition-colors duration-200"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
