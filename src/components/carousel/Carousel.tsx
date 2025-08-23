@@ -14,6 +14,8 @@ interface CarouselProps {
 
 export const Carousel: React.FC<CarouselProps> = ({ items }) => {
     const [currentSlide, setCurrentSlide] = useState(0);
+    const [touchStart, setTouchStart] = useState<number>(0);
+    const [touchEnd, setTouchEnd] = useState<number>(0);
 
     useEffect(() => {
         const timer = setInterval(() => {
@@ -21,6 +23,31 @@ export const Carousel: React.FC<CarouselProps> = ({ items }) => {
         }, 8000);
         return () => clearInterval(timer);
     }, [items.length]);
+
+    const handleTouchStart = (e: React.TouchEvent) => {
+        setTouchStart(e.targetTouches[0].clientX);
+    };
+
+    const handleTouchMove = (e: React.TouchEvent) => {
+        setTouchEnd(e.targetTouches[0].clientX);
+    };
+
+    const handleTouchEnd = () => {
+        if (!touchStart || !touchEnd) return;
+        const distance = touchStart - touchEnd;
+        const isLeftSwipe = distance > 50;
+        const isRightSwipe = distance < -50;
+
+        if (isLeftSwipe) {
+            setCurrentSlide((prev) => (prev + 1) % items.length);
+        }
+        if (isRightSwipe) {
+            setCurrentSlide((prev) => (prev - 1 + items.length) % items.length);
+        }
+
+        setTouchStart(0);
+        setTouchEnd(0);
+    };
 
     const nextSlide = () => {
         setCurrentSlide((prev) => (prev + 1) % items.length);
@@ -34,7 +61,7 @@ export const Carousel: React.FC<CarouselProps> = ({ items }) => {
     const getNextIndex = () => (currentSlide + 1) % items.length;
 
     return (
-        <div className="relative w-full h-64 md:h-80 lg:h-96 mb-8">
+        <div className="relative w-full aspect-square md:h-80 lg:h-96 mb-4 md:mb-8">
             <div className="absolute inset-0 flex justify-center items-center">
                 <div className="w-full h-full relative">
                     {/* Slides laterales - solo visibles en desktop */}
@@ -58,11 +85,14 @@ export const Carousel: React.FC<CarouselProps> = ({ items }) => {
                     />
 
                     {/* Slide principal */}
-                    <div className="absolute w-[92%] left-[4%] md:w-[94%] md:left-[3%] lg:w-[70%] lg:left-[15%] h-[95%] top-[2.5%]">
-                        <div className="w-full h-full overflow-hidden rounded-xl shadow-lg">
+                    <div className="absolute w-full md:w-[94%] md:left-[3%] lg:w-[70%] lg:left-[15%] h-full md:h-[95%] md:top-[2.5%]">
+                        <div className="w-full h-full overflow-hidden rounded-lg md:rounded-xl shadow-lg">
                             <div 
                                 className="flex transition-transform duration-1000 ease-in-out h-full"
                                 style={{ transform: `translateX(-${currentSlide * 100}%)` }}
+                                onTouchStart={handleTouchStart}
+                                onTouchMove={handleTouchMove}
+                                onTouchEnd={handleTouchEnd}
                             >
                                 {items.map((slide, index) => (
                                     <div key={slide.id} className="w-full h-full flex-shrink-0 relative overflow-hidden">
@@ -95,10 +125,10 @@ export const Carousel: React.FC<CarouselProps> = ({ items }) => {
                         </div>
                     </div>
 
-                    {/* Botones de navegación */}
+                    {/* Botones de navegación - ocultos en móvil */}
                     <button 
                         onClick={prevSlide}
-                        className="absolute left-[1%] md:left-[1.5%] lg:left-[15%] top-1/2 transform -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-colors z-10"
+                        className="hidden md:block absolute left-[1.5%] lg:left-[15%] top-1/2 transform -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-colors z-10"
                         aria-label="Slide anterior"
                     >
                         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -108,7 +138,7 @@ export const Carousel: React.FC<CarouselProps> = ({ items }) => {
                     
                     <button 
                         onClick={nextSlide}
-                        className="absolute right-[1%] md:right-[1.5%] lg:right-[15%] top-1/2 transform -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-colors z-10"
+                        className="hidden md:block absolute right-[1.5%] lg:right-[15%] top-1/2 transform -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-colors z-10"
                         aria-label="Siguiente slide"
                     >
                         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -117,7 +147,7 @@ export const Carousel: React.FC<CarouselProps> = ({ items }) => {
                     </button>
 
                     {/* Indicadores */}
-                    <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2 z-10">
+                    <div className="absolute bottom-2 md:bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2 z-10">
                         {items.map((_, index) => (
                             <button
                                 key={index}

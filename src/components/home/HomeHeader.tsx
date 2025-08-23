@@ -27,7 +27,7 @@ export default function HomeHeader() {
         />
       )}
 
-      <div className="container mx-auto px-4">
+      <div className="max-w-[1920px] mx-auto px-6 sm:px-12 md:px-16 lg:px-24 xl:px-32">
         {/* Vista Móvil */}
         <div className="md:hidden z-50 relative">
           <div className="flex items-center justify-between">

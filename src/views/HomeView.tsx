@@ -59,7 +59,7 @@ export const HomeView = () => {
         <div style={{fontFamily: 'Manrope, Arial, system-ui, sans-serif'}} className="min-h-screen bg-gradient-to-b from-gray-700 via-gray-800 to-gray-900">
             <HomeHeader />
             {/* Carousel and Offers Section */}
-            <div className="w-full pt-24">
+            <div className="w-full pt-20 md:pt-24">
                 {/* Carousel Section */}
                 <div className="w-full">
                     <div className="container mx-auto px-6 sm:px-12 md:px-16 lg:px-24 xl:px-32">
@@ -105,9 +105,24 @@ export const HomeView = () => {
                         </div>
                     )}
 
-                    {/* Grid de Ofertas */}
+                    {/* Carrusel de Ofertas en móvil, grid en desktop */}
                     {!isLoading && !error && (
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <>
+                        {/* Carrusel horizontal solo en móvil */}
+                        <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory sm:hidden pb-2 -mx-2 px-2">
+                            {offers.map((offer) => (
+                                <div key={offer.id} className="min-w-0 w-full max-w-xs snap-center flex-shrink-0">
+                                    <OfferCard
+                                        image={offer.image}
+                                        price={offer.price}
+                                        title={offer.title}
+                                        discount={offer.discount}
+                                    />
+                                </div>
+                            ))}
+                        </div>
+                        {/* Grid en tablet y desktop */}
+                        <div className="hidden sm:grid grid-cols-2 lg:grid-cols-4 gap-4">
                             {offers.map((offer) => (
                                 <OfferCard
                                     key={offer.id}
@@ -118,6 +133,7 @@ export const HomeView = () => {
                                 />
                             ))}
                         </div>
+                        </>
                     )}
                 </div>
             </div>

@@ -18,7 +18,7 @@ export const CardGridSection: React.FC<CardGridSectionProps> = ({ title, items, 
     return (
         <div className={`flex-1 bg-white/4 backdrop-blur-sm rounded-xl shadow-lg p-3 sm:p-4 ${className}`}>
             <h2 className="text-lg sm:text-xl font-bold text-white mb-2 sm:mb-3">{title}</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-4">
+            <div className="grid grid-cols-2 gap-2 sm:gap-4">
                 {items.slice(0, 4).map((item, idx) => (
                     <CardItem 
                         key={idx}
