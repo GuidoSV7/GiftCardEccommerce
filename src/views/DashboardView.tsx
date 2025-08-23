@@ -1,26 +1,5 @@
 
-type Payment = {
-  id: number;
-  user: string;
-  userId: string;
-  previousBalance: number;
-  amount: number;
-  method: string;
-  status: 'completed' | 'pending';
-};
 
-const payments: Payment[] = [
-  {
-    id: 2478,
-    user: "fullmoviesec593",
-    userId: "17",
-    previousBalance: 1.91,
-    amount: 10.00,
-    method: "stripe",
-    status: "completed"
-  },
-  // ... otros pagos
-];
 
 export default function DashboardView() {
   return (
