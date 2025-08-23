@@ -36,7 +36,7 @@ export const Carousel: React.FC<CarouselProps> = ({ items }) => {
     return (
         <div className="relative w-full h-64 md:h-80 lg:h-96 mb-8">
             <div className="absolute inset-0 flex justify-center items-center">
-                <div className="container mx-auto px-4 h-full relative">
+                <div className="w-full h-full relative">
                     {/* Slides laterales - solo visibles en desktop */}
                     <div
                         className="hidden lg:block absolute left-0 w-[15%] h-[90%] top-[5%] opacity-30 overflow-hidden rounded-lg"
@@ -58,7 +58,7 @@ export const Carousel: React.FC<CarouselProps> = ({ items }) => {
                     />
 
                     {/* Slide principal */}
-                    <div className="absolute w-full lg:w-[70%] lg:left-[15%] h-full">
+                    <div className="absolute w-[92%] left-[4%] md:w-[94%] md:left-[3%] lg:w-[70%] lg:left-[15%] h-[95%] top-[2.5%]">
                         <div className="w-full h-full overflow-hidden rounded-xl shadow-lg">
                             <div 
                                 className="flex transition-transform duration-1000 ease-in-out h-full"
@@ -98,7 +98,7 @@ export const Carousel: React.FC<CarouselProps> = ({ items }) => {
                     {/* Botones de navegación */}
                     <button 
                         onClick={prevSlide}
-                        className="absolute left-2 lg:left-[15%] top-1/2 transform -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-colors z-10"
+                        className="absolute left-[1%] md:left-[1.5%] lg:left-[15%] top-1/2 transform -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-colors z-10"
                         aria-label="Slide anterior"
                     >
                         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -108,7 +108,7 @@ export const Carousel: React.FC<CarouselProps> = ({ items }) => {
                     
                     <button 
                         onClick={nextSlide}
-                        className="absolute right-2 lg:right-[15%] top-1/2 transform -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-colors z-10"
+                        className="absolute right-[1%] md:right-[1.5%] lg:right-[15%] top-1/2 transform -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-colors z-10"
                         aria-label="Siguiente slide"
                     >
                         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
