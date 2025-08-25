@@ -1,13 +1,16 @@
 
+
 import { useState, useEffect } from 'react';
+
 
 export default function HomeHeader() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+  const [loginPanelOpen, setLoginPanelOpen] = useState(false);
 
   // Prevenir el scroll cuando el menú está abierto
   useEffect(() => {
-    if (menuOpen) {
+    if (menuOpen || loginPanelOpen) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = 'unset';
@@ -15,15 +18,15 @@ export default function HomeHeader() {
     return () => {
       document.body.style.overflow = 'unset';
     };
-  }, [menuOpen]);
+  }, [menuOpen, loginPanelOpen]);
 
   return (
     <header className="bg-[#080b14] py-3 fixed w-full top-0 z-50 shadow-lg">
-      {/* Overlay oscuro para el menú móvil */}
-      {menuOpen && (
+      {/* Overlay oscuro para el menú móvil y login */}
+      {(menuOpen || loginPanelOpen) && (
         <div 
           className="fixed inset-0 bg-black/50 z-40 md:hidden" 
-          onClick={() => setMenuOpen(false)}
+          onClick={() => { setMenuOpen(false); setLoginPanelOpen(false); }}
         />
       )}
 
@@ -46,15 +49,46 @@ export default function HomeHeader() {
               <span className="text-white font-bold text-xl">GIFCARDS</span>
             </div>
 
-            {/* Búsqueda */}
-            <button 
-              onClick={() => setSearchOpen(!searchOpen)}
-              className="text-white p-2"
-            >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-              </svg>
-            </button>
+            {/* Búsqueda y Login */}
+            <div className="flex items-center gap-1">
+              <button 
+                onClick={() => setSearchOpen(!searchOpen)}
+                className="text-white p-2"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+              </button>
+              <button
+                className="flex items-center justify-center bg-[#1c1f2c] text-white rounded-full p-2 hover:bg-[#2c2f3c] transition-colors md:rounded-lg md:px-4 md:py-2 md:gap-2 md:flex-row md:w-auto w-10 h-10"
+                onClick={() => setLoginPanelOpen(true)}
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                </svg>
+                <span className="hidden md:inline text-sm">Login</span>
+              </button>
+          {/* Panel deslizante de Login en móvil */}
+          <div
+            className={`fixed top-0 right-0 w-[280px] h-screen bg-[#23272f]/95 transform transition-transform duration-300 ease-out z-50 md:hidden
+              ${loginPanelOpen ? 'translate-x-0' : 'translate-x-full'}`}
+          >
+            <div className="pt-16 px-6 flex flex-col items-center h-full relative">
+              {/* Botón de cerrar */}
+              <button
+                onClick={() => setLoginPanelOpen(false)}
+                className="absolute top-4 right-4 text-white/90 hover:text-white"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+              <span className="text-white font-bold text-xl mt-8 mb-8">GIFCARDS</span>
+              <button className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 rounded-full mb-4 transition-colors">INICIAR SESIÓN</button>
+              <button className="w-full bg-green-400 hover:bg-green-500 text-white font-bold py-3 rounded-full transition-colors">REGISTRARSE</button>
+            </div>
+          </div>
+            </div>
           </div>
 
           {/* Menú desplegable */}
