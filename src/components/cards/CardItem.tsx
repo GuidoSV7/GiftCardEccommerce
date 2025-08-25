@@ -9,7 +9,7 @@ interface CardItemProps {
 export const CardItem: React.FC<CardItemProps> = ({ image, title, alt }) => (
     <div className="group cursor-pointer w-full">
         <div className="p-2 transition-all">
-            <div className="relative overflow-hidden rounded-lg mb-2 w-full aspect-square">
+            <div className="relative overflow-hidden rounded-2xl mb-2 w-full aspect-[4/3] sm:aspect-square">
                 <img 
                     src={image}
                     alt={alt}
