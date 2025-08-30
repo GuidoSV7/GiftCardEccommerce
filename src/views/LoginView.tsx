@@ -14,7 +14,7 @@ const LoginView: React.FC = () => {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
-    if (error) setError(''); // Limpiar error al escribir
+    if (error) setError(''); 
   };
 
   const handleSubmit = async (e: React.FormEvent) => {

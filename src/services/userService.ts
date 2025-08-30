@@ -1,7 +1,7 @@
 import api from "../lib/axios";
 
 export interface User {
-    id: number;
+    id: string;
     name: string;
     email: string;
     password: string;
@@ -39,7 +39,7 @@ export const getUsers = async (): Promise<User[]> => {
 };
 
 // Obtener un usuario por ID
-export const getUserById = async (id: number): Promise<User> => {
+export const getUserById = async (id: string): Promise<User> => {
     try {
         const response = await api.get<User>(`/users/${id}`);
         return response.data;
@@ -64,7 +64,7 @@ export const createUser = async (userData: CreateUserData): Promise<User> => {
 };
 
 // Actualizar un usuario
-export const updateUser = async (id: number, userData: UpdateUserData): Promise<User> => {
+export const updateUser = async (id: string, userData: UpdateUserData): Promise<User> => {
     try {
         const response = await api.put<User>(`/users/${id}`, userData);
         return response.data;
@@ -75,7 +75,7 @@ export const updateUser = async (id: number, userData: UpdateUserData): Promise<
 };
 
 // Eliminar un usuario
-export const deleteUser = async (id: number): Promise<void> => {
+export const deleteUser = async (id: string): Promise<void> => {
     try {
         await api.delete(`/users/${id}`);
     } catch (error) {

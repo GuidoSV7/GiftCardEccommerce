@@ -11,12 +11,10 @@ const LoginModal: React.FC<LoginModalProps> = ({ open, onClose }) => {
 
   const handleLogin = () => {
     navigate('/login');
-    onClose();
   };
 
   const handleRegister = () => {
     navigate('/register');
-    onClose();
   };
 
   if (!open) return null;
