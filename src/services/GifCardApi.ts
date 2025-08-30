@@ -1,14 +1,14 @@
 
-import api from "../lib/axios";
-import type { GifcardFormData } from "../types";
+// import api from "../lib/axios";
+// import type { GifcardFormData } from "../types";
 
-export async function createGifcard(formData: GifcardFormData){
-  try{
-    const { data } = await api.post('/gifcards', formData); 
+// export async function createGifcard(formData: GifcardFormData){
+//   try{
+//     const { data } = await api.post('/gifcards', formData); 
 
-  } catch (error) {
-    console.log(error);
-  }
+//   } catch (error) {
+//     console.log(error);
+//   }
     
 
-}
+// }

@@ -11,7 +11,7 @@
             "registrationDate": "2024-01-15T10:00:00.000Z",
             "balance": 1000.00,
             "discount": 15.0,
-            "state": "active"
+            "state": true
         },
         {
             "id": "550e8400-e29b-41d4-a716-446655440002",
@@ -23,7 +23,7 @@
             "registrationDate": "2024-02-20T14:30:00.000Z",
             "balance": 250.50,
             "discount": 5.0,
-            "state": "active"
+            "state": true
         }
     ],
 
@@ -54,7 +54,7 @@
             "imageUrl": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
             "redeem": "Redeem directly in the iTunes Store or App Store on your Apple device",
             "termsConditions": "Valid for use in iTunes Store only. Cannot be exchanged for cash. No expiration date. Subject to iTunes Store terms and conditions.",
-            "state": "active",
+            "state": true,
             "categoryId": {
                 "name": "Gift Cards"}
         },
@@ -65,7 +65,7 @@
             "imageUrl": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
             "redeem": "Log into Steam, go to 'Redeem a Steam Wallet Code' and enter your code",
             "termsConditions": "Valid for Steam Store purchases only. Cannot be transferred or exchanged for cash. Subject to Steam Subscriber Agreement.",
-            "state": "active",
+            "state": true,
             "categoryId": {
                 "name": "Games"
             }
@@ -77,7 +77,7 @@
             "imageUrl": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
             "redeem": "Redeem through PlayStation Store on your console or via web browser",
             "termsConditions": "Valid for PlayStation Store purchases. Cannot be returned or exchanged for cash. Subject to PlayStation Network Terms of Service.",
-            "state": "active",
+            "state": true,
             "categoryId": {
                 "name": "Gift Cards"}
         },
@@ -88,7 +88,7 @@
             "imageUrl": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
             "redeem": "Open Google Play Store app, go to Menu > Redeem and enter your code",
             "termsConditions": "Valid for Google Play Store purchases only. Cannot be exchanged for cash. Subject to Google Play Terms of Service.",
-            "state": "active",
+            "state": true,
             "categoryId": {
                 "name": "Gift Cards"
             }
@@ -100,7 +100,7 @@
             "imageUrl": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
             "redeem": "Visit roblox.com/redeem and enter your gift card code to add Robux to your account",
             "termsConditions": "Valid for Robux and Roblox Premium only. Cannot be exchanged for cash. Subject to Roblox Terms of Use.",
-            "state": "active",
+            "state": true,
             "categoryId": {
                 "name": "Games"
             }
@@ -112,7 +112,7 @@
             "imageUrl": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
             "redeem": "Open PUBG Mobile, go to the UC purchase section and use the redemption code",
             "termsConditions": "Valid for PUBG Mobile UC purchases only. Cannot be transferred between accounts. Subject to PUBG Mobile Terms of Service.",
-            "state": "active",
+            "state": true,
             "categoryId": {
                 "name": "Games"
             }
@@ -124,7 +124,7 @@
             "imageUrl": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
             "redeem": "Enter the gift card code at checkout on Amazon.com",
             "termsConditions": "Valid for Amazon purchases only. Cannot be exchanged for cash. Subject to Amazon Gift Card Terms and Conditions.",
-            "state": "active",
+            "state": true,
             "categoryId": {"name": "Gift Cards"}
         },
         {
@@ -134,7 +134,7 @@
             "imageUrl": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
             "redeem": "Visit netflix.com/redeem and enter your gift card code",
             "termsConditions": "Valid for Netflix subscription only. Cannot be exchanged for cash. Subject to Netflix Terms of Use.",
-            "state": "active",
+            "state": true,
             "categoryId": {"name": "Gift Cards"}
         },
         {
@@ -144,7 +144,7 @@
             "imageUrl": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
             "redeem": "Redeem at spotify.com/redeem with your gift card code",
             "termsConditions": "Valid for Spotify Premium subscription only. Cannot be exchanged for cash. Subject to Spotify Terms and Conditions.",
-            "state": "active",
+            "state": true,
             "categoryId": {"name": "Gift Cards"}
         },
         {
@@ -154,7 +154,7 @@
             "imageUrl": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
             "redeem": "Redeem on Xbox console or Microsoft Store online",
             "termsConditions": "Valid for Microsoft Store purchases only. Cannot be exchanged for cash. Subject to Microsoft Terms of Use.",
-            "state": "active",
+            "state": true,
             "categoryId": {"name": "Gift Cards"}
         },
         {
@@ -164,7 +164,7 @@
             "imageUrl": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
             "redeem": "Use like a regular Visa card at any merchant that accepts Visa",
             "termsConditions": "Subject to Visa Gift Card Terms and Conditions. Fees may apply. Cannot be exchanged for cash.",
-            "state": "active",
+            "state": true,
             "categoryId": {"name": "Gift Cards"}
         },
         {
@@ -174,7 +174,7 @@
             "imageUrl": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
             "redeem": "Redeem directly in any Apple Store or online at apple.com",
             "termsConditions": "Valid for Apple Store and iTunes purchases. Cannot be exchanged for cash. Subject to Apple Terms and Conditions.",
-            "state": "active",
+            "state": true,
             "categoryId": {"name": "Gift Cards"}
         },
         {
@@ -184,7 +184,7 @@
             "imageUrl": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
             "redeem": "Redeem in Fortnite game or Epic Games Store",
             "termsConditions": "Valid for Fortnite V-Bucks only. Cannot be exchanged for cash. Subject to Epic Games Terms of Service.",
-            "state": "active",
+            "state": true,
             "categoryId": {"name": "Games"}
         },
         {
@@ -194,7 +194,7 @@
             "imageUrl": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
             "redeem": "Redeem in Minecraft game through the Marketplace",
             "termsConditions": "Valid for Minecraft Marketplace purchases only. Cannot be exchanged for cash. Subject to Microsoft Terms of Use.",
-            "state": "active",
+            "state": true,
             "categoryId": {"name": "Games"}
         },
         {
@@ -204,7 +204,7 @@
             "imageUrl": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
             "redeem": "Redeem in League of Legends client or Riot Games website",
             "termsConditions": "Valid for League of Legends RP only. Cannot be exchanged for cash. Subject to Riot Games Terms of Service.",
-            "state": "active",
+            "state": true,
             "categoryId": {"name": "Games"}
         },
         {
@@ -214,7 +214,7 @@
             "imageUrl": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
             "redeem": "Redeem in Call of Duty game or Battle.net",
             "termsConditions": "Valid for Call of Duty Points only. Cannot be exchanged for cash. Subject to Activision Terms of Service.",
-            "state": "active",
+            "state": true,
             "categoryId": {"name": "Games"}
         },
         {
@@ -224,7 +224,7 @@
             "imageUrl": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
             "redeem": "Redeem in Apex Legends game or Origin/EA App",
             "termsConditions": "Valid for Apex Legends Coins only. Cannot be exchanged for cash. Subject to EA Terms of Service.",
-            "state": "active",
+            "state": true,
             "categoryId": {"name": "Games"}
         },
         {
@@ -234,7 +234,7 @@
             "imageUrl": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
             "redeem": "Redeem in Valorant game or Riot Games website",
             "termsConditions": "Valid for Valorant Points only. Cannot be exchanged for cash. Subject to Riot Games Terms of Service.",
-            "state": "active",
+            "state": true,
             "categoryId": {"name": "Games"}
         },
         {
@@ -244,7 +244,7 @@
             "imageUrl": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
             "redeem": "Activate at office.com/setup with your product key",
             "termsConditions": "Valid for Microsoft Office 365 subscription only. Subject to Microsoft Software License Terms.",
-            "state": "active",
+            "state": true,
             "categoryId": {"name": "Software & Apps"}
         },
         {
@@ -254,7 +254,7 @@
             "imageUrl": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
             "redeem": "Activate at adobe.com with your redemption code",
             "termsConditions": "Valid for Adobe Creative Cloud subscription only. Subject to Adobe Terms of Use.",
-            "state": "active",
+            "state": true,
             "categoryId": {"name": "Software & Apps"}
         },
         {
@@ -264,7 +264,7 @@
             "imageUrl": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
             "redeem": "Download and activate at norton.com with your product key",
             "termsConditions": "Valid for Norton 360 subscription only. Subject to Norton License Agreement.",
-            "state": "active",
+            "state": true,
             "categoryId": {"name": "Software & Apps"}
         },
         {
@@ -274,7 +274,7 @@
             "imageUrl": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
             "redeem": "Upgrade your account at zoom.us with your license code",
             "termsConditions": "Valid for Zoom Pro subscription only. Subject to Zoom Terms of Service.",
-            "state": "active",
+            "state": true,
             "categoryId": {"name": "Software & Apps"}
         },
         {
@@ -284,7 +284,7 @@
             "imageUrl": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
             "redeem": "Upgrade at canva.com with your subscription code",
             "termsConditions": "Valid for Canva Pro subscription only. Subject to Canva Terms of Use.",
-            "state": "active",
+            "state": true,
             "categoryId": {"name": "Software & Apps"}
         },
         {
@@ -294,7 +294,7 @@
             "imageUrl": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
             "redeem": "Upgrade at grammarly.com with your premium code",
             "termsConditions": "Valid for Grammarly Premium subscription only. Subject to Grammarly Terms of Service.",
-            "state": "active",
+            "state": true,
             "categoryId": {"name": "Software & Apps"}
         },
         {
@@ -304,7 +304,7 @@
             "imageUrl": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
             "redeem": "Upgrade at dropbox.com with your subscription code",
             "termsConditions": "Valid for Dropbox Plus subscription only. Subject to Dropbox Terms of Service.",
-            "state": "active",
+            "state": true,
             "categoryId": {"name": "Software & Apps"}
         },
         {
@@ -314,7 +314,7 @@
             "imageUrl": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
             "redeem": "Upgrade your workspace at slack.com with your plan code",
             "termsConditions": "Valid for Slack Pro subscription only. Subject to Slack Terms of Service.",
-            "state": "active",
+            "state": true,
             "categoryId": {"name": "Software & Apps"}
         },
         {
@@ -324,7 +324,7 @@
             "imageUrl": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
             "redeem": "Activate your card online or by phone using the provided instructions",
             "termsConditions": "Subject to Mastercard Prepaid Terms and Conditions. Fees may apply. Cannot be exchanged for cash.",
-            "state": "active",
+            "state": true,
             "categoryId": {"name": "Payment Cards"}
         },
         {
@@ -334,7 +334,7 @@
             "imageUrl": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
             "redeem": "Access your virtual card details through the provided secure portal",
             "termsConditions": "Valid for online purchases only. Subject to Visa Terms and Conditions. Cannot be exchanged for cash.",
-            "state": "active",
+            "state": true,
             "categoryId": {"name": "Payment Cards"}
         },
         {
@@ -344,7 +344,7 @@
             "imageUrl": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
             "redeem": "Use like a regular American Express card at participating merchants",
             "termsConditions": "Subject to American Express Gift Card Terms. Fees may apply. Cannot be exchanged for cash.",
-            "state": "active",
+            "state": true,
             "categoryId": {"name": "Payment Cards"}
         },
         {
@@ -354,7 +354,7 @@
             "imageUrl": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
             "redeem": "Add funds to your PayPal account using the provided redemption code",
             "termsConditions": "Valid for PayPal account funding only. Subject to PayPal User Agreement. Cannot be exchanged for cash.",
-            "state": "active",
+            "state": true,
             "categoryId": {"name": "Payment Cards"}
         },
         {
@@ -364,7 +364,7 @@
             "imageUrl": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
             "redeem": "Activate through your Skrill account dashboard",
             "termsConditions": "Subject to Skrill Terms and Conditions. International transaction fees may apply.",
-            "state": "active",
+            "state": true,
             "categoryId": {"name": "Payment Cards"}
         },
         {
@@ -374,7 +374,7 @@
             "imageUrl": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
             "redeem": "Order and activate through your Neteller account",
             "termsConditions": "Subject to Neteller Terms and Conditions. Account verification required.",
-            "state": "active",
+            "state": true,
             "categoryId": {"name": "Payment Cards"}
         }
     ],

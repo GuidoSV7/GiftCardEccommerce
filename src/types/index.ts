@@ -16,7 +16,7 @@ export const gifcardSchema = z.object({
     imageUrl: z.string().url(),
     redeem: z.string(),
     termsConditions: z.string(),
-    state: z.string(),
+    state: z.boolean(),
     categoryId: z.object({
         name: z.string()
     })
