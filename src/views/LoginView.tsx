@@ -59,18 +59,20 @@ const LoginView: React.FC = () => {
 
       {/* Main Container with Border */}
       <div className="max-w-5xl mx-auto bg-gray-800/30 backdrop-blur-sm border border-gray-600/50 rounded-3xl overflow-hidden">
-        <div className="flex min-h-[280px]">
-          {/* Left Section */}
-          <div className="flex-1 flex items-start justify-center pt-12 pb-8 px-8 bg-transparent">
+        <div className="flex flex-col lg:flex-row min-h-[280px]">
+          {/* Welcome Section - Second on mobile, First on desktop */}
+          <div className="order-2 lg:order-1 flex-1 flex items-start justify-center pt-8 sm:pt-12 pb-8 px-4 sm:px-6 lg:px-8 bg-transparent">
             <div className="max-w-sm w-full">
               {/* Title and Description */}
               <div className="mb-6">
-                <h1 className="text-white text-2xl font-bold mb-4 leading-tight">
-                  BIENVENIDO DE VUELTA A<br />
-                  GIFCARDS
+                <h1 className="text-white text-xl sm:text-2xl font-bold mb-4 leading-tight">
+                  <span className="block">BIENVENIDO DE VUELTA A</span>
+                  <span className="block">GIFCARDS</span>
                 </h1>
-                <p className="text-gray-300 text-xs leading-relaxed">
-                  ¡Hola! Inicia sesión en tu cuenta y continúa disfrutando<br />
+                <p className="text-gray-300 text-xs sm:text-sm leading-relaxed">
+                  ¡Hola! Inicia sesión en tu cuenta y continúa disfrutando
+                  <span className="hidden sm:inline"><br /></span>
+                  <span className="sm:hidden"> </span>
                   de tu experiencia de compra en GIFCARDS.
                 </p>
               </div>
@@ -85,10 +87,10 @@ const LoginView: React.FC = () => {
             </div>
           </div>
 
-          {/* Right Section */}
-          <div className="flex-1 flex items-center justify-center p-8 bg-gray-900/60">
-            <div className="w-full max-w-sm px-4 py-4">
-              <h2 className="text-white text-xl font-bold mb-1">INICIAR SESIÓN</h2>
+          {/* Login Section - First on mobile, Second on desktop */}
+          <div className="order-1 lg:order-2 flex-1 flex items-center justify-center p-4 sm:p-6 lg:p-8 bg-gray-900/60">
+            <div className="w-full max-w-sm px-2 sm:px-4 py-4">
+              <h2 className="text-white text-xl lg:text-2xl font-bold mb-1">INICIAR SESIÓN</h2>
               
               {/* Error Message */}
               {error && (
@@ -152,7 +154,9 @@ const LoginView: React.FC = () => {
 
                 {/* Divider */}
                 <div className="text-center text-gray-400 text-xs py-2 leading-relaxed">
-                  Inicia sesión con la cuenta de inicio de sesión existente de una<br />
+                  Inicia sesión con la cuenta de inicio de sesión existente de una
+                  <span className="hidden sm:inline"><br /></span>
+                  <span className="sm:hidden"> </span>
                   cuenta de red social.
                 </div>
 

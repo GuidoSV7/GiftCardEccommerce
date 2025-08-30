@@ -35,16 +35,16 @@ const RegisterView: React.FC = () => {
 
       {/* Main Container with Border */}
       <div className="max-w-5xl mx-auto bg-gray-800/30 backdrop-blur-sm border border-gray-600/50 rounded-3xl overflow-hidden">
-        <div className="flex min-h-[280px]">
-          {/* Left Section */}
-          <div className="flex-1 flex items-start justify-center pt-12 pb-8 px-8 bg-transparent">
+        <div className="flex flex-col lg:flex-row min-h-[280px]">
+          {/* Steps Section - Second on mobile, First on desktop */}
+          <div className="order-2 lg:order-1 flex-1 flex items-start justify-center pt-8 sm:pt-12 pb-8 px-4 sm:px-6 lg:px-8 bg-transparent">
             <div className="max-w-sm w-full">
               {/* Title */}
               <div className="mb-6">
-                <h1 className="text-white text-2xl font-bold mb-6 leading-tight">
-                  PASOS FÁCILES PARA UNIRSE<br />
-                  AL PROGRAMA DE<br />
-                  MEMBRESÍA GIFCARDS..
+                <h1 className="text-white text-xl sm:text-2xl font-bold mb-4 sm:mb-6 leading-tight">
+                  <span className="block">PASOS FÁCILES PARA UNIRSE</span>
+                  <span className="block">AL PROGRAMA DE</span>
+                  <span className="block">MEMBRESÍA GIFCARDS..</span>
                 </h1>
                 
                 {/* Steps */}
@@ -53,7 +53,7 @@ const RegisterView: React.FC = () => {
                     <div className="bg-white text-black rounded-full w-7 h-7 flex items-center justify-center font-bold text-sm flex-shrink-0">
                       1
                     </div>
-                    <p className="text-xs leading-relaxed pt-1">
+                    <p className="text-xs sm:text-sm leading-relaxed pt-1">
                       Regístrate usando tu correo electrónico.
                     </p>
                   </div>
@@ -62,7 +62,7 @@ const RegisterView: React.FC = () => {
                     <div className="bg-white text-black rounded-full w-7 h-7 flex items-center justify-center font-bold text-sm flex-shrink-0">
                       2
                     </div>
-                    <p className="text-xs leading-relaxed pt-1">
+                    <p className="text-xs sm:text-sm leading-relaxed pt-1">
                       Por favor, haga clic en el enlace de verificación en su correo electrónico registrado.
                     </p>
                   </div>
@@ -71,7 +71,7 @@ const RegisterView: React.FC = () => {
                     <div className="bg-white text-black rounded-full w-7 h-7 flex items-center justify-center font-bold text-sm flex-shrink-0">
                       3
                     </div>
-                    <p className="text-xs leading-relaxed pt-1">
+                    <p className="text-xs sm:text-sm leading-relaxed pt-1">
                       Completa el formulario de registro.
                     </p>
                   </div>
@@ -80,7 +80,7 @@ const RegisterView: React.FC = () => {
                     <div className="bg-white text-black rounded-full w-7 h-7 flex items-center justify-center font-bold text-sm flex-shrink-0">
                       4
                     </div>
-                    <p className="text-xs leading-relaxed pt-1">
+                    <p className="text-xs sm:text-sm leading-relaxed pt-1">
                       Estás listo, comienza a disfrutar de las compras en GIFCARDS.
                     </p>
                   </div>
@@ -89,12 +89,14 @@ const RegisterView: React.FC = () => {
             </div>
           </div>
 
-          {/* Right Section */}
-          <div className="flex-1 flex items-center justify-center p-8 bg-gray-900/60">
-            <div className="w-full max-w-sm px-4 py-4">
-              <h2 className="text-white text-xl font-bold mb-1">REGÍSTRATE</h2>
-              <p className="text-gray-400 text-xs mb-4 leading-relaxed">
-                Por favor, proporciona una dirección de correo electrónico<br />
+          {/* Register Section - First on mobile, Second on desktop */}
+          <div className="order-1 lg:order-2 flex-1 flex items-center justify-center p-4 sm:p-6 lg:p-8 bg-gray-900/60">
+            <div className="w-full max-w-sm px-2 sm:px-4 py-4">
+              <h2 className="text-white text-xl lg:text-2xl font-bold mb-1">REGÍSTRATE</h2>
+              <p className="text-gray-400 text-xs sm:text-sm mb-4 leading-relaxed">
+                Por favor, proporciona una dirección de correo electrónico
+                <span className="hidden sm:inline"><br /></span>
+                <span className="sm:hidden"> </span>
                 válida para la verificación de la cuenta..
               </p>
               
@@ -127,7 +129,9 @@ const RegisterView: React.FC = () => {
 
                 {/* Divider */}
                 <div className="text-center text-gray-400 text-xs py-2 leading-relaxed">
-                  Inicia sesión con la cuenta de inicio de sesión existente de una<br />
+                  Inicia sesión con la cuenta de inicio de sesión existente de una
+                  <span className="hidden sm:inline"><br /></span>
+                  <span className="sm:hidden"> </span>
                   cuenta de red social..
                 </div>
 
