@@ -1,6 +1,4 @@
-import axios from 'axios';
-
-const baseURL = import.meta.env.VITE_API_URL;
+import api from "../lib/axios";
 
 export interface NewsItem {
     id: number;
@@ -11,7 +9,7 @@ export interface NewsItem {
 
 export const getNewsAndPromotions = async (): Promise<NewsItem[]> => {
     try {
-        const response = await axios.get<NewsItem[]>(`${baseURL}/newsAndPromotions`);
+        const response = await api.get<NewsItem[]>('/newsAndPromotions');
         return response.data;
     } catch (error) {
         console.error('Error al cargar las noticias y promociones:', error);

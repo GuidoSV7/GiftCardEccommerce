@@ -1,6 +1,4 @@
-import axios from 'axios';
-
-const baseURL = import.meta.env.VITE_API_URL;
+import api from "../lib/axios";
 
 export interface CarouselItem {
     id: number;
@@ -11,6 +9,6 @@ export interface CarouselItem {
 }
 
 export const getCarouselItems = async (): Promise<CarouselItem[]> => {
-    const response = await axios.get<CarouselItem[]>(`${baseURL}/carousel`);
+    const response = await api.get<CarouselItem[]>('/carousel');
     return response.data;
 };

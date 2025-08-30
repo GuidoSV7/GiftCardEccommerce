@@ -1,6 +1,4 @@
-import axios from 'axios';
-
-const baseURL = import.meta.env.VITE_API_URL;
+import api from "../lib/axios";
 
 export interface Offer {
     id: number;
@@ -11,6 +9,6 @@ export interface Offer {
 }
 
 export const getOffers = async (): Promise<Offer[]> => {
-    const response = await axios.get<Offer[]>(`${baseURL}/offers`);
+    const response = await api.get<Offer[]>('/offers');
     return response.data;
 };

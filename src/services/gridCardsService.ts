@@ -1,4 +1,4 @@
-import axios from 'axios';
+import api from "../lib/axios";
 
 export interface GridCardItem {
     image: string;
@@ -14,11 +14,9 @@ export interface GridSection {
     items: GridCardItem[];
 }
 
-const baseURL = import.meta.env.VITE_API_URL;
-
 export const getGridSections = async (): Promise<GridSection[]> => {
     try {
-        const response = await axios.get(`${baseURL}/gridSections`);
+        const response = await api.get('/gridSections');
         return response.data;
     } catch (error) {
         console.error('Error fetching grid sections:', error);
