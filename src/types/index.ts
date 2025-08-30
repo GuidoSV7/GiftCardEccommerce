@@ -1,14 +1,26 @@
 import {z} from "zod";
 
-/** Gifcards / */
+/** Categories */
+export const categorySchema = z.object({
+    id: z.number(),
+    name: z.string()
+});
+
+export type Category = z.infer<typeof categorySchema>;
+
+/** Gifcards */
 export const gifcardSchema = z.object({
-    id: z.string().uuid(),
+    id: z.string(),
     title: z.string(),
     description: z.string(),
-    price: z.number().min(0),
     imageUrl: z.string().url(),
-    state: z.boolean()
+    redeem: z.string(),
+    termsConditions: z.string(),
+    state: z.string(),
+    categoryId: z.object({
+        name: z.string()
+    })
 });
 
 export type Gifcard = z.infer<typeof gifcardSchema>;
-export type GifcardFormData = Pick<Gifcard, "price" | "title" | "description" | "imageUrl" | "state">;
+export type GifcardFormData = Pick<Gifcard, "title" | "description" | "imageUrl" | "redeem" | "termsConditions" | "state" | "categoryId">;

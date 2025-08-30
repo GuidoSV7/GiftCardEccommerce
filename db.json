@@ -4,134 +4,378 @@
         {
             "id": "550e8400-e29b-41d4-a716-446655440001",
             "name": "Admin",
+            "userName": "admin_user",
             "email": "admin@gmail.com",
             "password": "123456",
-            "role": "admin"
+            "role": "admin",
+            "registrationDate": "2024-01-15T10:00:00.000Z",
+            "balance": 1000.00,
+            "discount": 15.0,
+            "state": "active"
         },
         {
             "id": "550e8400-e29b-41d4-a716-446655440002",
             "name": "User",
+            "userName": "regular_user",
             "email": "user@gmail.com",
             "password": "123456",
-            "role": "user"
+            "role": "user",
+            "registrationDate": "2024-02-20T14:30:00.000Z",
+            "balance": 250.50,
+            "discount": 5.0,
+            "state": "active"
         }
     ],
-    "gridSections": [
+
+    "categories": [
         {
             "id": 1,
-            "title": "Gift Cards",
-            "viewAllLink": "/gift-cards",
-            "items": [
-                {
-                    "image": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
-                    "title": "iTunes Gift Card",
-                    "alt": "iTunes Gift Card",
-                    "bgClass": "bg-gradient-to-br from-purple-400 to-pink-500"
-                },
-                {
-                    "image": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
-                    "title": "Steam Wallet Codes",
-                    "alt": "Steam Wallet Codes",
-                    "bgClass": "bg-gray-900"
-                },
-                {
-                    "image": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
-                    "title": "PlayStation™Store Gift Cards",
-                    "alt": "PlayStation Store Gift Cards",
-                    "bgClass": "bg-blue-600"
-                },
-                {
-                    "image": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
-                    "title": "Google Play Code",
-                    "alt": "Google Play Code",
-                    "bgClass": "bg-gradient-to-r from-green-400 to-blue-500"
-                }
-            ]
+            "name": "Gift Cards"
         },
         {
             "id": 2,
-            "title": "Games",
-            "viewAllLink": "/games",
-            "items": [
-                {
-                    "image": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
-                    "title": "Roblox Digital Gift Card",
-                    "alt": "Roblox"
-                },
-                {
-                    "image": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
-                    "title": "PUBG Mobile",
-                    "alt": "PUBG Mobile"
-                },
-                {
-                    "image": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
-                    "title": "CrossFire",
-                    "alt": "CrossFire"
-                },
-                {
-                    "image": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
-                    "title": "Yareel Gift Cards",
-                    "alt": "Yareel Gift Cards"
-                }
-            ]
-        }
-
-        ,
+            "name": "Games"
+        },
         {
             "id": 3,
-            "title": "Games",
-            "viewAllLink": "/games",
-            "items": [
-                {
-                    "image": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
-                    "title": "Roblox Digital Gift Card",
-                    "alt": "Roblox"
-                },
-                {
-                    "image": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
-                    "title": "PUBG Mobile",
-                    "alt": "PUBG Mobile"
-                },
-                {
-                    "image": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
-                    "title": "CrossFire",
-                    "alt": "CrossFire"
-                },
-                {
-                    "image": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
-                    "title": "Yareel Gift Cards",
-                    "alt": "Yareel Gift Cards"
-                }
-            ]
+            "name": "Software & Apps"
         },
-
-    
         {
             "id": 4,
-            "title": "Games",
-            "viewAllLink": "/games",
-            "items": [
-                {
-                    "image": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
+            "name": "Payment Cards"
+        }
+    ],
+    
+    "gifcards": [
+        {
+            "id": "gc001",
+            "title": "iTunes Gift Card",
+            "description": "Perfect for purchasing apps, games, music, movies, and more from the iTunes Store. Compatible with all Apple devices and services.",
+            "imageUrl": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
+            "redeem": "Redeem directly in the iTunes Store or App Store on your Apple device",
+            "termsConditions": "Valid for use in iTunes Store only. Cannot be exchanged for cash. No expiration date. Subject to iTunes Store terms and conditions.",
+            "state": "active",
+            "categoryId": {
+                "name": "Gift Cards"}
+        },
+        {
+            "id": "gc002",
+            "title": "Steam Wallet Codes",
+            "description": "Add funds to your Steam Wallet to purchase games, DLC, and in-game content from the Steam Store. Instant digital delivery.",
+            "imageUrl": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
+            "redeem": "Log into Steam, go to 'Redeem a Steam Wallet Code' and enter your code",
+            "termsConditions": "Valid for Steam Store purchases only. Cannot be transferred or exchanged for cash. Subject to Steam Subscriber Agreement.",
+            "state": "active",
+            "categoryId": {
+                "name": "Games"
+            }
+        },
+        {
+            "id": "gc003",
+            "title": "PlayStation™Store Gift Cards",
+            "description": "Purchase games, add-ons, themes, and more from the PlayStation Store. Compatible with PS4, PS5, and PlayStation Network.",
+            "imageUrl": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
+            "redeem": "Redeem through PlayStation Store on your console or via web browser",
+            "termsConditions": "Valid for PlayStation Store purchases. Cannot be returned or exchanged for cash. Subject to PlayStation Network Terms of Service.",
+            "state": "active",
+            "categoryId": {
+                "name": "Gift Cards"}
+        },
+        {
+            "id": "gc004",
+            "title": "Google Play Code",
+            "description": "Use to purchase apps, games, movies, books, and more from Google Play Store. Perfect for Android users and Google services.",
+            "imageUrl": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
+            "redeem": "Open Google Play Store app, go to Menu > Redeem and enter your code",
+            "termsConditions": "Valid for Google Play Store purchases only. Cannot be exchanged for cash. Subject to Google Play Terms of Service.",
+            "state": "active",
+            "categoryId": {
+                "name": "Gift Cards"
+            }
+        },
+        {
+            "id": "gc005",
                     "title": "Roblox Digital Gift Card",
-                    "alt": "Roblox"
-                },
-                {
-                    "image": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
-                    "title": "PUBG Mobile",
-                    "alt": "PUBG Mobile"
-                },
-                {
-                    "image": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
-                    "title": "CrossFire",
-                    "alt": "CrossFire"
-                },
-                {
-                    "image": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
-                    "title": "Yareel Gift Cards",
-                    "alt": "Yareel Gift Cards"
-                }
-            ]
+            "description": "Get Robux to customize your avatar, buy game passes, and unlock premium features in Roblox games. Perfect for young gamers.",
+            "imageUrl": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
+            "redeem": "Visit roblox.com/redeem and enter your gift card code to add Robux to your account",
+            "termsConditions": "Valid for Robux and Roblox Premium only. Cannot be exchanged for cash. Subject to Roblox Terms of Use.",
+            "state": "active",
+            "categoryId": {
+                "name": "Games"
+            }
+        },
+        {
+            "id": "gc006",
+            "title": "PUBG Mobile UC",
+            "description": "Purchase Unknown Cash (UC) for PUBG Mobile to buy premium battle passes, skins, and exclusive in-game items.",
+            "imageUrl": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
+            "redeem": "Open PUBG Mobile, go to the UC purchase section and use the redemption code",
+            "termsConditions": "Valid for PUBG Mobile UC purchases only. Cannot be transferred between accounts. Subject to PUBG Mobile Terms of Service.",
+            "state": "active",
+            "categoryId": {
+                "name": "Games"
+            }
+        },
+        {
+            "id": "gc007",
+            "title": "Amazon Gift Card",
+            "description": "Shop for millions of items on Amazon with this versatile gift card. Perfect for books, electronics, home goods, and more.",
+            "imageUrl": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
+            "redeem": "Enter the gift card code at checkout on Amazon.com",
+            "termsConditions": "Valid for Amazon purchases only. Cannot be exchanged for cash. Subject to Amazon Gift Card Terms and Conditions.",
+            "state": "active",
+            "categoryId": {"name": "Gift Cards"}
+        },
+        {
+            "id": "gc008",
+            "title": "Netflix Gift Card",
+            "description": "Enjoy unlimited streaming of movies and TV shows with a Netflix subscription gift card. Perfect for entertainment lovers.",
+            "imageUrl": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
+            "redeem": "Visit netflix.com/redeem and enter your gift card code",
+            "termsConditions": "Valid for Netflix subscription only. Cannot be exchanged for cash. Subject to Netflix Terms of Use.",
+            "state": "active",
+            "categoryId": {"name": "Gift Cards"}
+        },
+        {
+            "id": "gc009",
+            "title": "Spotify Gift Card",
+            "description": "Enjoy premium music streaming with ad-free listening, offline downloads, and high-quality audio on Spotify Premium.",
+            "imageUrl": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
+            "redeem": "Redeem at spotify.com/redeem with your gift card code",
+            "termsConditions": "Valid for Spotify Premium subscription only. Cannot be exchanged for cash. Subject to Spotify Terms and Conditions.",
+            "state": "active",
+            "categoryId": {"name": "Gift Cards"}
+        },
+        {
+            "id": "gc010",
+            "title": "Xbox Gift Card",
+            "description": "Buy the latest games, add-ons, and more from the Microsoft Store. Works on Xbox consoles and Windows PC.",
+            "imageUrl": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
+            "redeem": "Redeem on Xbox console or Microsoft Store online",
+            "termsConditions": "Valid for Microsoft Store purchases only. Cannot be exchanged for cash. Subject to Microsoft Terms of Use.",
+            "state": "active",
+            "categoryId": {"name": "Gift Cards"}
+        },
+        {
+            "id": "gc011",
+            "title": "Visa Gift Card",
+            "description": "Universal gift card accepted anywhere Visa is accepted. Perfect for any occasion and gives complete spending flexibility.",
+            "imageUrl": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
+            "redeem": "Use like a regular Visa card at any merchant that accepts Visa",
+            "termsConditions": "Subject to Visa Gift Card Terms and Conditions. Fees may apply. Cannot be exchanged for cash.",
+            "state": "active",
+            "categoryId": {"name": "Gift Cards"}
+        },
+        {
+            "id": "gc012",
+            "title": "Apple Gift Card",
+            "description": "Use for purchases at Apple Store, iTunes, App Store, and more. Compatible with all Apple devices and services.",
+            "imageUrl": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
+            "redeem": "Redeem directly in any Apple Store or online at apple.com",
+            "termsConditions": "Valid for Apple Store and iTunes purchases. Cannot be exchanged for cash. Subject to Apple Terms and Conditions.",
+            "state": "active",
+            "categoryId": {"name": "Gift Cards"}
+        },
+        {
+            "id": "gc013",
+            "title": "Fortnite V-Bucks",
+            "description": "Purchase V-Bucks for Fortnite to buy Battle Passes, outfits, pickaxes, gliders, emotes, and more in the Item Shop.",
+            "imageUrl": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
+            "redeem": "Redeem in Fortnite game or Epic Games Store",
+            "termsConditions": "Valid for Fortnite V-Bucks only. Cannot be exchanged for cash. Subject to Epic Games Terms of Service.",
+            "state": "active",
+            "categoryId": {"name": "Games"}
+        },
+        {
+            "id": "gc014",
+            "title": "Minecraft Minecoins",
+            "description": "Buy Minecoins to purchase skins, texture packs, worlds, and more from the Minecraft Marketplace.",
+            "imageUrl": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
+            "redeem": "Redeem in Minecraft game through the Marketplace",
+            "termsConditions": "Valid for Minecraft Marketplace purchases only. Cannot be exchanged for cash. Subject to Microsoft Terms of Use.",
+            "state": "active",
+            "categoryId": {"name": "Games"}
+        },
+        {
+            "id": "gc015",
+            "title": "League of Legends RP",
+            "description": "Purchase Riot Points (RP) for League of Legends to buy champions, skins, and other in-game content.",
+            "imageUrl": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
+            "redeem": "Redeem in League of Legends client or Riot Games website",
+            "termsConditions": "Valid for League of Legends RP only. Cannot be exchanged for cash. Subject to Riot Games Terms of Service.",
+            "state": "active",
+            "categoryId": {"name": "Games"}
+        },
+        {
+            "id": "gc016",
+            "title": "Call of Duty Points",
+            "description": "Purchase COD Points to buy Battle Passes, operator skins, weapon blueprints, and other premium content in Call of Duty games.",
+            "imageUrl": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
+            "redeem": "Redeem in Call of Duty game or Battle.net",
+            "termsConditions": "Valid for Call of Duty Points only. Cannot be exchanged for cash. Subject to Activision Terms of Service.",
+            "state": "active",
+            "categoryId": {"name": "Games"}
+        },
+        {
+            "id": "gc017",
+            "title": "Apex Legends Coins",
+            "description": "Buy Apex Coins to purchase Legends, Battle Passes, Apex Packs, and cosmetic items in Apex Legends.",
+            "imageUrl": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
+            "redeem": "Redeem in Apex Legends game or Origin/EA App",
+            "termsConditions": "Valid for Apex Legends Coins only. Cannot be exchanged for cash. Subject to EA Terms of Service.",
+            "state": "active",
+            "categoryId": {"name": "Games"}
+        },
+        {
+            "id": "gc018",
+            "title": "Valorant Points",
+            "description": "Purchase Valorant Points to buy agents, weapon skins, and battle passes in Riot Games' tactical shooter.",
+            "imageUrl": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
+            "redeem": "Redeem in Valorant game or Riot Games website",
+            "termsConditions": "Valid for Valorant Points only. Cannot be exchanged for cash. Subject to Riot Games Terms of Service.",
+            "state": "active",
+            "categoryId": {"name": "Games"}
+        },
+        {
+            "id": "gc019",
+            "title": "Microsoft Office 365",
+            "description": "Get access to Word, Excel, PowerPoint, Outlook, and more with a Microsoft Office 365 subscription. Includes cloud storage.",
+            "imageUrl": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
+            "redeem": "Activate at office.com/setup with your product key",
+            "termsConditions": "Valid for Microsoft Office 365 subscription only. Subject to Microsoft Software License Terms.",
+            "state": "active",
+            "categoryId": {"name": "Software & Apps"}
+        },
+        {
+            "id": "gc020",
+            "title": "Adobe Creative Cloud",
+            "description": "Access Photoshop, Illustrator, Premiere Pro, and 20+ creative apps with Adobe Creative Cloud subscription.",
+            "imageUrl": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
+            "redeem": "Activate at adobe.com with your redemption code",
+            "termsConditions": "Valid for Adobe Creative Cloud subscription only. Subject to Adobe Terms of Use.",
+            "state": "active",
+            "categoryId": {"name": "Software & Apps"}
+        },
+        {
+            "id": "gc021",
+            "title": "Norton 360 Antivirus",
+            "description": "Protect your devices with comprehensive antivirus, firewall, and identity theft protection from Norton 360.",
+            "imageUrl": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
+            "redeem": "Download and activate at norton.com with your product key",
+            "termsConditions": "Valid for Norton 360 subscription only. Subject to Norton License Agreement.",
+            "state": "active",
+            "categoryId": {"name": "Software & Apps"}
+        },
+        {
+            "id": "gc022",
+            "title": "Zoom Pro License",
+            "description": "Upgrade to Zoom Pro for unlimited group meetings, cloud recording, and advanced admin features.",
+            "imageUrl": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
+            "redeem": "Upgrade your account at zoom.us with your license code",
+            "termsConditions": "Valid for Zoom Pro subscription only. Subject to Zoom Terms of Service.",
+            "state": "active",
+            "categoryId": {"name": "Software & Apps"}
+        },
+        {
+            "id": "gc023",
+            "title": "Canva Pro Subscription",
+            "description": "Create stunning designs with Canva Pro featuring premium templates, photos, and advanced design tools.",
+            "imageUrl": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
+            "redeem": "Upgrade at canva.com with your subscription code",
+            "termsConditions": "Valid for Canva Pro subscription only. Subject to Canva Terms of Use.",
+            "state": "active",
+            "categoryId": {"name": "Software & Apps"}
+        },
+        {
+            "id": "gc024",
+            "title": "Grammarly Premium",
+            "description": "Improve your writing with advanced grammar checking, style suggestions, and plagiarism detection.",
+            "imageUrl": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
+            "redeem": "Upgrade at grammarly.com with your premium code",
+            "termsConditions": "Valid for Grammarly Premium subscription only. Subject to Grammarly Terms of Service.",
+            "state": "active",
+            "categoryId": {"name": "Software & Apps"}
+        },
+        {
+            "id": "gc025",
+            "title": "Dropbox Plus",
+            "description": "Get 2TB of secure cloud storage with Dropbox Plus, plus advanced sharing and collaboration features.",
+            "imageUrl": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
+            "redeem": "Upgrade at dropbox.com with your subscription code",
+            "termsConditions": "Valid for Dropbox Plus subscription only. Subject to Dropbox Terms of Service.",
+            "state": "active",
+            "categoryId": {"name": "Software & Apps"}
+        },
+        {
+            "id": "gc026",
+            "title": "Slack Pro Plan",
+            "description": "Enhance team collaboration with Slack Pro featuring unlimited message history and advanced integrations.",
+            "imageUrl": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
+            "redeem": "Upgrade your workspace at slack.com with your plan code",
+            "termsConditions": "Valid for Slack Pro subscription only. Subject to Slack Terms of Service.",
+            "state": "active",
+            "categoryId": {"name": "Software & Apps"}
+        },
+        {
+            "id": "gc027",
+            "title": "Mastercard Prepaid",
+            "description": "Reloadable prepaid Mastercard accepted worldwide. Perfect for online shopping and everyday purchases.",
+            "imageUrl": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
+            "redeem": "Activate your card online or by phone using the provided instructions",
+            "termsConditions": "Subject to Mastercard Prepaid Terms and Conditions. Fees may apply. Cannot be exchanged for cash.",
+            "state": "active",
+            "categoryId": {"name": "Payment Cards"}
+        },
+        {
+            "id": "gc028",
+            "title": "Visa Virtual Card",
+            "description": "Secure virtual Visa card for online purchases. Protect your main card details while shopping online.",
+            "imageUrl": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
+            "redeem": "Access your virtual card details through the provided secure portal",
+            "termsConditions": "Valid for online purchases only. Subject to Visa Terms and Conditions. Cannot be exchanged for cash.",
+            "state": "active",
+            "categoryId": {"name": "Payment Cards"}
+        },
+        {
+            "id": "gc029",
+            "title": "American Express Gift Card",
+            "description": "Premium gift card accepted at millions of locations worldwide. Perfect for special occasions and gifts.",
+            "imageUrl": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
+            "redeem": "Use like a regular American Express card at participating merchants",
+            "termsConditions": "Subject to American Express Gift Card Terms. Fees may apply. Cannot be exchanged for cash.",
+            "state": "active",
+            "categoryId": {"name": "Payment Cards"}
+        },
+        {
+            "id": "gc030",
+            "title": "PayPal Digital Gift",
+            "description": "Add funds directly to your PayPal account for secure online payments and transfers worldwide.",
+            "imageUrl": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
+            "redeem": "Add funds to your PayPal account using the provided redemption code",
+            "termsConditions": "Valid for PayPal account funding only. Subject to PayPal User Agreement. Cannot be exchanged for cash.",
+            "state": "active",
+            "categoryId": {"name": "Payment Cards"}
+        },
+        {
+            "id": "gc031",
+            "title": "Skrill Prepaid Card",
+            "description": "International prepaid card linked to your Skrill account. Perfect for global transactions and ATM withdrawals.",
+            "imageUrl": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
+            "redeem": "Activate through your Skrill account dashboard",
+            "termsConditions": "Subject to Skrill Terms and Conditions. International transaction fees may apply.",
+            "state": "active",
+            "categoryId": {"name": "Payment Cards"}
+        },
+        {
+            "id": "gc032",
+            "title": "Neteller Prepaid Card",
+            "description": "Secure prepaid Mastercard linked to your Neteller e-wallet. Ideal for online gaming and international payments.",
+            "imageUrl": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
+            "redeem": "Order and activate through your Neteller account",
+            "termsConditions": "Subject to Neteller Terms and Conditions. Account verification required.",
+            "state": "active",
+            "categoryId": {"name": "Payment Cards"}
         }
     ],
     "gameCards": [
@@ -416,55 +660,6 @@
             "title": "Poppo Live Coins",
             "discount": "-24.0%"
         }
-    ],
-    "newsAndPromotions": [
-        {
-            "id": 1,
-            "title": "Identity V x Frieren: Beyond Journey's End Lucky Draw",
-            "image": "https://images.unsplash.com/photo-1566576912321-d58ddd7a6088?w=400&h=200&fit=crop",
-            "category": "gaming"
-        },
-        {
-            "id": 2,
-            "title": "Enjoy 30% off Diamonds with MLBB's Metro Zero Update!",
-            "image": "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=400&h=200&fit=crop",
-            "category": "promotion"
-        },
-        {
-            "id": 3,
-            "title": "SEA2M is Gauging Interest in Doing a Nintendo Switch 2 Giveaway",
-            "image": "https://images.unsplash.com/photo-1566576912321-d58ddd7a6088?w=400&h=200&fit=crop",
-            "category": "news"
-        },
-        {
-            "id": 4,
-            "title": "Nintendo Super Mario Party Jamboree is Out on Switch 2!",
-            "image": "https://images.unsplash.com/photo-1566576912321-d58ddd7a6088?w=400&h=200&fit=crop",
-            "category": "gaming"
-        },
-        {
-            "id": 5,
-            "title": "Silver and Blood - The Gothic Vampire Real-Time Strategy RPG",
-            "image": "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=200&fit=crop",
-            "category": "gaming"
-        },
-        {
-            "id": 6,
-            "title": "Remamento: White Shadow - an open-world strategy RPG",
-            "image": "https://images.unsplash.com/photo-1511512578047-dfb367046420?w=400&h=200&fit=crop",
-            "category": "gaming"
-        },
-        {
-            "id": 7,
-            "title": "The Best Nintendo Switch 2 Games that Run at 60fps",
-            "image": "https://images.unsplash.com/photo-1566576912321-d58ddd7a6088?w=400&h=200&fit=crop",
-            "category": "gaming"
-        },
-        {
-            "id": 8,
-            "title": "Crystal of Atlan Giveaway is Coming your Way!",
-            "image": "https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=400&h=200&fit=crop",
-            "category": "giveaway"
-        }
     ]
+   
 }

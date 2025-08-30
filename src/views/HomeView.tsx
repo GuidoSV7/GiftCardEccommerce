@@ -8,12 +8,12 @@ import { HomeFooter } from '../components/home/HomeFooter';
 import { getOffers } from '../services/offerService';
 import { getCarouselItems } from '../services/carouselService';
 import { getGameCards } from '../services/gameCardService';
-import { getGridSections } from '../services/gridCardsService';
+import { getGifcardsWithCategories, getCategories } from '../services/gifcardService';
 import type { Offer } from '../services/offerService';
 import type { CarouselItem } from '../services/carouselService';
 import type { GameCardData } from '../services/gameCardService';
-import type { GridSection } from '../services/gridCardsService';
-import { getNewsAndPromotions } from '../services/newsService';
+import type { Gifcard, Category } from '../services/gifcardService';
+
 import HomeHeader from '../components/home/HomeHeader';
 
 
@@ -23,7 +23,8 @@ export const HomeView = () => {
     const [offers, setOffers] = useState<Offer[]>([]);
     const [carouselItems, setCarouselItems] = useState<CarouselItem[]>([]);
     const [gameCards, setGameCards] = useState<GameCardData[]>([]);
-    const [gridSections, setGridSections] = useState<GridSection[]>([]);
+    const [gifcards, setGifcards] = useState<Gifcard[]>([]);
+    const [categories, setCategories] = useState<Category[]>([]);
 
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -31,17 +32,19 @@ export const HomeView = () => {
     useEffect(() => {
         const loadData = async () => {
             try {
-                const [offersData, carouselData, gameCardsData, gridSectionsData] = await Promise.all([
+                const [offersData, carouselData, gameCardsData, gifcardsData, categoriesData] = await Promise.all([
                     getOffers(),
                     getCarouselItems(),
                     getGameCards(),
-                    getGridSections(),
-                    getNewsAndPromotions()
+                    getGifcardsWithCategories(),
+                    getCategories(),
+          
                 ]);
                 setOffers(offersData);
                 setCarouselItems(carouselData);
                 setGameCards(gameCardsData);
-                setGridSections(gridSectionsData);
+                setGifcards(gifcardsData);
+                setCategories(categoriesData);
 
                 setError(null);
             } catch (e) {
@@ -138,7 +141,7 @@ export const HomeView = () => {
                 </div>
             </div>
 
-            {/* Cards Grid Sections */}
+            {/* Gift Cards Sections */}
             {isLoading ? (
                 <div className="px-10 md:px-16 py-12">
                     <div className="flex items-center justify-center">
@@ -154,13 +157,20 @@ export const HomeView = () => {
             ) : (
                 <div className="container mx-auto px-6 sm:px-12 md:px-16 lg:px-24 xl:px-32 py-6">
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                        {gridSections.map((section, index) => (
-                            <CardGridSection
-                                key={index}
-                                title={section.title}
-                                items={section.items}
-                            />
-                        ))}
+                        {categories.map((category) => {
+                            const categoryGifcards = gifcards
+                                .filter(gc => gc.categoryId.name === category.name)
+                                .slice(-4); // Tomar las últimas 4 gifcards de cada categoría
+                            if (categoryGifcards.length === 0) return null;
+                            
+                            return (
+                                <CardGridSection
+                                    key={category.id}
+                                    title={category.name}
+                                    gifcards={categoryGifcards}
+                                />
+                            );
+                        })}
                     </div>
                 </div>
             )}

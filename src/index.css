@@ -1,5 +1,4 @@
 @import "tailwindcss";
-@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&display=swap');
 
 @keyframes gradient {
   0% {
@@ -10,16 +9,5 @@
   }
   100% {
     background-position: 0% 0%;
-  }
-}
-
-@layer utilities {
-  .animate-gradient {
-    animation: gradient 15s ease infinite;
-  }
-
-  .perspective {
-    perspective: 1000px;
-    transform-style: preserve-3d;
   }
 }
