@@ -5,7 +5,7 @@ export interface Category {
     name: string;
 }
 
-export interface Gifcard {
+export interface Product {
     id: string;
     title: string;
     description: string;
@@ -18,12 +18,12 @@ export interface Gifcard {
     };
 }
 
-export const getGifcards = async (): Promise<Gifcard[]> => {
+export const getProducts = async (): Promise<Product[]> => {
     try {
-        const response = await api.get('/gifcards');
+        const response = await api.get('/products');
         return response.data;
     } catch (error) {
-        console.error('Error fetching gifcards:', error);
+        console.error('Error fetching products:', error);
         throw error;
     }
 };
@@ -38,12 +38,12 @@ export const getCategories = async (): Promise<Category[]> => {
     }
 };
 
-export const getGifcardsWithCategories = async (): Promise<Gifcard[]> => {
+export const getProductsWithCategories = async (): Promise<Product[]> => {
     try {
-        const response = await api.get('/gifcards');
+        const response = await api.get('/products');
         return response.data;
     } catch (error) {
-        console.error('Error fetching gifcards with categories:', error);
+        console.error('Error fetching products with categories:', error);
         throw error;
     }
 };

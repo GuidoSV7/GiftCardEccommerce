@@ -1,12 +1,12 @@
 
 // import { type FieldErrors, type UseFormRegister } from 'react-hook-form';
 // import ErrorMessage from '../../ErrorMessage';
-// import type { GifcardFormData } from '../../../types';
+// import type { ProductFormData } from '../../../types';
 
 // type ProductFormProps = {
-//     register :  UseFormRegister<GifcardFormData>
+//     register :  UseFormRegister<ProductFormData>
 
-//     errors: FieldErrors<GifcardFormData>
+//     errors: FieldErrors<ProductFormData>
 
 //     }
 

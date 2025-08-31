@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import { useState } from 'react';
 
 export default function Sidebar() {
-  const [isGifcardsOpen, setIsGifcardsOpen] = useState(false);
+      const [isProductsOpen, setIsProductsOpen] = useState(false);
   const [isOffersOpen, setIsOffersOpen] = useState(false);
 
   return (
@@ -35,20 +35,20 @@ export default function Sidebar() {
             </Link>
           </li>
 
-          {/* Gifcards Menú */}
+                      {/* Products Menú */}
           <li>
             <button
-              onClick={() => setIsGifcardsOpen(!isGifcardsOpen)}
+              onClick={() => setIsProductsOpen(!isProductsOpen)}
               className="flex items-center justify-between w-full hover:bg-gray-700 rounded-lg p-3 transition-colors duration-200"
             >
               <div className="flex items-center">
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
                 </svg>
-                <span className="ml-3">Gifcards</span>
+                <span className="ml-3">Products</span>
               </div>
               <svg
-                className={`w-4 h-4 transition-transform duration-200 ${isGifcardsOpen ? 'transform rotate-180' : ''}`}
+                className={`w-4 h-4 transition-transform duration-200 ${isProductsOpen ? 'transform rotate-180' : ''}`}
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -57,14 +57,14 @@ export default function Sidebar() {
               </svg>
             </button>
 
-            {/* Submenú de Gifcards */}
-            <ul className={`mt-2 space-y-1 ${isGifcardsOpen ? 'block' : 'hidden'}`}>
+            {/* Submenú de Products */}
+            <ul className={`mt-2 space-y-1 ${isProductsOpen ? 'block' : 'hidden'}`}>
               <li>
                 <Link
                   to="/products"
                   className="flex items-center pl-11 pr-3 py-2 text-gray-300 hover:text-white hover:bg-gray-700 rounded-lg transition-colors duration-200"
                 >
-                  Ver Gifcards
+                  Ver Products
                 </Link>
               </li>
               <li>
@@ -72,7 +72,7 @@ export default function Sidebar() {
                   to="/products/create"
                   className="flex items-center pl-11 pr-3 py-2 text-gray-300 hover:text-white hover:bg-gray-700 rounded-lg transition-colors duration-200"
                 >
-                  Crear Gifcard
+                  Crear Product
                 </Link>
               </li>
               <li>

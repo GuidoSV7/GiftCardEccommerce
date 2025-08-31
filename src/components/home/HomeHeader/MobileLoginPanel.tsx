@@ -19,7 +19,7 @@ const MobileLoginPanel: React.FC<MobileLoginPanelProps> = ({ open, onClose }) =>
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M6 18L18 6M6 6l12 12" />
         </svg>
       </button>
-      <span className="text-white font-bold text-xl mt-8 mb-8">GIFCARDS</span>
+      <span className="text-white font-bold text-xl mt-8 mb-8">VEMPERGAMES</span>
       <button className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 rounded-full mb-4 transition-colors">INICIAR SESIÓN</button>
       <button className="w-full bg-green-400 hover:bg-green-500 text-white font-bold py-3 rounded-full transition-colors">REGISTRARSE</button>
     </div>

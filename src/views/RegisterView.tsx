@@ -29,7 +29,7 @@ const RegisterView: React.FC = () => {
       {/* Top Logo */}
       <div className="mb-8">
         <Link to="/" className="text-white font-bold text-xl">
-          GIFCARDS
+        VEMPERGAMES
         </Link>
       </div>
 
@@ -44,7 +44,7 @@ const RegisterView: React.FC = () => {
                 <h1 className="text-white text-xl sm:text-2xl font-bold mb-4 sm:mb-6 leading-tight">
                   <span className="block">PASOS FÁCILES PARA UNIRSE</span>
                   <span className="block">AL PROGRAMA DE</span>
-                  <span className="block">MEMBRESÍA GIFCARDS..</span>
+                  <span className="block">MEMBRESÍA VEMPERGAMES..</span>
                 </h1>
                 
                 {/* Steps */}
@@ -81,7 +81,7 @@ const RegisterView: React.FC = () => {
                       4
                     </div>
                     <p className="text-xs sm:text-sm leading-relaxed pt-1">
-                      Estás listo, comienza a disfrutar de las compras en GIFCARDS.
+                      Estás listo, comienza a disfrutar de las compras en VEMPERGAMES.
                     </p>
                   </div>
                 </div>
@@ -158,10 +158,10 @@ const RegisterView: React.FC = () => {
         <div className="max-w-5xl mx-auto">
           <div className="text-white text-xs text-center space-y-2">
             <div>
-              © 2007-2024 GifCards Mall Sdn Bhd
+              © 2007-2024 VEMPERGAMES Mall Sdn Bhd
             </div>
             <div className="flex justify-center items-center gap-4 flex-wrap">
-              <Link to="/about" className="hover:text-gray-300">Acerca de GIFCARDS</Link>
+              <Link to="/about" className="hover:text-gray-300">Acerca de VEMPERGAMES</Link>
               <span>•</span>
               <Link to="/support" className="hover:text-gray-300">Apoyo</Link>
               <span>•</span>

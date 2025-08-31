@@ -34,7 +34,7 @@ const LoginModal: React.FC<LoginModalProps> = ({ open, onClose }) => {
 
         {/* Header */}
         <div className="text-center mb-6 pt-2">
-          <h2 className="text-white text-lg font-semibold">Bienvenido a GifCards</h2>
+          <h2 className="text-white text-lg font-semibold">Bienvenido a VEMPERGAMES</h2>
         </div>
 
         {/* Botones */}

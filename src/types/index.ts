@@ -8,8 +8,8 @@ export const categorySchema = z.object({
 
 export type Category = z.infer<typeof categorySchema>;
 
-/** Gifcards */
-export const gifcardSchema = z.object({
+/** Products */
+export const productSchema = z.object({
     id: z.string(),
     title: z.string(),
     description: z.string(),
@@ -22,5 +22,5 @@ export const gifcardSchema = z.object({
     })
 });
 
-export type Gifcard = z.infer<typeof gifcardSchema>;
-export type GifcardFormData = Pick<Gifcard, "title" | "description" | "imageUrl" | "redeem" | "termsConditions" | "state" | "categoryId">;
+export type Product = z.infer<typeof productSchema>;
+export type ProductFormData = Pick<Product, "title" | "description" | "imageUrl" | "redeem" | "termsConditions" | "state" | "categoryId">;

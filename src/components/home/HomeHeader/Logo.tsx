@@ -7,7 +7,7 @@ interface LogoProps {
 const Logo: React.FC<LogoProps> = ({ className = "" }) => {
   return (
     <div className={`flex items-center ${className}`}>
-      <span className="text-white font-bold text-xl">GIFCARDS</span>
+      <span className="text-white font-bold text-xl">VEMPERGAMES</span>
     </div>
   );
 };

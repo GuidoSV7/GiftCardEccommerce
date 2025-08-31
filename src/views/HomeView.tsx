@@ -8,11 +8,11 @@ import { HomeFooter } from '../components/home/HomeFooter';
 import { getOffers } from '../services/offerService';
 import { getCarouselItems } from '../services/carouselService';
 import { getGameCards } from '../services/gameCardService';
-import { getGifcardsWithCategories, getCategories } from '../services/gifcardService';
+import { getProductsWithCategories, getCategories } from '../services/productService';
 import type { Offer } from '../services/offerService';
 import type { CarouselItem } from '../services/carouselService';
 import type { GameCardData } from '../services/gameCardService';
-import type { Gifcard, Category } from '../services/gifcardService';
+import type { Product, Category } from '../services/productService';
 
 import HomeHeader from '../components/home/HomeHeader';
 
@@ -23,7 +23,7 @@ export const HomeView = () => {
     const [offers, setOffers] = useState<Offer[]>([]);
     const [carouselItems, setCarouselItems] = useState<CarouselItem[]>([]);
     const [gameCards, setGameCards] = useState<GameCardData[]>([]);
-    const [gifcards, setGifcards] = useState<Gifcard[]>([]);
+    const [products, setProducts] = useState<Product[]>([]);
     const [categories, setCategories] = useState<Category[]>([]);
 
     const [isLoading, setIsLoading] = useState(true);
@@ -32,18 +32,18 @@ export const HomeView = () => {
     useEffect(() => {
         const loadData = async () => {
             try {
-                const [offersData, carouselData, gameCardsData, gifcardsData, categoriesData] = await Promise.all([
+                const [offersData, carouselData, gameCardsData, productsData, categoriesData] = await Promise.all([
                     getOffers(),
                     getCarouselItems(),
                     getGameCards(),
-                    getGifcardsWithCategories(),
+                    getProductsWithCategories(),
                     getCategories(),
           
                 ]);
                 setOffers(offersData);
                 setCarouselItems(carouselData);
                 setGameCards(gameCardsData);
-                setGifcards(gifcardsData);
+                setProducts(productsData);
                 setCategories(categoriesData);
 
                 setError(null);
@@ -158,16 +158,16 @@ export const HomeView = () => {
                 <div className="container mx-auto px-6 sm:px-12 md:px-16 lg:px-24 xl:px-32 py-6">
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                         {categories.map((category) => {
-                            const categoryGifcards = gifcards
-                                .filter(gc => gc.categoryId.name === category.name)
-                                .slice(-4); // Tomar las últimas 4 gifcards de cada categoría
-                            if (categoryGifcards.length === 0) return null;
+                            const categoryProducts = products
+                                .filter(product => product.categoryId.name === category.name)
+                                .slice(-4); // Tomar las últimas 4 products de cada categoría
+                            if (categoryProducts.length === 0) return null;
                             
                             return (
                                 <CardGridSection
                                     key={category.id}
                                     title={category.name}
-                                    gifcards={categoryGifcards}
+                                    products={categoryProducts}
                                 />
                             );
                         })}

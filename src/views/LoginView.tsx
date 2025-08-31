@@ -53,7 +53,7 @@ const LoginView: React.FC = () => {
       {/* Top Logo */}
       <div className="mb-8">
         <Link to="/" className="text-white font-bold text-xl">
-          GIFCARDS
+        VEMPERGAMES
         </Link>
       </div>
 
@@ -67,13 +67,13 @@ const LoginView: React.FC = () => {
               <div className="mb-6">
                 <h1 className="text-white text-xl sm:text-2xl font-bold mb-4 leading-tight">
                   <span className="block">BIENVENIDO DE VUELTA A</span>
-                  <span className="block">GIFCARDS</span>
+                  <span className="block">VEMPERGAMES</span>
                 </h1>
                 <p className="text-gray-300 text-xs sm:text-sm leading-relaxed">
                   ¡Hola! Inicia sesión en tu cuenta y continúa disfrutando
                   <span className="hidden sm:inline"><br /></span>
                   <span className="sm:hidden"> </span>
-                  de tu experiencia de compra en GIFCARDS.
+                  de tu experiencia de compra en VEMPERGAMES.
                 </p>
               </div>
 
@@ -193,10 +193,10 @@ const LoginView: React.FC = () => {
         <div className="max-w-5xl mx-auto">
           <div className="text-white text-xs text-center space-y-2">
             <div>
-              © 2007-2024 GifCards Mall Sdn Bhd
+              © 2007-2024 VEMPERGAMES Mall Sdn Bhd
             </div>
             <div className="flex justify-center items-center gap-4 flex-wrap">
-              <Link to="/about" className="hover:text-gray-300">Acerca de GIFCARDS</Link>
+              <Link to="/about" className="hover:text-gray-300">Acerca de VEMPERGAMES</Link>
               <span>•</span>
               <Link to="/support" className="hover:text-gray-300">Apoyo</Link>
               <span>•</span>
