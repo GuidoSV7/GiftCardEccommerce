@@ -1,5 +1,8 @@
 import { Outlet } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
+import { ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+
 
 export default function AppLayout() {
   return (
@@ -11,6 +14,9 @@ export default function AppLayout() {
           <Outlet />
         </main>
       </div>
+      <ToastContainer 
+
+      />
     </div>
   );
 }

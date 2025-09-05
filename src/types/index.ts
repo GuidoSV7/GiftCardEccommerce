@@ -7,6 +7,7 @@ export const categorySchema = z.object({
 });
 
 export type Category = z.infer<typeof categorySchema>;
+export type CategoryFormData = Pick<Category, "name">;
 
 /** Products */
 export const productSchema = z.object({
@@ -17,10 +18,26 @@ export const productSchema = z.object({
     redeem: z.string(),
     termsConditions: z.string(),
     state: z.boolean(),
-    categoryId: z.object({
+    category: z.object({
+        id: z.string(),
         name: z.string()
     })
 });
 
+export const dashboardProductSchema = z.array(
+    productSchema.pick({
+        id: true,
+        title: true,
+        description: true,
+        imageUrl: true,
+        redeem: true,
+        termsConditions: true,
+        state: true,
+        category: true
+    })
+)
+
 export type Product = z.infer<typeof productSchema>;
-export type ProductFormData = Pick<Product, "title" | "description" | "imageUrl" | "redeem" | "termsConditions" | "state" | "categoryId">;
+export type ProductFormData = Pick<Product, "title" | "description" | "imageUrl" | "redeem" | "termsConditions" | "state"> & {
+    category: { id: string; name: string };
+};

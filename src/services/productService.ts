@@ -1,4 +1,6 @@
+import { isAxiosError } from "axios";
 import api from "../lib/axios";
+import { dashboardProductSchema, type ProductFormData } from "../types";
 
 export interface Category {
     id: number;
@@ -12,21 +14,69 @@ export interface Product {
     imageUrl: string;
     redeem: string;
     termsConditions: string;
-    state: string;
-    categoryId: {
+    state: boolean;
+    category: {
+        id: string;
         name: string;
     };
 }
 
-export const getProducts = async (): Promise<Product[]> => {
+export async function createProduct(formData: ProductFormData) {
     try {
-        const response = await api.get('/products');
-        return response.data;
+        const { data } = await api.post('/products', formData);
+        return data;
     } catch (error) {
-        console.error('Error fetching products:', error);
+        if (isAxiosError(error)) {
+            
+            throw error.response?.data || error;
+        }
+       
         throw error;
     }
-};
+}
+
+export async function getProducts() {
+    try {
+        const { data } = await api.get('/products');
+        const response = dashboardProductSchema.safeParse(data);
+        if(response.success) {
+            return response.data;
+        }
+        return []; // Return empty array if parsing fails
+        
+    } catch (error) {
+        if (isAxiosError(error)) {
+            
+            throw error.response?.data || error;
+        }
+       
+        throw error;
+    }
+}
+
+export async function getProductsAll() {
+    try {
+        const { data } = await api.get('/products/admin/all');
+        return data;
+    } catch (error) {
+        if (isAxiosError(error)) {
+            
+            throw error.response?.data || error;
+        }
+       
+        throw error;
+    }
+}
+
+// export const getProducts = async (): Promise<Product[]> => {
+//     try {
+//         const response = await api.get('/products');
+//         return response.data;
+//     } catch (error) {
+//         console.error('Error fetching products:', error);
+//         throw error;
+//     }
+// };
 
 export const getCategories = async (): Promise<Category[]> => {
     try {

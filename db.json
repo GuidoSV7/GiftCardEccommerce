@@ -16,10 +16,10 @@
         {
             "id": "550e8400-e29b-41d4-a716-446655440002",
             "name": "User",
-            "userName": "regular_user",
+            "userName": "regular_member",
             "email": "user@gmail.com",
             "password": "123456",
-            "role": "user",
+            "role": "member",
             "registrationDate": "2024-02-20T14:30:00.000Z",
             "balance": 250.50,
             "discount": 5.0,
@@ -48,7 +48,7 @@
     
     "products": [
         {
-            "id": "gc001",
+            "id": "550e8400-e29b-41d4-a716-446655440001",
             "title": "iTunes Gift Card",
             "description": "Perfect for purchasing apps, games, music, movies, and more from the iTunes Store. Compatible with all Apple devices and services.",
             "imageUrl": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
@@ -59,7 +59,7 @@
                 "name": "Gift Cards"}
         },
         {
-            "id": "gc002",
+            "id": "550e8400-e29b-41d4-a716-446655440002",
             "title": "Steam Wallet Codes",
             "description": "Add funds to your Steam Wallet to purchase games, DLC, and in-game content from the Steam Store. Instant digital delivery.",
             "imageUrl": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
@@ -71,7 +71,7 @@
             }
         },
         {
-            "id": "gc003",
+            "id": "550e8400-e29b-41d4-a716-446655440003",
             "title": "PlayStation™Store Gift Cards",
             "description": "Purchase games, add-ons, themes, and more from the PlayStation Store. Compatible with PS4, PS5, and PlayStation Network.",
             "imageUrl": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
@@ -82,7 +82,7 @@
                 "name": "Gift Cards"}
         },
         {
-            "id": "gc004",
+            "id": "550e8400-e29b-41d4-a716-446655440004",
             "title": "Google Play Code",
             "description": "Use to purchase apps, games, movies, books, and more from Google Play Store. Perfect for Android users and Google services.",
             "imageUrl": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
@@ -94,8 +94,8 @@
             }
         },
         {
-            "id": "gc005",
-                    "title": "Roblox Digital Gift Card",
+            "id": "550e8400-e29b-41d4-a716-446655440005",
+            "title": "Roblox Digital Gift Card",
             "description": "Get Robux to customize your avatar, buy game passes, and unlock premium features in Roblox games. Perfect for young gamers.",
             "imageUrl": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
             "redeem": "Visit roblox.com/redeem and enter your gift card code to add Robux to your account",
@@ -106,7 +106,7 @@
             }
         },
         {
-            "id": "gc006",
+            "id": "550e8400-e29b-41d4-a716-446655440006",
             "title": "PUBG Mobile UC",
             "description": "Purchase Unknown Cash (UC) for PUBG Mobile to buy premium battle passes, skins, and exclusive in-game items.",
             "imageUrl": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
@@ -118,7 +118,7 @@
             }
         },
         {
-            "id": "gc007",
+            "id": "550e8400-e29b-41d4-a716-446655440007",
             "title": "Amazon Gift Card",
             "description": "Shop for millions of items on Amazon with this versatile gift card. Perfect for books, electronics, home goods, and more.",
             "imageUrl": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
@@ -128,7 +128,7 @@
             "categoryId": {"name": "Gift Cards"}
         },
         {
-            "id": "gc008",
+            "id": "550e8400-e29b-41d4-a716-446655440008",
             "title": "Netflix Gift Card",
             "description": "Enjoy unlimited streaming of movies and TV shows with a Netflix subscription gift card. Perfect for entertainment lovers.",
             "imageUrl": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
@@ -138,7 +138,7 @@
             "categoryId": {"name": "Gift Cards"}
         },
         {
-            "id": "gc009",
+            "id": "550e8400-e29b-41d4-a716-446655440009",
             "title": "Spotify Gift Card",
             "description": "Enjoy premium music streaming with ad-free listening, offline downloads, and high-quality audio on Spotify Premium.",
             "imageUrl": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
@@ -148,7 +148,7 @@
             "categoryId": {"name": "Gift Cards"}
         },
         {
-            "id": "gc010",
+            "id": "550e8400-e29b-41d4-a716-44665544000A",
             "title": "Xbox Gift Card",
             "description": "Buy the latest games, add-ons, and more from the Microsoft Store. Works on Xbox consoles and Windows PC.",
             "imageUrl": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
@@ -158,7 +158,7 @@
             "categoryId": {"name": "Gift Cards"}
         },
         {
-            "id": "gc011",
+            "id": "550e8400-e29b-41d4-a716-44665544000B",
             "title": "Visa Gift Card",
             "description": "Universal gift card accepted anywhere Visa is accepted. Perfect for any occasion and gives complete spending flexibility.",
             "imageUrl": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
@@ -168,7 +168,7 @@
             "categoryId": {"name": "Gift Cards"}
         },
         {
-            "id": "gc012",
+            "id": "550e8400-e29b-41d4-a716-44665544000C",
             "title": "Apple Gift Card",
             "description": "Use for purchases at Apple Store, iTunes, App Store, and more. Compatible with all Apple devices and services.",
             "imageUrl": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
@@ -178,7 +178,7 @@
             "categoryId": {"name": "Gift Cards"}
         },
         {
-            "id": "gc013",
+            "id": "550e8400-e29b-41d4-a716-44665544000D",
             "title": "Fortnite V-Bucks",
             "description": "Purchase V-Bucks for Fortnite to buy Battle Passes, outfits, pickaxes, gliders, emotes, and more in the Item Shop.",
             "imageUrl": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
@@ -188,7 +188,7 @@
             "categoryId": {"name": "Games"}
         },
         {
-            "id": "gc014",
+            "id": "550e8400-e29b-41d4-a716-44665544000E",
             "title": "Minecraft Minecoins",
             "description": "Buy Minecoins to purchase skins, texture packs, worlds, and more from the Minecraft Marketplace.",
             "imageUrl": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
@@ -198,7 +198,7 @@
             "categoryId": {"name": "Games"}
         },
         {
-            "id": "gc015",
+            "id": "550e8400-e29b-41d4-a716-44665544000F",
             "title": "League of Legends RP",
             "description": "Purchase Riot Points (RP) for League of Legends to buy champions, skins, and other in-game content.",
             "imageUrl": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
@@ -208,7 +208,7 @@
             "categoryId": {"name": "Games"}
         },
         {
-            "id": "gc016",
+            "id": "550e8400-e29b-41d4-a716-446655440010",
             "title": "Call of Duty Points",
             "description": "Purchase COD Points to buy Battle Passes, operator skins, weapon blueprints, and other premium content in Call of Duty games.",
             "imageUrl": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
@@ -218,7 +218,7 @@
             "categoryId": {"name": "Games"}
         },
         {
-            "id": "gc017",
+            "id": "550e8400-e29b-41d4-a716-446655440011",
             "title": "Apex Legends Coins",
             "description": "Buy Apex Coins to purchase Legends, Battle Passes, Apex Packs, and cosmetic items in Apex Legends.",
             "imageUrl": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
@@ -228,7 +228,7 @@
             "categoryId": {"name": "Games"}
         },
         {
-            "id": "gc018",
+            "id": "550e8400-e29b-41d4-a716-446655440012",
             "title": "Valorant Points",
             "description": "Purchase Valorant Points to buy agents, weapon skins, and battle passes in Riot Games' tactical shooter.",
             "imageUrl": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
@@ -238,7 +238,7 @@
             "categoryId": {"name": "Games"}
         },
         {
-            "id": "gc019",
+            "id": "550e8400-e29b-41d4-a716-446655440013",
             "title": "Microsoft Office 365",
             "description": "Get access to Word, Excel, PowerPoint, Outlook, and more with a Microsoft Office 365 subscription. Includes cloud storage.",
             "imageUrl": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
@@ -248,7 +248,7 @@
             "categoryId": {"name": "Software & Apps"}
         },
         {
-            "id": "gc020",
+            "id": "550e8400-e29b-41d4-a716-446655440014",
             "title": "Adobe Creative Cloud",
             "description": "Access Photoshop, Illustrator, Premiere Pro, and 20+ creative apps with Adobe Creative Cloud subscription.",
             "imageUrl": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
@@ -258,7 +258,7 @@
             "categoryId": {"name": "Software & Apps"}
         },
         {
-            "id": "gc021",
+            "id": "550e8400-e29b-41d4-a716-446655440015",
             "title": "Norton 360 Antivirus",
             "description": "Protect your devices with comprehensive antivirus, firewall, and identity theft protection from Norton 360.",
             "imageUrl": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
@@ -268,7 +268,7 @@
             "categoryId": {"name": "Software & Apps"}
         },
         {
-            "id": "gc022",
+            "id": "550e8400-e29b-41d4-a716-446655440016",
             "title": "Zoom Pro License",
             "description": "Upgrade to Zoom Pro for unlimited group meetings, cloud recording, and advanced admin features.",
             "imageUrl": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
@@ -278,7 +278,7 @@
             "categoryId": {"name": "Software & Apps"}
         },
         {
-            "id": "gc023",
+            "id": "550e8400-e29b-41d4-a716-446655440017",
             "title": "Canva Pro Subscription",
             "description": "Create stunning designs with Canva Pro featuring premium templates, photos, and advanced design tools.",
             "imageUrl": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
@@ -288,7 +288,7 @@
             "categoryId": {"name": "Software & Apps"}
         },
         {
-            "id": "gc024",
+            "id": "550e8400-e29b-41d4-a716-446655440018",
             "title": "Grammarly Premium",
             "description": "Improve your writing with advanced grammar checking, style suggestions, and plagiarism detection.",
             "imageUrl": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
@@ -298,7 +298,7 @@
             "categoryId": {"name": "Software & Apps"}
         },
         {
-            "id": "gc025",
+            "id": "550e8400-e29b-41d4-a716-446655440019",
             "title": "Dropbox Plus",
             "description": "Get 2TB of secure cloud storage with Dropbox Plus, plus advanced sharing and collaboration features.",
             "imageUrl": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
@@ -308,7 +308,7 @@
             "categoryId": {"name": "Software & Apps"}
         },
         {
-            "id": "gc026",
+            "id": "550e8400-e29b-41d4-a716-44665544001A",
             "title": "Slack Pro Plan",
             "description": "Enhance team collaboration with Slack Pro featuring unlimited message history and advanced integrations.",
             "imageUrl": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
@@ -318,7 +318,7 @@
             "categoryId": {"name": "Software & Apps"}
         },
         {
-            "id": "gc027",
+            "id": "550e8400-e29b-41d4-a716-44665544001B",
             "title": "Mastercard Prepaid",
             "description": "Reloadable prepaid Mastercard accepted worldwide. Perfect for online shopping and everyday purchases.",
             "imageUrl": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
@@ -328,7 +328,7 @@
             "categoryId": {"name": "Payment Cards"}
         },
         {
-            "id": "gc028",
+            "id": "550e8400-e29b-41d4-a716-44665544001C",
             "title": "Visa Virtual Card",
             "description": "Secure virtual Visa card for online purchases. Protect your main card details while shopping online.",
             "imageUrl": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
@@ -338,7 +338,7 @@
             "categoryId": {"name": "Payment Cards"}
         },
         {
-            "id": "gc029",
+            "id": "550e8400-e29b-41d4-a716-44665544001D",
             "title": "American Express Gift Card",
             "description": "Premium gift card accepted at millions of locations worldwide. Perfect for special occasions and gifts.",
             "imageUrl": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
@@ -348,7 +348,7 @@
             "categoryId": {"name": "Payment Cards"}
         },
         {
-            "id": "gc030",
+            "id": "550e8400-e29b-41d4-a716-44665544001E",
             "title": "PayPal Digital Gift",
             "description": "Add funds directly to your PayPal account for secure online payments and transfers worldwide.",
             "imageUrl": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
@@ -358,7 +358,7 @@
             "categoryId": {"name": "Payment Cards"}
         },
         {
-            "id": "gc031",
+            "id": "550e8400-e29b-41d4-a716-44665544001F",
             "title": "Skrill Prepaid Card",
             "description": "International prepaid card linked to your Skrill account. Perfect for global transactions and ATM withdrawals.",
             "imageUrl": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
@@ -368,7 +368,7 @@
             "categoryId": {"name": "Payment Cards"}
         },
         {
-            "id": "gc032",
+            "id": "550e8400-e29b-41d4-a716-446655440020",
             "title": "Neteller Prepaid Card",
             "description": "Secure prepaid Mastercard linked to your Neteller e-wallet. Ideal for online gaming and international payments.",
             "imageUrl": "https://assets.offgamers.com/img/offer/kr_fdf75033-56ee-4ce6-929c-1f9c93a4c642_9853ae0e-2a86-44de-870d-c1896f54b602.webp",
@@ -376,6 +376,99 @@
             "termsConditions": "Subject to Neteller Terms and Conditions. Account verification required.",
             "state": true,
             "categoryId": {"name": "Payment Cards"}
+        }
+    ],
+
+    "productsPrices":[
+        {
+            "id": "550e8400-e29b-41d4-a716-446655440010",
+            "name": "iTunes Gift Card",
+            "value": 10,
+            "productId": "550e8400-e29b-41d4-a716-446655440001"
+        },
+        {
+            "id": "550e8400-e29b-41d4-a716-446655440011",
+            "name": "iTunes Gift Card",
+            "value": 25,
+            "productId": "550e8400-e29b-41d4-a716-446655440001"
+        },
+        {
+            "id": "550e8400-e29b-41d4-a716-446655440012",
+            "name": "iTunes Gift Card",
+            "value": 50,
+            "productId": "550e8400-e29b-41d4-a716-446655440001"
+        },
+        {
+            "id": "550e8400-e29b-41d4-a716-446655440013",
+            "name": "iTunes Gift Card",
+            "value": 100,
+            "productId": "550e8400-e29b-41d4-a716-446655440001"
+        },
+        {
+            "id": "550e8400-e29b-41d4-a716-446655440014",
+            "name": "iTunes Gift Card",
+            "value": 200,
+            "productId": "550e8400-e29b-41d4-a716-446655440001"
+        },
+        {
+            "id": "550e8400-e29b-41d4-a716-446655440015",
+            "name": "Steam Wallet Codes",
+            "value": 5,
+            "productId": "550e8400-e29b-41d4-a716-446655440002"
+        },
+        {
+            "id": "550e8400-e29b-41d4-a716-446655440016",
+            "name": "Steam Wallet Codes",
+            "value": 10,
+            "productId": "550e8400-e29b-41d4-a716-446655440002"
+        },
+        {
+            "id": "550e8400-e29b-41d4-a716-446655440017",
+            "name": "Steam Wallet Codes",
+            "value": 25,
+            "productId": "550e8400-e29b-41d4-a716-446655440002"
+        },
+        {
+            "id": "550e8400-e29b-41d4-a716-446655440018",
+            "name": "Steam Wallet Codes",
+            "value": 50,
+            "productId": "550e8400-e29b-41d4-a716-446655440002"
+        },
+        {
+            "id": "550e8400-e29b-41d4-a716-446655440019",
+            "name": "Steam Wallet Codes",
+            "value": 100,
+            "productId": "550e8400-e29b-41d4-a716-446655440002"
+        },
+        {
+            "id": "550e8400-e29b-41d4-a716-446655440020",
+            "name": "PlayStation™Store Gift Cards",
+            "value": 10,
+            "productId": "550e8400-e29b-41d4-a716-446655440003"
+        },
+        {
+            "id": "550e8400-e29b-41d4-a716-446655440021",
+            "name": "PlayStation™Store Gift Cards",
+            "value": 25,
+            "productId": "550e8400-e29b-41d4-a716-446655440003"
+        },
+        {
+            "id": "550e8400-e29b-41d4-a716-446655440022",
+            "name": "PlayStation™Store Gift Cards",
+            "value": 50,
+            "productId": "550e8400-e29b-41d4-a716-446655440003"
+        },
+        {
+            "id": "550e8400-e29b-41d4-a716-446655440023",
+            "name": "PlayStation™Store Gift Cards",
+            "value": 100,
+            "productId": "550e8400-e29b-41d4-a716-446655440003"
+        },
+        {
+            "id": "550e8400-e29b-41d4-a716-446655440024",
+            "name": "PlayStation™Store Gift Cards",
+            "value": 200,
+            "productId": "550e8400-e29b-41d4-a716-446655440003"
         }
     ],
     "gameCards": [
@@ -659,6 +752,46 @@
             "price": "28,000,000 Coins",
             "title": "Poppo Live Coins",
             "discount": "-24.0%"
+        }
+    ],
+    
+    "tokens": [
+        {
+            "id": "token_001",
+            "userId": "550e8400-e29b-41d4-a716-446655440001",
+            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1NTBlODQwMC1lMjliLTQxZDQtYTcxNi00NDY2NTU0NDAwMDEiLCJlbWFpbCI6ImFkbWluQGdtYWlsLmNvbSIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTcwNTgwMDAwMCwiZXhwIjoxNzA1ODg2NDAwfQ.example_signature_admin",
+            "createdAt": "2024-01-20T10:00:00.000Z",
+            "expiresAt": "2024-01-20T12:00:00.000Z",
+            "isActive": true
+        },
+        {
+            "id": "token_002",
+            "userId": "550e8400-e29b-41d4-a716-446655440002",
+            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1NTBlODQwMC1lMjliLTQxZDQtYTcxNi00NDY2NTU0NDAwMDIiLCJlbWFpbCI6InVzZXJAZ21haWwuY29tIiwicm9sZSI6ImNsaWVudCIsImlhdCI6MTcwNTgwMDAwMCwiZXhwIjoxNzA1ODg2NDAwfQ.example_signature_user",
+            "createdAt": "2024-01-20T14:30:00.000Z",
+            "expiresAt": "2024-01-20T16:30:00.000Z",
+            "isActive": true
+        }
+    ],
+    
+    "sessions": [
+        {
+            "id": "session_001",
+            "userId": "550e8400-e29b-41d4-a716-446655440001",
+            "tokenId": "token_001",
+            "ipAddress": "192.168.1.100",
+            "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+            "lastActivity": "2024-01-20T10:30:00.000Z",
+            "isActive": true
+        },
+        {
+            "id": "session_002",
+            "userId": "550e8400-e29b-41d4-a716-446655440002",
+            "tokenId": "token_002",
+            "ipAddress": "192.168.1.101",
+            "userAgent": "Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15",
+            "lastActivity": "2024-01-20T14:45:00.000Z",
+            "isActive": true
         }
     ]
    

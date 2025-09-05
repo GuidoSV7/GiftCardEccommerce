@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 interface LogoProps {
   className?: string;
@@ -6,9 +7,9 @@ interface LogoProps {
 
 const Logo: React.FC<LogoProps> = ({ className = "" }) => {
   return (
-    <div className={`flex items-center ${className}`}>
+    <Link to="/" className={`flex items-center ${className}`}>
       <span className="text-white font-bold text-xl">VEMPERGAMES</span>
-    </div>
+    </Link>
   );
 };
 

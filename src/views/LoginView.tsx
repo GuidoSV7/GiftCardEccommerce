@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { loginUser, type LoginCredentials } from '../services/userService';
+import { login, type LoginCredentials } from '../services/authService';
+import { useAuthStore } from '../stores/authStore';
 
 const LoginView: React.FC = () => {
   const navigate = useNavigate();
+  const { setUser } = useAuthStore();
   const [formData, setFormData] = useState<LoginCredentials>({
     email: '',
     password: ''
@@ -23,16 +25,27 @@ const LoginView: React.FC = () => {
     setError('');
 
     try {
-      const user = await loginUser(formData);
-      if (user) {
-        console.log('Login successful:', user);
-        // Redirigir al dashboard o home después del login exitoso
+      const response = await login(formData);
+      
+      // Guardar en el store de Zustand
+      setUser({
+        id: response.id,
+        email: response.email,
+        rol: response.rol
+      }, response.token);
+      
+      // Redirigir según el rol del usuario
+      if (response.rol === 'admin') {
         navigate('/dashboard');
+      } else if (response.rol === 'member') {
+        navigate('/');
       } else {
-        setError('Credenciales incorrectas. Verifica tu email y contraseña.');
+        // Para otros roles, redirigir al home
+        navigate('/');
       }
-    } catch (err) {
-      setError('Error al iniciar sesión. Inténtalo de nuevo.');
+    } catch (err: any) {
+      const errorMessage = err.response?.data?.message || 'Error al iniciar sesión. Inténtalo de nuevo.';
+      setError(errorMessage);
       console.error('Login error:', err);
     } finally {
       setLoading(false);
