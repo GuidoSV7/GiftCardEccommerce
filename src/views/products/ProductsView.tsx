@@ -1,17 +1,49 @@
 
 import { getProductsAll, type Product } from '../../services/productService';
-
-import {  useQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
+import { useNavigate } from 'react-router-dom';
 
 export default function ProductsView() {
+  const navigate = useNavigate();
 
-    const { data} = useQuery({
-        queryKey: ['products'],
-        queryFn: getProductsAll
-    })
+  const { data, isLoading, error } = useQuery({
+    queryKey: ['products'],
+    queryFn: getProductsAll
+  });
+
+  const handleEditProduct = (productId: string) => {
+    navigate(`/products/edit/${productId}`);
+  };
 
 
- if(data) return (
+  if (isLoading) {
+    return (
+      <div className="w-full flex items-center justify-center min-h-[400px]">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Cargando productos...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="w-full flex items-center justify-center min-h-[400px]">
+        <div className="text-center">
+          <div className="h-24 w-24 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <svg className="h-12 w-12 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+            </svg>
+          </div>
+          <h2 className="text-2xl font-bold text-gray-800 mb-2">Error al cargar</h2>
+          <p className="text-gray-600">No se pudieron cargar los productos</p>
+        </div>
+      </div>
+    );
+  }
+
+  return (
     <div className="container mx-auto p-4">
       <div className="mb-6">
         <h1 className="text-4xl font-black text-gray-800">Todos los Productos</h1>
@@ -20,7 +52,7 @@ export default function ProductsView() {
         </p>
       </div>
 
-     {data.length === 0 ? (
+      {data && data.length === 0 ? (
          <div className="bg-gray-50 rounded-lg p-8 text-center">
            <h3 className="text-lg font-medium text-gray-600 mb-2">No hay productos</h3>
            <p className="text-gray-500">Aún no se han creado productos en el sistema.</p>
@@ -73,7 +105,7 @@ export default function ProductsView() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                        {product.category.name }
+                        {product.category?.name || 'Sin categoría'}
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
@@ -86,14 +118,15 @@ export default function ProductsView() {
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                      <div className="flex space-x-2">
-                        <button className="text-blue-600 hover:text-blue-900 font-medium">
-                          Editar
-                        </button>
-                        <button className="text-red-600 hover:text-red-900 font-medium">
-                          Eliminar
-                        </button>
-                      </div>
+                      <button 
+                        onClick={() => handleEditProduct(product.id)}
+                        className="text-blue-600 hover:text-blue-900 font-medium flex items-center gap-1"
+                      >
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                        </svg>
+                        Editar
+                      </button>
                     </td>
                   </tr>
                 ))}
@@ -104,7 +137,7 @@ export default function ProductsView() {
       )}
 
       <div className="mt-6 text-sm text-gray-500 text-center">
-        Total de productos: {data.length}
+        Total de productos: {data?.length || 0}
       </div>
     </div>
   );

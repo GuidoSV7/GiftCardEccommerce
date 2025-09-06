@@ -15,6 +15,7 @@ import VemperAffiliatesView from "./views/VemperAffiliatesView";
 import MyCouponsView from "./views/MyCouponsView";
 import CreateProductView from "./views/products/CreateProductView";
 import ProductsView from "./views/products/ProductsView";
+import EditProductView from "./views/products/EditProductView";
 
 export default function router() {
   return (
@@ -37,7 +38,8 @@ export default function router() {
         <Route element={<AppLayout />}>
           <Route path="/dashboard" element={<DashboardView />} index />
           <Route path="/products" element={<ProductsView />} />
-          <Route path="/products/create" element={<CreateProductView />} /> 
+          <Route path="/products/create" element={<CreateProductView />} />
+          <Route path="/products/edit/:id" element={<EditProductView />} />
         </Route>
       </Routes>
     </BrowserRouter>

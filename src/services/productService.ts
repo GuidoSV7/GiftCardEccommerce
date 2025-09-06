@@ -68,15 +68,43 @@ export async function getProductsAll() {
     }
 }
 
-// export const getProducts = async (): Promise<Product[]> => {
-//     try {
-//         const response = await api.get('/products');
-//         return response.data;
-//     } catch (error) {
-//         console.error('Error fetching products:', error);
-//         throw error;
-//     }
-// };
+export async function getProductById(id: string) {
+    try {
+        const { data } = await api.get(`/products/${id}`);
+        return data;
+    } catch (error) {
+        if (isAxiosError(error)) {
+            throw error.response?.data || error;
+        }
+        throw error;
+    }
+}
+
+export async function getProductByCategoryId(id: string) {
+    try {
+        const { data } = await api.get(`/products/category/${id}`);
+        return data;
+    } catch (error) {
+        if (isAxiosError(error)) {
+            throw error.response?.data || error;
+        }
+        throw error;
+    }
+}
+
+export async function updateProduct(id: string, formData: ProductFormData) {
+    try {
+        const { data } = await api.put(`/products/${id}`, formData);
+        return data;
+    } catch (error) {
+        if (isAxiosError(error)) {
+            throw error.response?.data || error;
+        }
+        throw error;
+    }
+}
+
+
 
 export const getCategories = async (): Promise<Category[]> => {
     try {

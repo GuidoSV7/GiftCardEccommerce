@@ -5,7 +5,6 @@ import { GameSection } from '../components/games/GameSection';
 import { CardGridSection } from '../components/cards/CardGridSection';
 import { HomeFooter } from '../components/home/HomeFooter';
 import { getOffers } from '../services/offerService';
-import { getCarouselItems } from '../services/carouselService';
 import { getGameCards } from '../services/gameCardService';
 import {getCategories, getProducts } from '../services/productService';
 
@@ -25,12 +24,6 @@ export const HomeView = () => {
         staleTime: 5 * 60 * 1000, // 5 minutos
     });
 
-    const { data: carouselItems = [], isLoading: carouselLoading, error: carouselError } = useQuery({
-        queryKey: ['carousel'],
-        queryFn: getCarouselItems,
-        retry: 2,
-        staleTime: 5 * 60 * 1000,
-    });
 
     const { data: gameCards = [], isLoading: gameCardsLoading, error: gameCardsError } = useQuery({
         queryKey: ['gameCards'],
@@ -55,7 +48,6 @@ export const HomeView = () => {
 
     // Log de errores para debugging (solo en desarrollo)
     if (offersError) console.error('Error en ofertas:', offersError);
-    if (carouselError) console.error('Error en carousel:', carouselError);
     if (gameCardsError) console.error('Error en game cards:', gameCardsError);
     if (productsError) console.error('Error en productos:', productsError);
     if (categoriesError) console.error('Error en categorías:', categoriesError);
@@ -68,72 +60,12 @@ export const HomeView = () => {
                 {/* Carousel Section */}
                 <div className="w-full">
                     <div className="container mx-auto px-6 sm:px-12 md:px-16 lg:px-24 xl:px-32">
-                        {!carouselLoading && !carouselError && <Carousel items={carouselItems} />}
-                        {carouselLoading && (
-                            <div className="relative w-full h-64 md:h-80 lg:h-96 overflow-hidden mb-8 bg-gray-800">
-                                <div className="flex items-center justify-center h-full">
-                                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white"></div>
-                                </div>
-                            </div>
-                        )}
-                        {carouselError && (
-                            <div className="relative w-full h-64 md:h-80 lg:h-96 overflow-hidden mb-8 bg-gray-800">
-                                <div className="flex items-center justify-center h-full">
-                                    <p className="text-red-500">Error al cargar carousel</p>
-                                </div>
-                            </div>
-                        )}
-
-                        {/* Carousel por defecto si no hay datos */}
-                        {!carouselLoading && !carouselError && (!carouselItems || carouselItems.length === 0) && (
-                            <div className="relative w-full h-64 md:h-80 lg:h-96 overflow-hidden mb-8 rounded-lg">
-                                <div className="flex h-full">
-                                    {/* Imagen 1 */}
-                                    <div className="flex-1 relative bg-gradient-to-br from-blue-600 to-blue-800">
-                                        <div className="absolute inset-0 flex items-center justify-center">
-                                            <div className="text-center text-white">
-                                                <div className="w-16 h-16 mx-auto mb-4 bg-white/20 rounded-full flex items-center justify-center">
-                                                    <span className="text-2xl">🎮</span>
-                                                </div>
-                                                <h3 className="text-xl font-bold">Gaming</h3>
-                                                <p className="text-sm opacity-90">Steam, PlayStation, Xbox</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                    {/* Imagen 2 */}
-                                    <div className="flex-1 relative bg-gradient-to-br from-purple-600 to-purple-800">
-                                        <div className="absolute inset-0 flex items-center justify-center">
-                                            <div className="text-center text-white">
-                                                <div className="w-16 h-16 mx-auto mb-4 bg-white/20 rounded-full flex items-center justify-center">
-                                                    <span className="text-2xl">🎬</span>
-                                                </div>
-                                                <h3 className="text-xl font-bold">Entertainment</h3>
-                                                <p className="text-sm opacity-90">Netflix, Spotify, Disney+</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                    {/* Imagen 3 */}
-                                    <div className="flex-1 relative bg-gradient-to-br from-green-600 to-green-800">
-                                        <div className="absolute inset-0 flex items-center justify-center">
-                                            <div className="text-center text-white">
-                                                <div className="w-16 h-16 mx-auto mb-4 bg-white/20 rounded-full flex items-center justify-center">
-                                                    <span className="text-2xl">💳</span>
-                                                </div>
-                                                <h3 className="text-xl font-bold">Gift Cards</h3>
-                                                <p className="text-sm opacity-90">Amazon, Google Play</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        )}
+                        <Carousel offers={offers} products={products} />
                     </div>
                 </div>
 
-                {/* Ofertas Section - Solo mostrar si hay ofertas */}
-                {!offersLoading && !offersError && offers && offers.length > 0 && (
+                {/* Ofertas Section */}
+                {!offersLoading && !offersError && offers && offers.length > 0 ? (
                     <div className="container mx-auto px-6 sm:px-12 md:px-16 lg:px-24 xl:px-32 pb-8">
                         {/* Header Section */}
                         <div className="flex justify-between items-center mb-6">
@@ -179,25 +111,41 @@ export const HomeView = () => {
                         </div>
                         </>
                     </div>
-                )}
-
-                {/* Estados de carga y error para ofertas */}
-                {offersLoading && (
+                ) : !offersLoading && !offersError ? (
+                    /* Mensaje cuando no hay ofertas */
+                    <div className="container mx-auto px-6 sm:px-12 md:px-16 lg:px-24 xl:px-32 pb-8">
+                        <div className="text-center py-12">
+                            <div className="w-20 h-20 mx-auto mb-4 bg-gray-700 rounded-full flex items-center justify-center">
+                                <svg className="w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
+                                </svg>
+                            </div>
+                            <h3 className="text-xl font-bold text-white mb-2">No hay ofertas por el momento</h3>
+                            <p className="text-gray-400">Vuelve pronto para descubrir nuestras ofertas exclusivas</p>
+                        </div>
+                    </div>
+                ) : offersLoading ? (
+                    /* Estado de carga */
                     <div className="container mx-auto px-6 sm:px-12 md:px-16 lg:px-24 xl:px-32 pb-8">
                         <div className="text-center py-8">
                             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto"></div>
                             <p className="text-white mt-4">Cargando ofertas...</p>
                         </div>
                     </div>
-                )}
-
-                {offersError && (
+                ) : offersError ? (
+                    /* Estado de error - disfrazado como "no hay ofertas" */
                     <div className="container mx-auto px-6 sm:px-12 md:px-16 lg:px-24 xl:px-32 pb-8">
-                        <div className="text-center py-8">
-                            <p className="text-red-500">Error al cargar ofertas</p>
+                        <div className="text-center py-12">
+                            <div className="w-20 h-20 mx-auto mb-4 bg-gray-700 rounded-full flex items-center justify-center">
+                                <svg className="w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
+                                </svg>
+                            </div>
+                            <h3 className="text-xl font-bold text-white mb-2">No hay ofertas disponibles</h3>
+                            <p className="text-gray-400">Vuelve pronto para descubrir nuestras ofertas exclusivas</p>
                         </div>
                     </div>
-                )}
+                ) : null}
             </div>
 
             {/* Gift Cards Sections */}
@@ -292,24 +240,53 @@ export const HomeView = () => {
             <div className="pt-6">
                 {/* Game Cards Sections */}
                 <div className="container mx-auto px-6 sm:px-12 md:px-16 lg:px-24 xl:px-32 pb-12">
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-12">
-                        <GameSection
-                            title="TARJETA DE JUEGO POPULAR"
-                            games={gameCards.filter(card => card.category === 'tarjeta')}
-                            isLoading={gameCardsLoading}
-                            error={gameCardsError ? 'Error al cargar tarjetas de juego' : null}
-                        />
+                    {gameCardsLoading ? (
+                        /* Estado de carga para Game Cards */
+                        <div className="text-center py-12">
+                            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto"></div>
+                            <p className="text-white mt-4">Cargando tarjetas de juego...</p>
+                        </div>
+                    ) : gameCardsError ? (
+                        /* Estado de error para Game Cards - disfrazado como "no hay tarjetas" */
+                        <div className="text-center py-12">
+                            <div className="w-20 h-20 mx-auto mb-4 bg-gray-700 rounded-full flex items-center justify-center">
+                                <svg className="w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                                </svg>
+                            </div>
+                            <h3 className="text-xl font-bold text-white mb-2">No hay tarjetas de juego disponibles</h3>
+                            <p className="text-gray-400">Vuelve pronto para descubrir nuestras tarjetas de juego</p>
+                        </div>
+                    ) : gameCards && gameCards.length > 0 ? (
+                        /* Mostrar Game Cards si hay datos */
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-12">
+                            <GameSection
+                                title="TARJETA DE JUEGO POPULAR"
+                                games={gameCards.filter(card => card.category === 'tarjeta')}
+                                isLoading={false}
+                                error={null}
+                            />
 
-                        {/* Popular Game Recharge Section */}
-                        <GameSection
-                            title="RECARGA DE JUEGO POPULAR"
-                            games={gameCards.filter(card => card.category === 'recarga')}
-                            isLoading={gameCardsLoading}
-                            error={gameCardsError ? 'Error al cargar recargas de juego' : null}
-                        />
-
-                        
-                    </div>
+                            {/* Popular Game Recharge Section */}
+                            <GameSection
+                                title="RECARGA DE JUEGO POPULAR"
+                                games={gameCards.filter(card => card.category === 'recarga')}
+                                isLoading={false}
+                                error={null}
+                            />
+                        </div>
+                    ) : (
+                        /* Mensaje cuando no hay Game Cards */
+                        <div className="text-center py-12">
+                            <div className="w-20 h-20 mx-auto mb-4 bg-gray-700 rounded-full flex items-center justify-center">
+                                <svg className="w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                                </svg>
+                            </div>
+                            <h3 className="text-xl font-bold text-white mb-2">No hay tarjetas de juego por el momento</h3>
+                            <p className="text-gray-400">Vuelve pronto para descubrir nuestras tarjetas de juego</p>
+                        </div>
+                    )}
                 </div>
                 
 

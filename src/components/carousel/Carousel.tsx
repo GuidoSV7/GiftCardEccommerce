@@ -1,28 +1,92 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 
-interface CarouselItem {
+interface Offer {
     id: number;
-    image: string;
     title: string;
-    subtitle: string;
-    brand: string;
+    image: string;
+    price?: string;
+    discount?: string;
+}
+
+interface Product {
+    id: string;
+    title: string;
+    imageUrl: string;
+    description?: string;
+    category?: {
+        name: string;
+    };
 }
 
 interface CarouselProps {
-    items: CarouselItem[];
+    offers?: Offer[];
+    products?: Product[];
 }
 
-export const Carousel: React.FC<CarouselProps> = ({ items }) => {
+export const Carousel: React.FC<CarouselProps> = ({ offers = [], products = [] }) => {
     const [currentSlide, setCurrentSlide] = useState(0);
     const [touchStart, setTouchStart] = useState<number>(0);
     const [touchEnd, setTouchEnd] = useState<number>(0);
 
+    // Imágenes por defecto
+    const defaultImages = [
+        {
+            id: 1,
+            image: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?w=800&h=600&fit=crop',
+            title: 'Gaming',
+            subtitle: 'Descubre los mejores juegos',
+            brand: 'GAMING'
+        },
+        {
+            id: 2,
+            image: 'https://images.unsplash.com/photo-1489599804151-0b6a0b4a0b4a?w=800&h=600&fit=crop',
+            title: 'Entertainment',
+            subtitle: 'Entretenimiento sin límites',
+            brand: 'ENTERTAINMENT'
+        },
+        {
+            id: 3,
+            image: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&h=600&fit=crop',
+            title: 'Gift Cards',
+            subtitle: 'Regalos perfectos para cualquier ocasión',
+            brand: 'GIFT CARDS'
+        }
+    ];
+
+    // Lógica de fallback: ofertas -> productos -> imágenes por defecto
+    const carouselItems = useMemo(() => {
+        // Si hay ofertas, usar las últimas 3
+        if (offers && offers.length > 0) {
+            return offers.slice(-3).map((offer, index) => ({
+                id: index + 1,
+                image: offer.image,
+                title: offer.title,
+                subtitle: offer.discount || 'Oferta especial',
+                brand: 'OFERTA'
+            }));
+        }
+        
+        // Si no hay ofertas pero hay productos, usar los últimos 3
+        if (products && products.length > 0) {
+            return products.slice(-3).map((product, index) => ({
+                id: index + 1,
+                image: product.imageUrl,
+                title: product.title,
+                subtitle: product.category?.name || 'Producto destacado',
+                brand: 'PRODUCTO'
+            }));
+        }
+        
+        // Si no hay ni ofertas ni productos, usar imágenes por defecto
+        return defaultImages;
+    }, [offers, products]);
+
     useEffect(() => {
         const timer = setInterval(() => {
-            setCurrentSlide((prev) => (prev + 1) % items.length);
+            setCurrentSlide((prev) => (prev + 1) % carouselItems.length);
         }, 8000);
         return () => clearInterval(timer);
-    }, [items.length]);
+    }, [carouselItems.length]);
 
     const handleTouchStart = (e: React.TouchEvent) => {
         setTouchStart(e.targetTouches[0].clientX);
@@ -39,10 +103,10 @@ export const Carousel: React.FC<CarouselProps> = ({ items }) => {
         const isRightSwipe = distance < -50;
 
         if (isLeftSwipe) {
-            setCurrentSlide((prev) => (prev + 1) % items.length);
+            setCurrentSlide((prev) => (prev + 1) % carouselItems.length);
         }
         if (isRightSwipe) {
-            setCurrentSlide((prev) => (prev - 1 + items.length) % items.length);
+            setCurrentSlide((prev) => (prev - 1 + carouselItems.length) % carouselItems.length);
         }
 
         setTouchStart(0);
@@ -50,15 +114,15 @@ export const Carousel: React.FC<CarouselProps> = ({ items }) => {
     };
 
     const nextSlide = () => {
-        setCurrentSlide((prev) => (prev + 1) % items.length);
+        setCurrentSlide((prev) => (prev + 1) % carouselItems.length);
     };
 
     const prevSlide = () => {
-        setCurrentSlide((prev) => (prev - 1 + items.length) % items.length);
+        setCurrentSlide((prev) => (prev - 1 + carouselItems.length) % carouselItems.length);
     };
 
-    const getPrevIndex = () => (currentSlide - 1 + items.length) % items.length;
-    const getNextIndex = () => (currentSlide + 1) % items.length;
+    const getPrevIndex = () => (currentSlide - 1 + carouselItems.length) % carouselItems.length;
+    const getNextIndex = () => (currentSlide + 1) % carouselItems.length;
 
     return (
         <div className="relative w-full aspect-square md:h-80 lg:h-96 mb-4 md:mb-8">
@@ -68,7 +132,7 @@ export const Carousel: React.FC<CarouselProps> = ({ items }) => {
                     <div
                         className="hidden lg:block absolute left-0 w-[15%] h-[90%] top-[5%] opacity-30 overflow-hidden rounded-lg"
                         style={{
-                            backgroundImage: `url(${items[getPrevIndex()].image})`,
+                            backgroundImage: `url(${carouselItems[getPrevIndex()].image})`,
                             backgroundSize: 'cover',
                             backgroundPosition: 'center',
                             filter: 'blur(4px)',
@@ -77,7 +141,7 @@ export const Carousel: React.FC<CarouselProps> = ({ items }) => {
                     <div
                         className="hidden lg:block absolute right-0 w-[15%] h-[90%] top-[5%] opacity-30 overflow-hidden rounded-lg"
                         style={{
-                            backgroundImage: `url(${items[getNextIndex()].image})`,
+                            backgroundImage: `url(${carouselItems[getNextIndex()].image})`,
                             backgroundSize: 'cover',
                             backgroundPosition: 'center',
                             filter: 'blur(4px)',
@@ -94,7 +158,7 @@ export const Carousel: React.FC<CarouselProps> = ({ items }) => {
                                 onTouchMove={handleTouchMove}
                                 onTouchEnd={handleTouchEnd}
                             >
-                                {items.map((slide, index) => (
+                                {carouselItems.map((slide, index) => (
                                     <div key={slide.id} className="w-full h-full flex-shrink-0 relative overflow-hidden">
                                         <img 
                                             src={slide.image}
@@ -148,7 +212,7 @@ export const Carousel: React.FC<CarouselProps> = ({ items }) => {
 
                     {/* Indicadores */}
                     <div className="absolute bottom-2 md:bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2 z-10">
-                        {items.map((_, index) => (
+                        {carouselItems.map((_, index) => (
                             <button
                                 key={index}
                                 onClick={() => setCurrentSlide(index)}
