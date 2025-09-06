@@ -2,12 +2,13 @@ import {z} from "zod";
 
 /** Categories */
 export const categorySchema = z.object({
-    id: z.number(),
-    name: z.string()
+    id: z.string(),
+    name: z.string(),
+    state: z.boolean()
 });
 
 export type Category = z.infer<typeof categorySchema>;
-export type CategoryFormData = Pick<Category, "name">;
+export type CategoryFormData = Pick<Category, "name" | "state">;
 
 /** Products */
 export const productSchema = z.object({
