@@ -1,14 +1,39 @@
 
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useAuthStore } from '../stores/authStore';
 
 export default function DashboardView() {
   const [editModalOpen, setEditModalOpen] = useState(false);
+  const { user, isAuthenticated } = useAuthStore();
+  
   const [userData, setUserData] = useState({
-    name: 'Admin',
-    email: 'admin@gmail.com',
-    role: 'Administrador'
+    name: '',
+    email: '',
+    role: ''
   });
+
+  // Función para generar un nombre amigable
+  const generateFriendlyName = (email: string) => {
+    const username = email.split('@')[0];
+    // Capitalizar la primera letra y reemplazar puntos/guiones con espacios
+    return username
+      .replace(/[._-]/g, ' ')
+      .split(' ')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ');
+  };
+
+  // Cargar datos del usuario logueado
+  useEffect(() => {
+    if (user && isAuthenticated) {
+      setUserData({
+        name: generateFriendlyName(user.email),
+        email: user.email,
+        role: user.rol === 'admin' ? 'Administrador' : 'Miembro'
+      });
+    }
+  }, [user, isAuthenticated]);
 
   const handleSaveProfile = (e: React.FormEvent) => {
     e.preventDefault();
@@ -16,6 +41,23 @@ export default function DashboardView() {
     console.log('Guardando perfil:', userData);
     setEditModalOpen(false);
   };
+
+  // Si no está autenticado, mostrar mensaje
+  if (!isAuthenticated || !user) {
+    return (
+      <div className="w-full flex items-center justify-center min-h-[400px]">
+        <div className="text-center">
+          <div className="h-24 w-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <svg className="h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+            </svg>
+          </div>
+          <h2 className="text-2xl font-bold text-gray-800 mb-2">No autenticado</h2>
+          <p className="text-gray-600">Por favor inicia sesión para acceder al dashboard</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full space-y-8">
@@ -31,20 +73,29 @@ export default function DashboardView() {
           
           {/* Información del usuario */}
           <div>
-            <h1 className="text-4xl font-bold mb-3">¡Bienvenido de vuelta, Admin!</h1>
-            <p className="text-blue-100 text-xl mb-4">admin@gmail.com</p>
+            <h1 className="text-4xl font-bold mb-3">
+              ¡Bienvenido de vuelta, {userData.name || 'Usuario'}!
+            </h1>
+            <p className="text-blue-100 text-xl mb-4">{userData.email || 'Cargando...'}</p>
             <div className="flex items-center justify-center space-x-6 text-blue-100">
               <span className="flex items-center">
                 <svg className="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                Último acceso: Hoy 9:30 AM
+                Último acceso: {new Date().toLocaleDateString('es-ES', { 
+                  weekday: 'long', 
+                  year: 'numeric', 
+                  month: 'long', 
+                  day: 'numeric',
+                  hour: '2-digit',
+                  minute: '2-digit'
+                })}
               </span>
               <span className="flex items-center">
                 <svg className="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                Rol: Administrador
+                Rol: {userData.role || 'Cargando...'}
               </span>
             </div>
           </div>

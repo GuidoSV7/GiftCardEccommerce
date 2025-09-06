@@ -1,7 +1,7 @@
 
 import { type FieldErrors, type UseFormRegister, useWatch, type Control } from 'react-hook-form';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import ErrorMessage from '../../ErrorMessage';
 import type { ProductFormData } from '../../../types';
@@ -21,6 +21,16 @@ export default function ProductForm({ register, control, setValue, errors }: Pro
     const [showCategoryModal, setShowCategoryModal] = useState(false);
     const [newCategoryName, setNewCategoryName] = useState('');
     
+    // Estados para los modales de HTML
+    const [showDescriptionModal, setShowDescriptionModal] = useState(false);
+    const [showRedeemModal, setShowRedeemModal] = useState(false);
+    const [showTermsModal, setShowTermsModal] = useState(false);
+    
+    // Estados para el contenido HTML temporal
+    const [tempDescription, setTempDescription] = useState('');
+    const [tempRedeem, setTempRedeem] = useState('');
+    const [tempTerms, setTempTerms] = useState('');
+    
     const queryClient = useQueryClient();
     const { data: categories, isLoading: categoriesLoading } = useQuery({
         queryKey: ['categories'],
@@ -31,6 +41,75 @@ export default function ProductForm({ register, control, setValue, errors }: Pro
         control,
         name: "imageUrl"
     });
+
+    const description = useWatch({
+        control,
+        name: "description"
+    });
+
+    const redeem = useWatch({
+        control,
+        name: "redeem"
+    });
+
+    const termsConditions = useWatch({
+        control,
+        name: "termsConditions"
+    });
+
+    // Funciones para abrir modales
+    const openDescriptionModal = () => {
+        setTempDescription(description || '');
+        setShowDescriptionModal(true);
+    };
+
+    const openRedeemModal = () => {
+        setTempRedeem(redeem || '');
+        setShowRedeemModal(true);
+    };
+
+    const openTermsModal = () => {
+        setTempTerms(termsConditions || '');
+        setShowTermsModal(true);
+    };
+
+    // Funciones para guardar cambios
+    const saveDescription = () => {
+        setValue("description", tempDescription);
+        setShowDescriptionModal(false);
+    };
+
+    const saveRedeem = () => {
+        setValue("redeem", tempRedeem);
+        setShowRedeemModal(false);
+    };
+
+    const saveTerms = () => {
+        setValue("termsConditions", tempTerms);
+        setShowTermsModal(false);
+    };
+
+    // Función para manejar imágenes rotas en la vista previa
+    const handleImageError = useCallback((e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+        const img = e.target as HTMLImageElement;
+        img.style.display = 'none';
+        
+        // Crear un div de reemplazo
+        const replacement = document.createElement('div');
+        replacement.className = 'flex items-center justify-center bg-gray-100 border-2 border-dashed border-gray-300 rounded-lg p-4 text-gray-500 text-sm';
+        replacement.innerHTML = `
+            <div class="text-center">
+                <svg class="w-8 h-8 mx-auto mb-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                </svg>
+                <p>Imagen no disponible</p>
+                <p class="text-xs mt-1">${img.alt || 'Sin descripción'}</p>
+            </div>
+        `;
+        
+        // Reemplazar la imagen con el div
+        img.parentNode?.insertBefore(replacement, img);
+    }, []);
 
     const handleDrag = useCallback((e: React.DragEvent) => {
         e.preventDefault();
@@ -99,6 +178,63 @@ export default function ProductForm({ register, control, setValue, errors }: Pro
 
     return (
         <>
+            {/* Inputs ocultos para los campos HTML */}
+            <input
+                type="hidden"
+                {...register("description", {
+                    required: "La descripción del producto es obligatoria"
+                })}
+            />
+            <input
+                type="hidden"
+                {...register("redeem", {
+                    required: "Las instrucciones de redención son obligatorias"
+                })}
+            />
+            <input
+                type="hidden"
+                {...register("termsConditions", {
+                    required: "Los términos y condiciones son obligatorios"
+                })}
+            />
+
+            {/* Botones para editar contenido HTML */}
+            <div className="mb-6 p-4 bg-gray-50 rounded-lg">
+                <h3 className="text-sm font-bold text-gray-700 mb-3">Contenido HTML del Producto</h3>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                    <button
+                        type="button"
+                        onClick={openDescriptionModal}
+                        className="flex items-center justify-center gap-2 p-3 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors"
+                    >
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                        </svg>
+                        Editar Descripción
+                    </button>
+                    <button
+                        type="button"
+                        onClick={openRedeemModal}
+                        className="flex items-center justify-center gap-2 p-3 bg-green-500 hover:bg-green-600 text-white rounded-lg transition-colors"
+                    >
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                        </svg>
+                        Editar Instrucciones
+                    </button>
+                    <button
+                        type="button"
+                        onClick={openTermsModal}
+                        className="flex items-center justify-center gap-2 p-3 bg-yellow-500 hover:bg-yellow-600 text-white rounded-lg transition-colors"
+                    >
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                        </svg>
+                        Editar Términos
+                    </button>
+                </div>
+            </div>
+
             <div className="mb-5 space-y-3">
                 <label htmlFor="title" className="text-sm uppercase font-bold">
                     Título del Producto
@@ -117,22 +253,6 @@ export default function ProductForm({ register, control, setValue, errors }: Pro
                 )}
             </div>
 
-            <div className="mb-5 space-y-3">
-                <label htmlFor="description" className="text-sm uppercase font-bold">
-                    Descripción
-                </label>
-                <textarea
-                    id="description"
-                    className="w-full p-3 border border-gray-200 rounded"
-                    placeholder="Descripción del producto"
-                    {...register("description", {
-                        required: "La descripción del producto es obligatoria"
-                    })}
-                />
-                {errors.description && (
-                    <ErrorMessage>{errors.description.message}</ErrorMessage>
-                )}
-            </div>
 
             <div className="mb-5 space-y-3">
                 <label htmlFor="imageUrl" className="text-sm uppercase font-bold">
@@ -220,39 +340,7 @@ export default function ProductForm({ register, control, setValue, errors }: Pro
                 )}
             </div>
 
-            <div className="mb-5 space-y-3">
-                <label htmlFor="redeem" className="text-sm uppercase font-bold">
-                    Instrucciones de Redención
-                </label>
-                <textarea
-                    id="redeem"
-                    className="w-full p-3 border border-gray-200 rounded"
-                    placeholder="Instrucciones para redimir el producto"
-                    {...register("redeem", {
-                        required: "Las instrucciones de redención son obligatorias"
-                    })}
-                />
-                {errors.redeem && (
-                    <ErrorMessage>{errors.redeem.message}</ErrorMessage>
-                )}
-            </div>
 
-            <div className="mb-5 space-y-3">
-                <label htmlFor="termsConditions" className="text-sm uppercase font-bold">
-                    Términos y Condiciones
-                </label>
-                <textarea
-                    id="termsConditions"
-                    className="w-full p-3 border border-gray-200 rounded"
-                    placeholder="Términos y condiciones del producto"
-                    {...register("termsConditions", {
-                        required: "Los términos y condiciones son obligatorios"
-                    })}
-                />
-                {errors.termsConditions && (
-                    <ErrorMessage>{errors.termsConditions.message}</ErrorMessage>
-                )}
-            </div>
 
             <div className="mb-5 space-y-3">
                 <div className="flex items-center gap-2">
@@ -282,10 +370,10 @@ export default function ProductForm({ register, control, setValue, errors }: Pro
                     </button>
                 </div>
                 <select
-                    id="category"
+                    id="categoryId"
                     className="w-full p-3 border border-gray-200 rounded"
                     disabled={categoriesLoading}
-                    {...register("category", {
+                    {...register("categoryId", {
                         required: "La categoría es obligatoria"
                     })}
                 >
@@ -300,8 +388,8 @@ export default function ProductForm({ register, control, setValue, errors }: Pro
                         ))
                     )}
                 </select>
-                {errors.category && (
-                    <ErrorMessage>{errors.category.message}</ErrorMessage>
+                {errors.categoryId && (
+                    <ErrorMessage>{errors.categoryId.message}</ErrorMessage>
                 )}
             </div>
 
@@ -354,6 +442,213 @@ export default function ProductForm({ register, control, setValue, errors }: Pro
                                 className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition-colors duration-200"
                             >
                                 Crear
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Modal para editar Descripción */}
+            {showDescriptionModal && (
+                <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-6">
+                    <div className="bg-white rounded-xl shadow-2xl w-full max-w-5xl h-[90vh] flex flex-col">
+                        <div className="flex justify-between items-center p-6 border-b border-gray-200">
+                            <div>
+                                <h3 className="text-2xl font-bold text-gray-800">Editar Descripción</h3>
+                                <p className="text-sm text-gray-600 mt-1">Escribe el contenido HTML de la descripción del producto</p>
+                            </div>
+                            <button
+                                type="button"
+                                onClick={() => setShowDescriptionModal(false)}
+                                className="text-gray-400 hover:text-gray-600 text-3xl font-bold transition-colors"
+                            >
+                                ×
+                            </button>
+                        </div>
+                        
+                        <div className="flex-1 grid grid-cols-1 lg:grid-cols-2 gap-6 p-6 min-h-0">
+                            <div className="space-y-3">
+                                <label className="block text-sm font-semibold text-gray-700 uppercase tracking-wide">Editor HTML</label>
+                                <textarea
+                                    value={tempDescription}
+                                    onChange={(e) => setTempDescription(e.target.value)}
+                                    className="w-full h-full p-4 border-2 border-gray-300 rounded-lg font-mono text-sm resize-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all"
+                                    placeholder="<h3>Descripción del Producto</h3>&#10;<p>Descripción detallada...</p>&#10;<ul>&#10;  <li>Característica 1</li>&#10;  <li>Característica 2</li>&#10;</ul>"
+                                />
+                            </div>
+                            <div className="space-y-3">
+                                <label className="block text-sm font-semibold text-gray-700 uppercase tracking-wide">Vista Previa</label>
+                                <div className="h-full max-h-[60vh] border-2 border-gray-200 rounded-lg p-4 bg-white overflow-y-auto shadow-inner">
+                                    {tempDescription ? (
+                                        <div 
+                                            dangerouslySetInnerHTML={{ __html: tempDescription }}
+                                            style={{
+                                                '--image-error-bg': '#f3f4f6',
+                                                '--image-error-color': '#6b7280'
+                                            } as React.CSSProperties}
+                                        />
+                                    ) : (
+                                        <div className="flex items-center justify-center h-full min-h-[200px]">
+                                            <p className="text-gray-400 text-center">
+                                                <svg className="w-12 h-12 mx-auto mb-2 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                                </svg>
+                                                Escribe HTML para ver la vista previa
+                                            </p>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div className="flex gap-4 p-6 border-t border-gray-200 bg-gray-50">
+                            <button
+                                type="button"
+                                onClick={() => setShowDescriptionModal(false)}
+                                className="flex-1 bg-gray-500 hover:bg-gray-600 text-white font-bold py-3 px-6 rounded-lg transition-colors duration-200"
+                            >
+                                Cancelar
+                            </button>
+                            <button
+                                type="button"
+                                onClick={saveDescription}
+                                className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition-colors duration-200"
+                            >
+                                Guardar Descripción
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Modal para editar Instrucciones de Redención */}
+            {showRedeemModal && (
+                <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-6">
+                    <div className="bg-white rounded-xl shadow-2xl w-full max-w-5xl h-[90vh] flex flex-col">
+                        <div className="flex justify-between items-center p-6 border-b border-gray-200">
+                            <div>
+                                <h3 className="text-2xl font-bold text-gray-800">Editar Instrucciones de Redención</h3>
+                                <p className="text-sm text-gray-600 mt-1">Escribe las instrucciones paso a paso para que el usuario pueda canjear su producto</p>
+                            </div>
+                            <button
+                                type="button"
+                                onClick={() => setShowRedeemModal(false)}
+                                className="text-gray-400 hover:text-gray-600 text-3xl font-bold transition-colors"
+                            >
+                                ×
+                            </button>
+                        </div>
+                        
+                        <div className="flex-1 grid grid-cols-1 lg:grid-cols-2 gap-6 p-6 min-h-0">
+                            <div className="space-y-3">
+                                <label className="block text-sm font-semibold text-gray-700 uppercase tracking-wide">Editor HTML</label>
+                                <textarea
+                                    value={tempRedeem}
+                                    onChange={(e) => setTempRedeem(e.target.value)}
+                                    className="w-full h-full p-4 border-2 border-gray-300 rounded-lg font-mono text-sm resize-none focus:border-green-500 focus:ring-2 focus:ring-green-200 transition-all"
+                                    placeholder="<h3>Cómo canjear tu código:</h3>&#10;<ol>&#10;  <li>Ve a la página de canje</li>&#10;  <li>Ingresa tu código</li>&#10;  <li>¡Disfruta!</li>&#10;</ol>"
+                                />
+                            </div>
+                            <div className="space-y-3">
+                                <label className="block text-sm font-semibold text-gray-700 uppercase tracking-wide">Vista Previa</label>
+                                <div className="h-full max-h-[60vh] border-2 border-gray-200 rounded-lg p-4 bg-white overflow-y-auto shadow-inner">
+                                    {tempRedeem ? (
+                                        <div dangerouslySetInnerHTML={{ __html: tempRedeem }} />
+                                    ) : (
+                                        <div className="flex items-center justify-center h-full min-h-[200px]">
+                                            <p className="text-gray-400 text-center">
+                                                <svg className="w-12 h-12 mx-auto mb-2 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                                </svg>
+                                                Escribe HTML para ver la vista previa
+                                            </p>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div className="flex gap-4 p-6 border-t border-gray-200 bg-gray-50">
+                            <button
+                                type="button"
+                                onClick={() => setShowRedeemModal(false)}
+                                className="flex-1 bg-gray-500 hover:bg-gray-600 text-white font-bold py-3 px-6 rounded-lg transition-colors duration-200"
+                            >
+                                Cancelar
+                            </button>
+                            <button
+                                type="button"
+                                onClick={saveRedeem}
+                                className="flex-1 bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg transition-colors duration-200"
+                            >
+                                Guardar Instrucciones
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Modal para editar Términos y Condiciones */}
+            {showTermsModal && (
+                <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-6">
+                    <div className="bg-white rounded-xl shadow-2xl w-full max-w-5xl h-[90vh] flex flex-col">
+                        <div className="flex justify-between items-center p-6 border-b border-gray-200">
+                            <div>
+                                <h3 className="text-2xl font-bold text-gray-800">Editar Términos y Condiciones</h3>
+                                <p className="text-sm text-gray-600 mt-1">Define las condiciones legales y restricciones del producto</p>
+                            </div>
+                            <button
+                                type="button"
+                                onClick={() => setShowTermsModal(false)}
+                                className="text-gray-400 hover:text-gray-600 text-3xl font-bold transition-colors"
+                            >
+                                ×
+                            </button>
+                        </div>
+                        
+                        <div className="flex-1 grid grid-cols-1 lg:grid-cols-2 gap-6 p-6 min-h-0">
+                            <div className="space-y-3">
+                                <label className="block text-sm font-semibold text-gray-700 uppercase tracking-wide">Editor HTML</label>
+                                <textarea
+                                    value={tempTerms}
+                                    onChange={(e) => setTempTerms(e.target.value)}
+                                    className="w-full h-full p-4 border-2 border-gray-300 rounded-lg font-mono text-sm resize-none focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 transition-all"
+                                    placeholder="<h3>Términos y Condiciones</h3>&#10;<ul>&#10;  <li>Válido por 1 año</li>&#10;  <li>Solo en Estados Unidos</li>&#10;</ul>&#10;<table>&#10;  <tr><th>Restricción</th><th>Detalle</th></tr>&#10;  <tr><td>Región</td><td>US</td></tr>&#10;</table>"
+                                />
+                            </div>
+                            <div className="space-y-3">
+                                <label className="block text-sm font-semibold text-gray-700 uppercase tracking-wide">Vista Previa</label>
+                                <div className="h-full max-h-[60vh] border-2 border-gray-200 rounded-lg p-4 bg-white overflow-y-auto shadow-inner">
+                                    {tempTerms ? (
+                                        <div dangerouslySetInnerHTML={{ __html: tempTerms }} />
+                                    ) : (
+                                        <div className="flex items-center justify-center h-full min-h-[200px]">
+                                            <p className="text-gray-400 text-center">
+                                                <svg className="w-12 h-12 mx-auto mb-2 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                                </svg>
+                                                Escribe HTML para ver la vista previa
+                                            </p>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div className="flex gap-4 p-6 border-t border-gray-200 bg-gray-50">
+                            <button
+                                type="button"
+                                onClick={() => setShowTermsModal(false)}
+                                className="flex-1 bg-gray-500 hover:bg-gray-600 text-white font-bold py-3 px-6 rounded-lg transition-colors duration-200"
+                            >
+                                Cancelar
+                            </button>
+                            <button
+                                type="button"
+                                onClick={saveTerms}
+                                className="flex-1 bg-yellow-600 hover:bg-yellow-700 text-white font-bold py-3 px-6 rounded-lg transition-colors duration-200"
+                            >
+                                Guardar Términos
                             </button>
                         </div>
                     </div>

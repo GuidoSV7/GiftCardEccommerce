@@ -3,9 +3,10 @@ import React from 'react';
 interface MobileLoginPanelProps {
   open: boolean;
   onClose: () => void;
+  onLoginClick: () => void;
 }
 
-const MobileLoginPanel: React.FC<MobileLoginPanelProps> = ({ open, onClose }) => (
+const MobileLoginPanel: React.FC<MobileLoginPanelProps> = ({ open, onClose, onLoginClick }) => (
   <div
     className={`fixed top-0 right-0 w-[280px] h-screen bg-[#23272f]/95 transform transition-transform duration-300 ease-out z-50 md:hidden ${open ? 'translate-x-0' : 'translate-x-full'}`}
   >
@@ -20,8 +21,21 @@ const MobileLoginPanel: React.FC<MobileLoginPanelProps> = ({ open, onClose }) =>
         </svg>
       </button>
       <span className="text-white font-bold text-xl mt-8 mb-8">VEMPERGAMES</span>
-      <button className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 rounded-full mb-4 transition-colors">INICIAR SESIÓN</button>
-      <button className="w-full bg-green-400 hover:bg-green-500 text-white font-bold py-3 rounded-full transition-colors">REGISTRARSE</button>
+      <button 
+        onClick={() => {
+          onClose();
+          onLoginClick();
+        }}
+        className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 rounded-full mb-4 transition-colors"
+      >
+        INICIAR SESIÓN
+      </button>
+      <button 
+        onClick={onClose}
+        className="w-full bg-green-400 hover:bg-green-500 text-white font-bold py-3 rounded-full transition-colors"
+      >
+        REGISTRARSE
+      </button>
     </div>
   </div>
 );

@@ -46,7 +46,11 @@ export default function HomeHeader() {
         />
 
         <MobileMenu open={menuOpen} onClose={() => setMenuOpen(false)} />
-        <MobileLoginPanel open={loginPanelOpen} onClose={() => setLoginPanelOpen(false)} />
+        <MobileLoginPanel 
+          open={loginPanelOpen} 
+          onClose={() => setLoginPanelOpen(false)}
+          onLoginClick={() => setLoginModalOpen(true)}
+        />
 
         {/* Vista Desktop */}
         <DesktopHeader onLoginModalOpen={() => setLoginModalOpen(true)} />

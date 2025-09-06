@@ -39,5 +39,5 @@ export const dashboardProductSchema = z.array(
 
 export type Product = z.infer<typeof productSchema>;
 export type ProductFormData = Pick<Product, "title" | "description" | "imageUrl" | "redeem" | "termsConditions" | "state"> & {
-    category: { id: string; name: string };
+    categoryId: number;
 };

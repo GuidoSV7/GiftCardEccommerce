@@ -19,7 +19,7 @@ export default function CreateProductView() {
         redeem: "",
         termsConditions: "",
         state: true,  
-        category: { id: "", name: "" }
+        categoryId: 0
     }
 
 

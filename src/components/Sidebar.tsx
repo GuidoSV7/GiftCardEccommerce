@@ -2,8 +2,10 @@ import { Link } from 'react-router-dom';
 import { useState } from 'react';
 
 export default function Sidebar() {
-      const [isProductsOpen, setIsProductsOpen] = useState(false);
+  const [isProductsOpen, setIsProductsOpen] = useState(false);
   const [isOffersOpen, setIsOffersOpen] = useState(false);
+  const [isCategoriesOpen, setIsCategoriesOpen] = useState(false);
+  const [isMembersOpen, setIsMembersOpen] = useState(false);
 
   return (
     <nav className="bg-gray-800 h-screen w-64 fixed left-0 top-0 pt-20 text-white">
@@ -132,6 +134,108 @@ export default function Sidebar() {
                   className="flex items-center pl-11 pr-3 py-2 text-gray-300 hover:text-white hover:bg-gray-700 rounded-lg transition-colors duration-200"
                 >
                   Ofertas Activas
+                </Link>
+              </li>
+            </ul>
+          </li>
+
+          {/* Categorías Menú */}
+          <li>
+            <button
+              onClick={() => setIsCategoriesOpen(!isCategoriesOpen)}
+              className="flex items-center justify-between w-full hover:bg-gray-700 rounded-lg p-3 transition-colors duration-200"
+            >
+              <div className="flex items-center">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                </svg>
+                <span className="ml-3">Categorías</span>
+              </div>
+              <svg
+                className={`w-4 h-4 transition-transform duration-200 ${isCategoriesOpen ? 'transform rotate-180' : ''}`}
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+
+            {/* Submenú de Categorías */}
+            <ul className={`mt-2 space-y-1 ${isCategoriesOpen ? 'block' : 'hidden'}`}>
+              <li>
+                <Link
+                  to="/categories"
+                  className="flex items-center pl-11 pr-3 py-2 text-gray-300 hover:text-white hover:bg-gray-700 rounded-lg transition-colors duration-200"
+                >
+                  Ver Categorías
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/categories/create"
+                  className="flex items-center pl-11 pr-3 py-2 text-gray-300 hover:text-white hover:bg-gray-700 rounded-lg transition-colors duration-200"
+                >
+                  Crear Categoría
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/categories/metrics"
+                  className="flex items-center pl-11 pr-3 py-2 text-gray-300 hover:text-white hover:bg-gray-700 rounded-lg transition-colors duration-200"
+                >
+                  Ver Métricas
+                </Link>
+              </li>
+            </ul>
+          </li>
+
+          {/* Miembros Menú */}
+          <li>
+            <button
+              onClick={() => setIsMembersOpen(!isMembersOpen)}
+              className="flex items-center justify-between w-full hover:bg-gray-700 rounded-lg p-3 transition-colors duration-200"
+            >
+              <div className="flex items-center">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z" />
+                </svg>
+                <span className="ml-3">Miembros</span>
+              </div>
+              <svg
+                className={`w-4 h-4 transition-transform duration-200 ${isMembersOpen ? 'transform rotate-180' : ''}`}
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+
+            {/* Submenú de Miembros */}
+            <ul className={`mt-2 space-y-1 ${isMembersOpen ? 'block' : 'hidden'}`}>
+              <li>
+                <Link
+                  to="/members"
+                  className="flex items-center pl-11 pr-3 py-2 text-gray-300 hover:text-white hover:bg-gray-700 rounded-lg transition-colors duration-200"
+                >
+                  Ver Miembros
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/members/create"
+                  className="flex items-center pl-11 pr-3 py-2 text-gray-300 hover:text-white hover:bg-gray-700 rounded-lg transition-colors duration-200"
+                >
+                  Crear Miembro
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/members/analytics"
+                  className="flex items-center pl-11 pr-3 py-2 text-gray-300 hover:text-white hover:bg-gray-700 rounded-lg transition-colors duration-200"
+                >
+                  Analytics
                 </Link>
               </li>
             </ul>
