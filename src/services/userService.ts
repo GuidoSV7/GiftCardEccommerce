@@ -5,21 +5,21 @@ export interface User {
     name: string;
     email: string;
     password: string;
-    role: "admin" | "user" | "client";
+    roles: "admin" | "user" | "client";
 }
 
 export interface CreateUserData {
     name: string;
     email: string;
     password: string;
-    role?: "admin" | "user" | "client";
+    roles?: "admin" | "user" | "client";
 }
 
 export interface UpdateUserData {
     name?: string;
     email?: string;
     password?: string;
-    role?: "admin" | "user" | "client";
+    roles?: "admin" | "user" | "client";
 }
 
 export interface LoginCredentials {
@@ -54,7 +54,7 @@ export const createUser = async (userData: CreateUserData): Promise<User> => {
     try {
         const response = await api.post<User>('/users', {
             ...userData,
-            role: userData.role || 'client'
+            roles: userData.roles || 'client'
         });
         return response.data;
     } catch (error) {

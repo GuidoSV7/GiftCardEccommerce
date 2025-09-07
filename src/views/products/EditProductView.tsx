@@ -2,7 +2,6 @@ import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { getProductById, updateProduct } from '../../services/productService';
-import { getCategories } from '../../services/categoryService';
 import { toast } from 'react-toastify';
 import { useNavigate, useParams } from 'react-router-dom';
 import type { ProductFormData } from '../../types';
@@ -22,11 +21,6 @@ export default function EditProductView() {
     enabled: !!id
   });
 
-  // Obtener categorías
-  const { data: categories } = useQuery({
-    queryKey: ['categories'],
-    queryFn: getCategories
-  });
 
   // Mutation para actualizar producto
   const updateProductMutation = useMutation({
@@ -53,15 +47,13 @@ export default function EditProductView() {
       setValue('redeem', product.redeem);
       setValue('termsConditions', product.termsConditions);
       setValue('state', product.state);
-      // Buscar el ID de la categoría por nombre
-      if (product.category?.name) {
-        const category = categories?.find((cat: any) => cat.name === product.category.name);
-        if (category) {
-          setValue('categoryId', category.id);
-        }
+      
+      // Asignar directamente el ID de la categoría del producto
+      if (product.category?.id) {
+        setValue('categoryId', product.category.id);
       }
     }
-  }, [product, categories, setValue]);
+  }, [product, setValue]);
 
   const onSubmit = (data: ProductFormData) => {
     if (id) {

@@ -52,8 +52,8 @@ const UserDropdown: React.FC<UserDropdownProps> = ({ onLoginModalOpen }) => {
     setIsOpen(false);
   };
 
-  // Si no hay usuario o no es member, mostrar botón de Login
-  if (!user || user.rol !== 'member') {
+  // Si no hay usuario, mostrar botón de Login
+  if (!user) {
     return (
       <button 
         onClick={onLoginModalOpen}
@@ -65,12 +65,20 @@ const UserDropdown: React.FC<UserDropdownProps> = ({ onLoginModalOpen }) => {
     );
   }
 
+  // Determinar el estilo del botón según el rol
+  const getButtonStyle = () => {
+    if (user.roles === 'admin' || user.roles === 'superadmin') {
+      return "flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors";
+    }
+    return "flex items-center gap-2 bg-[#1c1f2c] text-white px-4 py-2 rounded-lg hover:bg-[#2c2f3c] transition-colors";
+  };
+
   return (
     <div className="relative" ref={dropdownRef}>
       {/* Botón del usuario */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 bg-[#1c1f2c] text-white px-4 py-2 rounded-lg hover:bg-[#2c2f3c] transition-colors"
+        className={getButtonStyle()}
       >
         <UserIcon />
         <span>{user.email.split('@')[0]}</span>
@@ -92,73 +100,94 @@ const UserDropdown: React.FC<UserDropdownProps> = ({ onLoginModalOpen }) => {
             </div>
           </div>
 
-          {/* Grid de opciones - Mismos elementos que MemberSidebar */}
+          {/* Grid de opciones - Diferentes según el rol */}
           <div className="p-4">
-            <div className="grid grid-cols-2 gap-3">
-              {/* Columna izquierda */}
-              <div className="space-y-2">
-                <Link
-                  to="/member/my-account"
-                  className="flex items-center gap-3 p-2 text-white hover:bg-gray-700 rounded-lg transition-colors"
-                  onClick={() => setIsOpen(false)}
-                >
-                  <AccountIcon />
-                  <span className="text-sm">Mi Cuenta</span>
-                </Link>
-                <Link
-                  to="/member/recharge"
-                  className="flex items-center gap-3 p-2 text-white hover:bg-gray-700 rounded-lg transition-colors"
-                  onClick={() => setIsOpen(false)}
-                >
-                  <RechargeIcon />
-                  <span className="text-sm">Recarga</span>
-                </Link>
-                <Link
-                  to="/member/my-invoice"
-                  className="flex items-center gap-3 p-2 text-white hover:bg-gray-700 rounded-lg transition-colors"
-                  onClick={() => setIsOpen(false)}
-                >
-                  <InvoiceIcon />
-                  <span className="text-sm">Mis Facturas</span>
-                </Link>
-                <Link
-                  to="/member/my-coupons"
-                  className="flex items-center gap-3 p-2 text-white hover:bg-gray-700 rounded-lg transition-colors"
-                  onClick={() => setIsOpen(false)}
-                >
-                  <CouponsIcon />
-                  <span className="text-sm">Mis Cupones</span>
-                </Link>
-              </div>
+            {user.roles === 'member' ? (
+              // Opciones para miembros
+              <div className="grid grid-cols-2 gap-3">
+                {/* Columna izquierda */}
+                <div className="space-y-2">
+                  <Link
+                    to="/member/my-account"
+                    className="flex items-center gap-3 p-2 text-white hover:bg-gray-700 rounded-lg transition-colors"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    <AccountIcon />
+                    <span className="text-sm">Mi Cuenta</span>
+                  </Link>
+                  <Link
+                    to="/member/recharge"
+                    className="flex items-center gap-3 p-2 text-white hover:bg-gray-700 rounded-lg transition-colors"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    <RechargeIcon />
+                    <span className="text-sm">Recarga</span>
+                  </Link>
+                  <Link
+                    to="/member/my-invoice"
+                    className="flex items-center gap-3 p-2 text-white hover:bg-gray-700 rounded-lg transition-colors"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    <InvoiceIcon />
+                    <span className="text-sm">Mis Facturas</span>
+                  </Link>
+                  <Link
+                    to="/member/my-coupons"
+                    className="flex items-center gap-3 p-2 text-white hover:bg-gray-700 rounded-lg transition-colors"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    <CouponsIcon />
+                    <span className="text-sm">Mis Cupones</span>
+                  </Link>
+                </div>
 
-              {/* Columna derecha */}
+                {/* Columna derecha */}
+                <div className="space-y-2">
+                  <Link
+                    to="/member/my-orders"
+                    className="flex items-center gap-3 p-2 text-white hover:bg-gray-700 rounded-lg transition-colors"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    <OrdersIcon />
+                    <span className="text-sm">Mis Pedidos</span>
+                  </Link>
+                  <Link
+                    to="/member/my-cards"
+                    className="flex items-center gap-3 p-2 text-white hover:bg-gray-700 rounded-lg transition-colors"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    <CardsIcon />
+                    <span className="text-sm">Mis Tarjetas</span>
+                  </Link>
+                  <Link
+                    to="/member/vemper-affiliates"
+                    className="flex items-center gap-3 p-2 text-white hover:bg-gray-700 rounded-lg transition-colors"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    <GamesIcon />
+                    <span className="text-sm">Vemper Affiliates</span>
+                  </Link>
+                </div>
+              </div>
+            ) : (
+              // Opciones para admin/superadmin - Solo Panel de Administración
               <div className="space-y-2">
                 <Link
-                  to="/member/my-orders"
-                  className="flex items-center gap-3 p-2 text-white hover:bg-gray-700 rounded-lg transition-colors"
+                  to="/dashboard"
+                  className="flex items-center gap-3 p-3 text-white hover:bg-gray-700 rounded-lg transition-colors bg-green-600/20 border border-green-600/30"
                   onClick={() => setIsOpen(false)}
                 >
-                  <OrdersIcon />
-                  <span className="text-sm">Mis Pedidos</span>
-                </Link>
-                <Link
-                  to="/member/my-cards"
-                  className="flex items-center gap-3 p-2 text-white hover:bg-gray-700 rounded-lg transition-colors"
-                  onClick={() => setIsOpen(false)}
-                >
-                  <CardsIcon />
-                  <span className="text-sm">Mis Tarjetas</span>
-                </Link>
-                <Link
-                  to="/member/vemper-affiliates"
-                  className="flex items-center gap-3 p-2 text-white hover:bg-gray-700 rounded-lg transition-colors"
-                  onClick={() => setIsOpen(false)}
-                >
-                  <GamesIcon />
-                  <span className="text-sm">Vemper Affiliates</span>
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 5a2 2 0 012-2h4a2 2 0 012 2v2H8V5z" />
+                  </svg>
+                  <div>
+                    <span className="text-sm font-medium">Panel de Administración</span>
+                    <p className="text-xs text-gray-400">Gestionar productos, categorías y miembros</p>
+                  </div>
                 </Link>
               </div>
-            </div>
+            )}
 
             {/* Opciones del footer */}
             <div className="mt-4 pt-4 border-t border-gray-700 space-y-2">
@@ -169,11 +198,6 @@ const UserDropdown: React.FC<UserDropdownProps> = ({ onLoginModalOpen }) => {
                 <LogoutIcon />
                 <span className="text-sm">Cerrar sesión</span>
               </button>
-            </div>
-
-            {/* Ver más */}
-            <div className="mt-4 text-right">
-              <span className="text-gray-400 text-xs">Ver más</span>
             </div>
           </div>
         </div>

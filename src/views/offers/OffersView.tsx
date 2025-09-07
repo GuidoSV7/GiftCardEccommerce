@@ -1,71 +1,53 @@
-
-import { getProductsAll, type Product } from '../../services/productService';
 import { useQuery } from '@tanstack/react-query';
+import { getOffers, type Offer } from '../../services/offerService';
 import { useNavigate } from 'react-router-dom';
 import { useState, useMemo } from 'react';
 import { useCarouselStore } from '../../stores/carouselStore';
 import CarouselLimitModal from '../../components/CarouselLimitModal';
 
-export default function ProductsView() {
+export default function OffersView() {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
-  const [categoryFilter, setCategoryFilter] = useState('');
-  const [stateFilter, setStateFilter] = useState('');
+  const [statusFilter, setStatusFilter] = useState('');
 
   const { data, isLoading, error } = useQuery({
-    queryKey: ['products'],
-    queryFn: getProductsAll
+    queryKey: ['offers'],
+    queryFn: getOffers
   });
 
   const { 
-    toggleProduct, 
-    isProductSelected, 
+    toggleOffer, 
+    isOfferSelected, 
     canSelectMore, 
-    getTotalSelected
+    getTotalSelected 
   } = useCarouselStore();
 
-  const handleEditProduct = (productId: string) => {
-    navigate(`/products/edit/${productId}`);
+  const handleEditOffer = (offerId: number) => {
+    navigate(`/offers/edit/${offerId}`);
   };
 
-  // Obtener categorías únicas para el filtro
-  const categories = useMemo((): string[] => {
-    if (!data) return [];
-    const categoryNames: string[] = [];
-    data.forEach((product: Product) => {
-      if (product.category?.name && typeof product.category.name === 'string') {
-        categoryNames.push(product.category.name);
-      }
-    });
-    const uniqueCategories = [...new Set(categoryNames)];
-    return uniqueCategories.sort();
-  }, [data]);
-
-  // Filtrar productos
-  const filteredProducts = useMemo(() => {
+  // Filtrar ofertas
+  const filteredOffers = useMemo(() => {
     if (!data) return [];
     
-    return data.filter((product: Product) => {
-      const matchesSearch = product.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                           product.description.toLowerCase().includes(searchTerm.toLowerCase());
+    return data.filter((offer: Offer) => {
+      const matchesSearch = offer.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                           offer.discount.toLowerCase().includes(searchTerm.toLowerCase());
       
-      const matchesCategory = !categoryFilter || product.category?.name === categoryFilter;
+      // Para ofertas, asumimos que todas están activas por defecto
+      // Si necesitas un campo de estado, deberías agregarlo al tipo Offer
+      const matchesStatus = !statusFilter || statusFilter === 'active';
       
-      const matchesState = !stateFilter || 
-                          (stateFilter === 'active' && product.state === true) ||
-                          (stateFilter === 'inactive' && product.state === false);
-      
-      return matchesSearch && matchesCategory && matchesState;
+      return matchesSearch && matchesStatus;
     });
-  }, [data, searchTerm, categoryFilter, stateFilter]);
-
+  }, [data, searchTerm, statusFilter]);
 
   if (isLoading) {
     return (
       <div className="w-full flex items-center justify-center min-h-[400px]">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Cargando productos...</p>
+          <p className="text-gray-600">Cargando ofertas...</p>
         </div>
       </div>
     );
@@ -81,7 +63,7 @@ export default function ProductsView() {
             </svg>
           </div>
           <h2 className="text-2xl font-bold text-gray-800 mb-2">Error al cargar</h2>
-          <p className="text-gray-600">No se pudieron cargar los productos</p>
+          <p className="text-gray-600">No se pudieron cargar las ofertas</p>
         </div>
       </div>
     );
@@ -90,64 +72,43 @@ export default function ProductsView() {
   return (
     <div className="container mx-auto p-4">
       <div className="mb-6">
-        <h1 className="text-4xl font-black text-gray-800">Todos los Productos</h1>
+        <h1 className="text-4xl font-black text-gray-800">Todas las Ofertas</h1>
         <p className="text-xl font-light text-gray-500">
-          Gestiona y visualiza todos los productos del sistema
+          Gestiona y visualiza todas las ofertas del sistema
         </p>
       </div>
 
       {/* Buscador y Filtros */}
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          {/* Buscador por nombre */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {/* Buscador por título y descuento */}
           <div>
             <label htmlFor="search" className="block text-sm font-medium text-gray-700 mb-2">
-              Buscar por nombre
+              Buscar oferta
             </label>
             <input
               id="search"
               type="text"
-              placeholder="Buscar productos..."
+              placeholder="Buscar por título o descuento..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             />
           </div>
 
-          {/* Filtro por categoría */}
-          <div>
-            <label htmlFor="category" className="block text-sm font-medium text-gray-700 mb-2">
-              Categoría
-            </label>
-            <select
-              id="category"
-              value={categoryFilter}
-              onChange={(e) => setCategoryFilter(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            >
-              <option value="">Todas las categorías</option>
-              {categories.map((category: string) => (
-                <option key={category} value={category}>
-                  {category}
-                </option>
-              ))}
-            </select>
-          </div>
-
           {/* Filtro por estado */}
           <div>
-            <label htmlFor="state" className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="status" className="block text-sm font-medium text-gray-700 mb-2">
               Estado
             </label>
             <select
-              id="state"
-              value={stateFilter}
-              onChange={(e) => setStateFilter(e.target.value)}
+              id="status"
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             >
               <option value="">Todos los estados</option>
-              <option value="active">Activo</option>
-              <option value="inactive">Inactivo</option>
+              <option value="active">Activa</option>
             </select>
           </div>
 
@@ -162,47 +123,30 @@ export default function ProductsView() {
           </div>
         </div>
 
-        {/* Botones de limpieza */}
-        <div className="mt-4 flex gap-4">
-          {(searchTerm || categoryFilter || stateFilter) && (
+        {/* Botón para limpiar filtros */}
+        {(searchTerm || statusFilter) && (
+          <div className="mt-4">
             <button
               onClick={() => {
                 setSearchTerm('');
-                setCategoryFilter('');
-                setStateFilter('');
+                setStatusFilter('');
               }}
               className="text-sm text-blue-600 hover:text-blue-800 font-medium"
             >
               Limpiar filtros
             </button>
-          )}
-          
-          {getTotalSelected() > 0 && (
-            <button
-              onClick={() => {
-                if (confirm('¿Estás seguro de que quieres limpiar toda la selección del carrusel?')) {
-                  // Limpiar localStorage directamente
-                  localStorage.removeItem('carousel-config');
-                  // Recargar la página para que el store se reinicialice
-                  window.location.reload();
-                }
-              }}
-              className="text-sm text-red-600 hover:text-red-800 font-medium"
-            >
-              🗑️ Limpiar carrusel ({getTotalSelected()} seleccionados)
-            </button>
-          )}
-        </div>
+          </div>
+        )}
       </div>
 
-      {filteredProducts.length === 0 ? (
+      {filteredOffers.length === 0 ? (
          <div className="bg-gray-50 rounded-lg p-8 text-center">
            <h3 className="text-lg font-medium text-gray-600 mb-2">
-             {data && data.length === 0 ? 'No hay productos' : 'No se encontraron productos'}
+             {data && data.length === 0 ? 'No hay ofertas' : 'No se encontraron ofertas'}
            </h3>
            <p className="text-gray-500">
              {data && data.length === 0 
-               ? 'Aún no se han creado productos en el sistema.' 
+               ? 'Aún no se han creado ofertas en el sistema.' 
                : 'Intenta ajustar los filtros de búsqueda.'}
            </p>
          </div>
@@ -213,13 +157,13 @@ export default function ProductsView() {
               <thead className="bg-gray-50">
                 <tr>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Producto
+                    Oferta
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Categoría
+                    Precio
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Estado
+                    Descuento
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Carrusel
@@ -230,15 +174,15 @@ export default function ProductsView() {
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                                 {filteredProducts.map((product: Product) => (
-                  <tr key={product.id} className="hover:bg-gray-50">
+                {filteredOffers.map((offer: Offer) => (
+                  <tr key={offer.id} className="hover:bg-gray-50">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
                         <div className="flex-shrink-0 h-12 w-12">
                           <img
                             className="h-12 w-12 rounded-lg object-cover"
-                            src={product.imageUrl}
-                            alt={product.title}
+                            src={offer.image}
+                            alt={offer.title}
                             onError={(e) => {
                               const target = e.target as HTMLImageElement;
                               target.src = 'https://via.placeholder.com/48x48?text=No+Image';
@@ -247,45 +191,36 @@ export default function ProductsView() {
                         </div>
                         <div className="ml-4">
                           <div className="text-sm font-medium text-gray-900">
-                            {product.title}
-                          </div>
-                          <div className="text-sm text-gray-500 truncate max-w-xs">
-                            {product.description}
+                            {offer.title}
                           </div>
                         </div>
                       </div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                        {product.category?.name || 'Sin categoría'}
-                      </span>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                      {offer.price}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                        product.state === true
-                            ? 'bg-green-100 text-green-800'
-                          : 'bg-red-100 text-red-800'
-                      }`}>
-                        {product.state ? 'Activo' : 'Inactivo'}
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                        {offer.discount}
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <label className="flex items-center">
                         <input
                           type="checkbox"
-                          checked={isProductSelected(product.id)}
-                          onChange={() => toggleProduct(product.id)}
-                          disabled={!isProductSelected(product.id) && !canSelectMore()}
+                          checked={isOfferSelected(offer.id.toString())}
+                          onChange={() => toggleOffer(offer.id.toString())}
+                          disabled={!isOfferSelected(offer.id.toString()) && !canSelectMore()}
                           className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
                         />
                         <span className="ml-2 text-sm text-gray-600">
-                          {isProductSelected(product.id) ? 'En carrusel' : 'Agregar'}
+                          {isOfferSelected(offer.id.toString()) ? 'En carrusel' : 'Agregar'}
                         </span>
                       </label>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                       <button 
-                        onClick={() => handleEditProduct(product.id)}
+                        onClick={() => handleEditOffer(offer.id)}
                         className="text-blue-600 hover:text-blue-900 font-medium flex items-center gap-1"
                       >
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -303,7 +238,7 @@ export default function ProductsView() {
       )}
 
       <div className="mt-6 text-sm text-gray-500 text-center">
-        Mostrando {filteredProducts.length} de {data?.length || 0} productos
+        Mostrando {filteredOffers.length} de {data?.length || 0} ofertas
       </div>
 
       {/* Modal de límite del carrusel */}

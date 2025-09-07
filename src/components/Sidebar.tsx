@@ -9,7 +9,7 @@ export default function Sidebar() {
 
   return (
     <nav className="bg-gray-800 h-screen w-64 fixed left-0 top-0 pt-20 text-white">
-      <div className="p-4">
+      <div className="p-4 h-full overflow-y-auto pb-20">
         <ul className="space-y-2">
           {/* Dashboard */}
           <li>
@@ -47,7 +47,7 @@ export default function Sidebar() {
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
                 </svg>
-                <span className="ml-3">Products</span>
+                <span className="ml-3">Productos</span>
               </div>
               <svg
                 className={`w-4 h-4 transition-transform duration-200 ${isProductsOpen ? 'transform rotate-180' : ''}`}
@@ -66,7 +66,7 @@ export default function Sidebar() {
                   to="/products"
                   className="flex items-center pl-11 pr-3 py-2 text-gray-300 hover:text-white hover:bg-gray-700 rounded-lg transition-colors duration-200"
                 >
-                  Ver Products
+                  Ver Productos
                 </Link>
               </li>
               <li>
@@ -74,7 +74,7 @@ export default function Sidebar() {
                   to="/products/create"
                   className="flex items-center pl-11 pr-3 py-2 text-gray-300 hover:text-white hover:bg-gray-700 rounded-lg transition-colors duration-200"
                 >
-                  Crear Product
+                  Crear Productos
                 </Link>
               </li>
               <li>
@@ -228,14 +228,6 @@ export default function Sidebar() {
                   className="flex items-center pl-11 pr-3 py-2 text-gray-300 hover:text-white hover:bg-gray-700 rounded-lg transition-colors duration-200"
                 >
                   Crear Miembro
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/members/analytics"
-                  className="flex items-center pl-11 pr-3 py-2 text-gray-300 hover:text-white hover:bg-gray-700 rounded-lg transition-colors duration-200"
-                >
-                  Analytics
                 </Link>
               </li>
             </ul>

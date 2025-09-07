@@ -31,13 +31,13 @@ const LoginView: React.FC = () => {
       setUser({
         id: response.id,
         email: response.email,
-        rol: response.rol
+        roles: response.roles
       }, response.token);
       
       // Redirigir según el rol del usuario
-      if (response.rol === 'admin') {
+      if (response.roles === 'admin') {
         navigate('/dashboard');
-      } else if (response.rol === 'member') {
+      } else if (response.roles === 'member') {
         navigate('/');
       } else {
         // Para otros roles, redirigir al home

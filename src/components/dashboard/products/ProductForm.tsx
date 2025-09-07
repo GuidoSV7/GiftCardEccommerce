@@ -37,6 +37,7 @@ export default function ProductForm({ register, control, setValue, errors }: Pro
         queryFn: getCategories
     });
 
+
     const imageUrl = useWatch({
         control,
         name: "imageUrl"
@@ -56,6 +57,8 @@ export default function ProductForm({ register, control, setValue, errors }: Pro
         control,
         name: "termsConditions"
     });
+
+
 
     // Funciones para abrir modales
     const openDescriptionModal = () => {
@@ -361,7 +364,7 @@ export default function ProductForm({ register, control, setValue, errors }: Pro
                     {categoriesLoading ? (
                         <option value="" disabled>Cargando categorías...</option>
                     ) : (
-                        categories?.map((category: { id: number; name: string }) => (
+                        categories?.map((category: { id: string; name: string }) => (
                             <option key={category.id} value={category.id}>
                                 {category.name}
                             </option>
@@ -447,18 +450,18 @@ export default function ProductForm({ register, control, setValue, errors }: Pro
                         </div>
                         
                         <div className="flex-1 grid grid-cols-1 lg:grid-cols-2 gap-6 p-6 min-h-0">
-                            <div className="space-y-3">
+                            <div className="space-y-3 flex flex-col">
                                 <label className="block text-sm font-semibold text-gray-700 uppercase tracking-wide">Editor HTML</label>
                                 <textarea
                                     value={tempDescription}
                                     onChange={(e) => setTempDescription(e.target.value)}
-                                    className="w-full h-full p-4 border-2 border-gray-300 rounded-lg font-mono text-sm resize-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all"
+                                    className="w-full h-[60vh] p-4 border-2 border-gray-300 rounded-lg font-mono text-sm resize-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all overflow-y-auto"
                                     placeholder="<h3>Descripción del Producto</h3>&#10;<p>Descripción detallada...</p>&#10;<ul>&#10;  <li>Característica 1</li>&#10;  <li>Característica 2</li>&#10;</ul>"
                                 />
                             </div>
-                            <div className="space-y-3">
+                            <div className="space-y-3 flex flex-col">
                                 <label className="block text-sm font-semibold text-gray-700 uppercase tracking-wide">Vista Previa</label>
-                                <div className="h-full max-h-[60vh] border-2 border-gray-200 rounded-lg p-4 bg-white overflow-y-auto shadow-inner">
+                                <div className="w-full h-[60vh] border-2 border-gray-200 rounded-lg p-4 bg-white overflow-y-auto shadow-inner">
                                     {tempDescription ? (
                                         <div 
                                             dangerouslySetInnerHTML={{ __html: tempDescription }}
@@ -520,18 +523,18 @@ export default function ProductForm({ register, control, setValue, errors }: Pro
                         </div>
                         
                         <div className="flex-1 grid grid-cols-1 lg:grid-cols-2 gap-6 p-6 min-h-0">
-                            <div className="space-y-3">
+                            <div className="space-y-3 flex flex-col">
                                 <label className="block text-sm font-semibold text-gray-700 uppercase tracking-wide">Editor HTML</label>
                                 <textarea
                                     value={tempRedeem}
                                     onChange={(e) => setTempRedeem(e.target.value)}
-                                    className="w-full h-full p-4 border-2 border-gray-300 rounded-lg font-mono text-sm resize-none focus:border-green-500 focus:ring-2 focus:ring-green-200 transition-all"
+                                    className="w-full h-[60vh] p-4 border-2 border-gray-300 rounded-lg font-mono text-sm resize-none focus:border-green-500 focus:ring-2 focus:ring-green-200 transition-all overflow-y-auto"
                                     placeholder="<h3>Cómo canjear tu código:</h3>&#10;<ol>&#10;  <li>Ve a la página de canje</li>&#10;  <li>Ingresa tu código</li>&#10;  <li>¡Disfruta!</li>&#10;</ol>"
                                 />
                             </div>
-                            <div className="space-y-3">
+                            <div className="space-y-3 flex flex-col">
                                 <label className="block text-sm font-semibold text-gray-700 uppercase tracking-wide">Vista Previa</label>
-                                <div className="h-full max-h-[60vh] border-2 border-gray-200 rounded-lg p-4 bg-white overflow-y-auto shadow-inner">
+                                <div className="w-full h-[60vh] border-2 border-gray-200 rounded-lg p-4 bg-white overflow-y-auto shadow-inner">
                                     {tempRedeem ? (
                                         <div dangerouslySetInnerHTML={{ __html: tempRedeem }} />
                                     ) : (
@@ -587,18 +590,18 @@ export default function ProductForm({ register, control, setValue, errors }: Pro
                         </div>
                         
                         <div className="flex-1 grid grid-cols-1 lg:grid-cols-2 gap-6 p-6 min-h-0">
-                            <div className="space-y-3">
+                            <div className="space-y-3 flex flex-col">
                                 <label className="block text-sm font-semibold text-gray-700 uppercase tracking-wide">Editor HTML</label>
                                 <textarea
                                     value={tempTerms}
                                     onChange={(e) => setTempTerms(e.target.value)}
-                                    className="w-full h-full p-4 border-2 border-gray-300 rounded-lg font-mono text-sm resize-none focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 transition-all"
+                                    className="w-full h-[60vh] p-4 border-2 border-gray-300 rounded-lg font-mono text-sm resize-none focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 transition-all overflow-y-auto"
                                     placeholder="<h3>Términos y Condiciones</h3>&#10;<ul>&#10;  <li>Válido por 1 año</li>&#10;  <li>Solo en Estados Unidos</li>&#10;</ul>&#10;<table>&#10;  <tr><th>Restricción</th><th>Detalle</th></tr>&#10;  <tr><td>Región</td><td>US</td></tr>&#10;</table>"
                                 />
                             </div>
-                            <div className="space-y-3">
+                            <div className="space-y-3 flex flex-col">
                                 <label className="block text-sm font-semibold text-gray-700 uppercase tracking-wide">Vista Previa</label>
-                                <div className="h-full max-h-[60vh] border-2 border-gray-200 rounded-lg p-4 bg-white overflow-y-auto shadow-inner">
+                                <div className="w-full h-[60vh] border-2 border-gray-200 rounded-lg p-4 bg-white overflow-y-auto shadow-inner">
                                     {tempTerms ? (
                                         <div dangerouslySetInnerHTML={{ __html: tempTerms }} />
                                     ) : (

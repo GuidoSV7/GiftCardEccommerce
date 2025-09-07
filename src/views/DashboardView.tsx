@@ -2,10 +2,12 @@
 
 import { useState, useEffect } from 'react';
 import { useAuthStore } from '../stores/authStore';
+import { useNavigate } from 'react-router-dom';
 
 export default function DashboardView() {
   const [editModalOpen, setEditModalOpen] = useState(false);
-  const { user, isAuthenticated } = useAuthStore();
+  const { user, isAuthenticated, logout } = useAuthStore();
+  const navigate = useNavigate();
   
   const [userData, setUserData] = useState({
     name: '',
@@ -30,7 +32,7 @@ export default function DashboardView() {
       setUserData({
         name: generateFriendlyName(user.email),
         email: user.email,
-        role: user.rol === 'admin' ? 'Administrador' : 'Miembro'
+        role: user.roles === 'admin' ? 'Administrador' : 'Miembro'
       });
     }
   }, [user, isAuthenticated]);
@@ -40,6 +42,11 @@ export default function DashboardView() {
     // Aquí implementarías la lógica para guardar los cambios
     console.log('Guardando perfil:', userData);
     setEditModalOpen(false);
+  };
+
+  const handleLogout = () => {
+    logout();
+    navigate('/');
   };
 
   // Si no está autenticado, mostrar mensaje
@@ -107,6 +114,17 @@ export default function DashboardView() {
               className="bg-white/20 hover:bg-white/30 backdrop-blur-sm px-6 py-3 rounded-lg font-medium transition-colors"
             >
               Editar Perfil
+            </button>
+            <button 
+              onClick={handleLogout}
+              className="bg-red-500/20 hover:bg-red-500/30 backdrop-blur-sm px-6 py-3 rounded-lg font-medium transition-colors border border-red-400/30"
+            >
+              <div className="flex items-center gap-2">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                </svg>
+                Cerrar Sesión
+              </div>
             </button>
           </div>
         </div>

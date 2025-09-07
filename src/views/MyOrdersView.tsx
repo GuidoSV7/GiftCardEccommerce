@@ -1,9 +1,16 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import HomeHeader from '../components/home/HomeHeader';
 import MemberSidebar from '../components/member/MemberSidebar';
 import { HomeFooter } from '../components/home/HomeFooter';
 
 const MyOrdersView: React.FC = () => {
+  const navigate = useNavigate();
+
+  const handleViewCodes = () => {
+    navigate('/member/my-cards');
+  };
+
   return (
     <div style={{fontFamily: 'Manrope, Arial, system-ui, sans-serif'}} className="min-h-screen bg-gray-900">
       <HomeHeader />
@@ -56,7 +63,10 @@ const MyOrdersView: React.FC = () => {
                           </td>
                           <td className="py-4 px-6">
                             <div className="flex space-x-2">
-                              <button className="inline-flex items-center px-4 py-2 rounded-lg text-sm font-medium bg-blue-600 hover:bg-blue-700 text-white transition-all duration-200 shadow-md hover:shadow-lg transform hover:scale-105">
+                              <button 
+                                onClick={handleViewCodes}
+                                className="inline-flex items-center px-4 py-2 rounded-lg text-sm font-medium bg-blue-600 hover:bg-blue-700 text-white transition-all duration-200 shadow-md hover:shadow-lg transform hover:scale-105"
+                              >
                                 Ver códigos
                               </button>
                               <button className="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium bg-gray-600 text-blue-300 border border-gray-500 hover:bg-gray-500 hover:text-blue-200 transition-colors duration-200">
@@ -86,7 +96,10 @@ const MyOrdersView: React.FC = () => {
                           </td>
                           <td className="py-4 px-6">
                             <div className="flex space-x-2">
-                              <button className="inline-flex items-center px-4 py-2 rounded-lg text-sm font-medium bg-blue-600 hover:bg-blue-700 text-white transition-all duration-200 shadow-md hover:shadow-lg transform hover:scale-105">
+                              <button 
+                                onClick={handleViewCodes}
+                                className="inline-flex items-center px-4 py-2 rounded-lg text-sm font-medium bg-blue-600 hover:bg-blue-700 text-white transition-all duration-200 shadow-md hover:shadow-lg transform hover:scale-105"
+                              >
                                 Ver códigos
                               </button>
                               <button className="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium bg-gray-600 text-blue-300 border border-gray-500 hover:bg-gray-500 hover:text-blue-200 transition-colors duration-200">

@@ -94,7 +94,7 @@ export async function getProductByCategoryId(id: string) {
 
 export async function updateProduct(id: string, formData: ProductFormData) {
     try {
-        const { data } = await api.put(`/products/${id}`, formData);
+        const { data } = await api.patch(`/products/${id}`, formData);
         return data;
     } catch (error) {
         if (isAxiosError(error)) {

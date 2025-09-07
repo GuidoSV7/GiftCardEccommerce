@@ -1,32 +1,30 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import { useCarouselStore } from '../../stores/carouselStore';
+import { useQuery } from '@tanstack/react-query';
+import { getProductsAll } from '../../services/productService';
+import { getOffers } from '../../services/offerService';
 
-interface Offer {
-    id: number;
-    title: string;
-    image: string;
-    price?: string;
-    discount?: string;
-}
 
-interface Product {
-    id: string;
-    title: string;
-    imageUrl: string;
-    description?: string;
-    category?: {
-        name: string;
-    };
-}
-
-interface CarouselProps {
-    offers?: Offer[];
-    products?: Product[];
-}
-
-export const Carousel: React.FC<CarouselProps> = ({ offers = [], products = [] }) => {
+export const Carousel: React.FC = () => {
     const [currentSlide, setCurrentSlide] = useState(0);
     const [touchStart, setTouchStart] = useState<number>(0);
     const [touchEnd, setTouchEnd] = useState<number>(0);
+    
+    // Obtener configuración del carrusel desde el store
+    const { selectedProducts, selectedOffers } = useCarouselStore();
+    
+    // Obtener datos de productos y ofertas
+    const { data: allProducts } = useQuery({
+        queryKey: ['products'],
+        queryFn: getProductsAll,
+        enabled: selectedProducts.length > 0
+    });
+    
+    const { data: allOffers } = useQuery({
+        queryKey: ['offers'],
+        queryFn: getOffers,
+        enabled: selectedOffers.length > 0
+    });
 
     // Imágenes por defecto
     const defaultImages = [
@@ -39,7 +37,7 @@ export const Carousel: React.FC<CarouselProps> = ({ offers = [], products = [] }
         },
         {
             id: 2,
-            image: 'https://images.unsplash.com/photo-1489599804151-0b6a0b4a0b4a?w=800&h=600&fit=crop',
+            image: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?w=800&h=600&fit=crop',
             title: 'Entertainment',
             subtitle: 'Entretenimiento sin límites',
             brand: 'ENTERTAINMENT'
@@ -53,33 +51,59 @@ export const Carousel: React.FC<CarouselProps> = ({ offers = [], products = [] }
         }
     ];
 
-    // Lógica de fallback: ofertas -> productos -> imágenes por defecto
+    // Lógica de carrusel basada en selección del store
     const carouselItems = useMemo(() => {
-        // Si hay ofertas, usar las últimas 3
-        if (offers && offers.length > 0) {
-            return offers.slice(-3).map((offer, index) => ({
-                id: index + 1,
-                image: offer.image,
-                title: offer.title,
-                subtitle: offer.discount || 'Oferta especial',
-                brand: 'OFERTA'
-            }));
+        const items: any[] = [];
+        
+        // Debug: Log de selecciones
+        console.log('Carousel Debug:', {
+            selectedProducts,
+            selectedOffers,
+            allProductsCount: allProducts?.length || 0,
+            allOffersCount: allOffers?.length || 0
+        });
+        
+        // Agregar ofertas seleccionadas (solo las que están explícitamente seleccionadas)
+        if (selectedOffers.length > 0 && allOffers) {
+            selectedOffers.forEach(offerId => {
+                const offer = allOffers.find(o => o.id.toString() === offerId);
+                if (offer) {
+                    items.push({
+                        id: `offer-${offer.id}`,
+                        image: offer.image,
+                        title: offer.title,
+                        subtitle: offer.discount || 'Oferta especial',
+                        brand: 'OFERTA'
+                    });
+                }
+            });
         }
         
-        // Si no hay ofertas pero hay productos, usar los últimos 3
-        if (products && products.length > 0) {
-            return products.slice(-3).map((product, index) => ({
-                id: index + 1,
-                image: product.imageUrl,
-                title: product.title,
-                subtitle: product.category?.name || 'Producto destacado',
-                brand: 'PRODUCTO'
-            }));
+        // Agregar productos seleccionados (solo los que están explícitamente seleccionados y activos)
+        if (selectedProducts.length > 0 && allProducts) {
+            selectedProducts.forEach(productId => {
+                const product = allProducts.find((p: any) => p.id === productId);
+                if (product && product.state === true) { // state = activo/inactivo del producto
+                    items.push({
+                        id: `product-${product.id}`,
+                        image: product.imageUrl,
+                        title: product.title,
+                        subtitle: product.category?.name || 'Producto destacado',
+                        brand: 'PRODUCTO'
+                    });
+                }
+            });
         }
         
-        // Si no hay ni ofertas ni productos, usar imágenes por defecto
-        return defaultImages;
-    }, [offers, products]);
+        // Si no hay elementos seleccionados, mostrar solo imágenes por defecto
+        if (items.length === 0) {
+            console.log('No hay elementos seleccionados, mostrando imágenes por defecto');
+            return defaultImages;
+        }
+        
+        console.log('Elementos del carrusel:', items);
+        return items;
+    }, [selectedOffers, selectedProducts, allOffers, allProducts]);
 
     useEffect(() => {
         const timer = setInterval(() => {

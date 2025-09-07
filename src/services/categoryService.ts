@@ -14,6 +14,18 @@ export async function createCategory(formData: CategoryFormData) {
     }
 }
 
+export async function updateCategory(id: string, formData: CategoryFormData) {
+    try {
+        const { data } = await api.patch(`/categories/${id}`, formData);
+        return data;
+    } catch (error) {
+        if (isAxiosError(error)) {
+            throw error.response?.data || error;
+        }
+        throw error;
+    }
+}
+
 export async function getCategories() {
     try {
         const { data } = await api.get('/categories');

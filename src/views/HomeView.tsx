@@ -36,7 +36,7 @@ export const HomeView = () => {
         queryKey: ['products'],
         queryFn: getProducts,
         retry: 2,
-        staleTime: 5 * 60 * 1000,
+        staleTime: 30 * 1000, // 30 segundos en lugar de 5 minutos
     });
 
     const { data: categories = [], isLoading: categoriesLoading, error: categoriesError } = useQuery({
@@ -52,6 +52,8 @@ export const HomeView = () => {
     if (productsError) console.error('Error en productos:', productsError);
     if (categoriesError) console.error('Error en categorías:', categoriesError);
 
+    console.log('Productos:', products);
+
     return (
         <div style={{fontFamily: 'Manrope, Arial, system-ui, sans-serif'}} className="min-h-screen bg-gradient-to-b from-gray-700 via-gray-800 to-gray-900">
             <HomeHeader />
@@ -60,29 +62,29 @@ export const HomeView = () => {
                 {/* Carousel Section */}
                 <div className="w-full">
                     <div className="container mx-auto px-6 sm:px-12 md:px-16 lg:px-24 xl:px-32">
-                        <Carousel offers={offers} products={products} />
+                        <Carousel />
                     </div>
                 </div>
 
                 {/* Ofertas Section */}
                 {!offersLoading && !offersError && offers && offers.length > 0 ? (
-                    <div className="container mx-auto px-6 sm:px-12 md:px-16 lg:px-24 xl:px-32 pb-8">
-                        {/* Header Section */}
-                        <div className="flex justify-between items-center mb-6">
-                            <div>
-                                <h2 className="text-2xl font-bold uppercase text-white mb-2">
-                                    OFERTAS EXCLUSIVAS
-                                </h2>
-                                <p className="text-gray-300 text-sm">
-                                    ¡No te pierdas nuestras ofertas por tiempo limitado! ¡Descubre las ofertas actuales hoy!
-                                </p>
-                            </div>
-                            <button className="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
-                                Ver más
-                            </button>
+                <div className="container mx-auto px-6 sm:px-12 md:px-16 lg:px-24 xl:px-32 pb-8">
+                    {/* Header Section */}
+                    <div className="flex justify-between items-center mb-6">
+                        <div>
+                            <h2 className="text-2xl font-bold uppercase text-white mb-2">
+                                OFERTAS EXCLUSIVAS
+                            </h2>
+                            <p className="text-gray-300 text-sm">
+                                ¡No te pierdas nuestras ofertas por tiempo limitado! ¡Descubre las ofertas actuales hoy!
+                            </p>
                         </div>
+                        <button className="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                            Ver más
+                        </button>
+                    </div>
 
-                        {/* Carrusel de Ofertas en móvil, grid en desktop */}
+                    {/* Carrusel de Ofertas en móvil, grid en desktop */}
                         <>
                         {/* Carrusel horizontal solo en móvil */}
                         <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory sm:hidden pb-2 -mx-2 px-2">
@@ -143,7 +145,7 @@ export const HomeView = () => {
                             </div>
                             <h3 className="text-xl font-bold text-white mb-2">No hay ofertas disponibles</h3>
                             <p className="text-gray-400">Vuelve pronto para descubrir nuestras ofertas exclusivas</p>
-                        </div>
+                     </div>
                     </div>
                 ) : null}
             </div>
@@ -166,18 +168,18 @@ export const HomeView = () => {
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                         {categories && categories.length > 0 && products && products.length > 0 ? (
                             categories.map((category) => {
-                                const categoryProducts = products
+                            const categoryProducts = products
                                     .filter(product => product && product.category && product.category.name === category.name)
-                                    .slice(-4); // Tomar las últimas 4 products de cada categoría
-                                if (categoryProducts.length === 0) return null;
-                                
-                                return (
-                                    <CardGridSection
-                                        key={category.id}
-                                        title={category.name}
-                                        products={categoryProducts}
-                                    />
-                                );
+                                .slice(-4); // Tomar las últimas 4 products de cada categoría
+                            if (categoryProducts.length === 0) return null;
+                            
+                            return (
+                                <CardGridSection
+                                    key={category.id}
+                                    title={category.name}
+                                    products={categoryProducts}
+                                />
+                            );
                             })
                         ) : (
                             <div className="col-span-full">
@@ -206,27 +208,16 @@ export const HomeView = () => {
                                         </div>
                                     </div>
 
-                                    {/* Categoría por defecto - Entertainment */}
-                                    <div className="flex-1 bg-white/4 backdrop-blur-sm rounded-xl shadow-lg p-3 sm:p-4">
-                                        <h2 className="text-lg sm:text-xl font-bold text-white mb-2 sm:mb-3">Entertainment</h2>
-                                        <div className="grid grid-cols-2 gap-2 sm:gap-4">
-                                            {[
-                                                { id: '5', title: 'Netflix', imageUrl: 'https://via.placeholder.com/200x150/e50914/ffffff?text=Netflix' },
-                                                { id: '6', title: 'Spotify', imageUrl: 'https://via.placeholder.com/200x150/1db954/ffffff?text=Spotify' },
-                                                { id: '7', title: 'Disney+', imageUrl: 'https://via.placeholder.com/200x150/113ccf/ffffff?text=Disney+' },
-                                                { id: '8', title: 'Amazon Prime', imageUrl: 'https://via.placeholder.com/200x150/00a8e1/ffffff?text=Prime' }
-                                            ].map((product) => (
-                                                <div key={product.id} className="bg-white/10 rounded-lg overflow-hidden hover:bg-white/20 transition-colors">
-                                                    <img 
-                                                        src={product.imageUrl} 
-                                                        alt={product.title}
-                                                        className="w-full h-20 object-cover"
-                                                    />
-                                                    <div className="p-2">
-                                                        <h3 className="text-white text-sm font-medium truncate">{product.title}</h3>
-                                                    </div>
-                                                </div>
-                                            ))}
+                                    {/* Mensaje cuando no hay productos */}
+                                    <div className="col-span-full">
+                                        <div className="text-center py-12">
+                                            <div className="w-20 h-20 mx-auto mb-4 bg-gray-700 rounded-full flex items-center justify-center">
+                                                <svg className="w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                                                </svg>
+                                            </div>
+                                            <h3 className="text-xl font-bold text-white mb-2">No hay productos disponibles</h3>
+                                            <p className="text-gray-400">Vuelve pronto para descubrir nuestros productos</p>
                                         </div>
                                     </div>
                                 </div>
@@ -259,18 +250,18 @@ export const HomeView = () => {
                         </div>
                     ) : gameCards && gameCards.length > 0 ? (
                         /* Mostrar Game Cards si hay datos */
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-12">
-                            <GameSection
-                                title="TARJETA DE JUEGO POPULAR"
-                                games={gameCards.filter(card => card.category === 'tarjeta')}
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-12">
+                        <GameSection
+                            title="TARJETA DE JUEGO POPULAR"
+                            games={gameCards.filter(card => card.category === 'tarjeta')}
                                 isLoading={false}
                                 error={null}
-                            />
+                        />
 
-                            {/* Popular Game Recharge Section */}
-                            <GameSection
-                                title="RECARGA DE JUEGO POPULAR"
-                                games={gameCards.filter(card => card.category === 'recarga')}
+                        {/* Popular Game Recharge Section */}
+                        <GameSection
+                            title="RECARGA DE JUEGO POPULAR"
+                            games={gameCards.filter(card => card.category === 'recarga')}
                                 isLoading={false}
                                 error={null}
                             />
@@ -285,7 +276,7 @@ export const HomeView = () => {
                             </div>
                             <h3 className="text-xl font-bold text-white mb-2">No hay tarjetas de juego por el momento</h3>
                             <p className="text-gray-400">Vuelve pronto para descubrir nuestras tarjetas de juego</p>
-                        </div>
+                    </div>
                     )}
                 </div>
                 
