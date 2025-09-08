@@ -1,4 +1,4 @@
-import { Product } from '../../services/productService';
+import type { Product } from '../../services/productService';
 
 interface ProductBannerProps {
     product: Product;

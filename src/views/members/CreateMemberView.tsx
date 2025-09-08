@@ -40,7 +40,7 @@ export default function CreateMemberView() {
       userName: memberData.userName,
       email: memberData.email,
       password: memberData.password,
-      rol: 'member'
+      roles: 'member'
     };
     console.log('Datos enviados al crear usuario:', userData);
     createMemberMutation.mutate(userData);

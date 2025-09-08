@@ -1,4 +1,3 @@
-import React from 'react';
 import { useCarouselStore } from '../stores/carouselStore';
 
 export default function CarouselLimitModal() {

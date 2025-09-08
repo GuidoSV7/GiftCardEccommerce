@@ -3,7 +3,7 @@ import { useState } from 'react';
 
 export default function Sidebar() {
   const [isProductsOpen, setIsProductsOpen] = useState(false);
-  const [isOffersOpen, setIsOffersOpen] = useState(false);
+  const [isOffersOpen] = useState(false);
   const [isCategoriesOpen, setIsCategoriesOpen] = useState(false);
   const [isMembersOpen, setIsMembersOpen] = useState(false);
 

@@ -3,7 +3,7 @@ interface EmptyStateProps {
     filteredCount: number;
 }
 
-export const EmptyState = ({ hasProducts, filteredCount }: EmptyStateProps) => {
+export const EmptyState = ({ hasProducts }: EmptyStateProps) => {
     return (
         <div className="bg-gray-50 rounded-lg p-8 text-center">
             <h3 className="text-lg font-medium text-gray-600 mb-2">

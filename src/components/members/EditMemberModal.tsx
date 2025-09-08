@@ -20,7 +20,7 @@ interface EditMemberModalProps {
 export default function EditMemberModal({ isOpen, onClose, selectedMember }: EditMemberModalProps) {
   const queryClient = useQueryClient();
   
-  const { register, handleSubmit, formState: { errors }, setValue, reset } = useForm<MemberFormData>();
+  const { register, handleSubmit, formState: { errors },  reset } = useForm<MemberFormData>();
 
   const updateMemberMutation = useMutation({
     mutationFn: ({ id, data }: { id: string; data: MemberFormData }) => 
