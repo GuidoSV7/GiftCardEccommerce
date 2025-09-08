@@ -25,7 +25,14 @@ const LoginView: React.FC = () => {
     setError('');
 
     try {
+      console.log('Iniciando login con:', formData);
       const response = await login(formData);
+      console.log('Respuesta del login:', response);
+      
+      // Verificar que la respuesta tenga los datos necesarios
+      if (!response || !response.id || !response.email || !response.roles || !response.token) {
+        throw new Error('Respuesta del servidor incompleta');
+      }
       
       // Guardar en el store de Zustand
       setUser({
@@ -34,19 +41,34 @@ const LoginView: React.FC = () => {
         roles: response.roles
       }, response.token);
       
+      console.log('Usuario guardado en store:', {
+        id: response.id,
+        email: response.email,
+        roles: response.roles
+      });
+      
+      // Verificar que el store se actualizó correctamente
+      const { user, isAuthenticated } = useAuthStore.getState();
+      console.log('Estado del store después del login:', { user, isAuthenticated });
+      
       // Redirigir según el rol del usuario
-      if (response.roles === 'admin') {
+      if (response.roles === 'admin' || response.roles === 'superadmin') {
+        console.log('Redirigiendo a dashboard para admin');
         navigate('/dashboard');
       } else if (response.roles === 'member') {
+        console.log('Redirigiendo a home para member');
         navigate('/');
       } else {
-        // Para otros roles, redirigir al home
+        console.log('Redirigiendo a home para rol desconocido:', response.roles);
         navigate('/');
       }
     } catch (err: any) {
-      const errorMessage = err.response?.data?.message || 'Error al iniciar sesión. Inténtalo de nuevo.';
+      console.error('Error completo del login:', err);
+      console.error('Error response:', err.response);
+      console.error('Error data:', err.response?.data);
+      
+      const errorMessage = err.response?.data?.message || err.message || 'Error al iniciar sesión. Inténtalo de nuevo.';
       setError(errorMessage);
-      console.error('Login error:', err);
     } finally {
       setLoading(false);
     }
