@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useCarouselStore } from '../../stores/carouselStore';
 import { useQuery } from '@tanstack/react-query';
 import { getProductsAll } from '../../services/productService';
@@ -9,6 +10,7 @@ export const Carousel: React.FC = () => {
     const [currentSlide, setCurrentSlide] = useState(0);
     const [touchStart, setTouchStart] = useState<number>(0);
     const [touchEnd, setTouchEnd] = useState<number>(0);
+    const navigate = useNavigate();
     
     // Obtener configuración del carrusel desde el store
     const { selectedProducts, selectedOffers } = useCarouselStore();
@@ -33,21 +35,24 @@ export const Carousel: React.FC = () => {
             image: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?w=800&h=600&fit=crop',
             title: 'Gaming',
             subtitle: 'Descubre los mejores juegos',
-            brand: 'GAMING'
+            brand: 'GAMING',
+            type: 'default'
         },
         {
             id: 2,
             image: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?w=800&h=600&fit=crop',
             title: 'Entertainment',
             subtitle: 'Entretenimiento sin límites',
-            brand: 'ENTERTAINMENT'
+            brand: 'ENTERTAINMENT',
+            type: 'default'
         },
         {
             id: 3,
             image: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&h=600&fit=crop',
             title: 'Gift Cards',
             subtitle: 'Regalos perfectos para cualquier ocasión',
-            brand: 'GIFT CARDS'
+            brand: 'GIFT CARDS',
+            type: 'default'
         }
     ];
 
@@ -73,7 +78,9 @@ export const Carousel: React.FC = () => {
                         image: offer.image,
                         title: offer.title,
                         subtitle: offer.discount || 'Oferta especial',
-                        brand: 'OFERTA'
+                        brand: 'OFERTA',
+                        type: 'offer',
+                        originalId: offer.id
                     });
                 }
             });
@@ -89,7 +96,9 @@ export const Carousel: React.FC = () => {
                         image: product.imageUrl,
                         title: product.title,
                         subtitle: product.category?.name || 'Producto destacado',
-                        brand: 'PRODUCTO'
+                        brand: 'PRODUCTO',
+                        type: 'product',
+                        originalId: product.id
                     });
                 }
             });
@@ -148,6 +157,14 @@ export const Carousel: React.FC = () => {
     const getPrevIndex = () => (currentSlide - 1 + carouselItems.length) % carouselItems.length;
     const getNextIndex = () => (currentSlide + 1) % carouselItems.length;
 
+    const handleSlideClick = (slide: any) => {
+        // Solo navegar si es un producto
+        if (slide.type === 'product') {
+            navigate(`/product/${slide.originalId}`);
+        }
+        // Las ofertas y elementos por defecto no navegan
+    };
+
     return (
         <div className="relative w-full aspect-square md:h-80 lg:h-96 mb-4 md:mb-8">
             <div className="absolute inset-0 flex justify-center items-center">
@@ -183,7 +200,13 @@ export const Carousel: React.FC = () => {
                                 onTouchEnd={handleTouchEnd}
                             >
                                 {carouselItems.map((slide, index) => (
-                                    <div key={slide.id} className="w-full h-full flex-shrink-0 relative overflow-hidden">
+                                    <div 
+                                        key={slide.id} 
+                                        className={`w-full h-full flex-shrink-0 relative overflow-hidden ${
+                                            slide.type === 'product' ? 'cursor-pointer' : 'cursor-default'
+                                        }`}
+                                        onClick={() => handleSlideClick(slide)}
+                                    >
                                         <img 
                                             src={slide.image}
                                             alt={slide.title}
@@ -207,6 +230,13 @@ export const Carousel: React.FC = () => {
                                                 {slide.subtitle}
                                             </p>
                                         </div>
+
+                                        {/* Indicador de click para productos */}
+                                        {slide.type === 'product' && (
+                                            <div className="absolute top-4 left-4 bg-blue-600/80 backdrop-blur-sm text-white px-2 py-1 rounded text-xs font-medium">
+                                                Click para ver detalles
+                                            </div>
+                                        )}
                                     </div>
                                 ))}
                             </div>

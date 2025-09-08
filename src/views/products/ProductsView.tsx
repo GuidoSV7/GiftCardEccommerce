@@ -5,6 +5,13 @@ import { useNavigate } from 'react-router-dom';
 import { useState, useMemo } from 'react';
 import { useCarouselStore } from '../../stores/carouselStore';
 import CarouselLimitModal from '../../components/CarouselLimitModal';
+import { 
+    ProductFilters, 
+    ProductTable, 
+    EmptyState, 
+    LoadingState, 
+    ErrorState 
+} from '../../components/products';
 
 export default function ProductsView() {
   const navigate = useNavigate();
@@ -26,6 +33,21 @@ export default function ProductsView() {
 
   const handleEditProduct = (productId: string) => {
     navigate(`/products/edit/${productId}`);
+  };
+
+  const handleClearFilters = () => {
+    setSearchTerm('');
+    setCategoryFilter('');
+    setStateFilter('');
+  };
+
+  const handleClearCarousel = () => {
+    if (confirm('¿Estás seguro de que quieres limpiar toda la selección del carrusel?')) {
+      // Limpiar localStorage directamente
+      localStorage.removeItem('carousel-config');
+      // Recargar la página para que el store se reinicialice
+      window.location.reload();
+    }
   };
 
   // Obtener categorías únicas para el filtro
@@ -61,30 +83,11 @@ export default function ProductsView() {
 
 
   if (isLoading) {
-    return (
-      <div className="w-full flex items-center justify-center min-h-[400px]">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Cargando productos...</p>
-        </div>
-      </div>
-    );
+    return <LoadingState />;
   }
 
   if (error) {
-    return (
-      <div className="w-full flex items-center justify-center min-h-[400px]">
-        <div className="text-center">
-          <div className="h-24 w-24 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <svg className="h-12 w-12 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
-            </svg>
-          </div>
-          <h2 className="text-2xl font-bold text-gray-800 mb-2">Error al cargar</h2>
-          <p className="text-gray-600">No se pudieron cargar los productos</p>
-        </div>
-      </div>
-    );
+    return <ErrorState />;
   }
 
   return (
@@ -96,210 +99,32 @@ export default function ProductsView() {
         </p>
       </div>
 
-      {/* Buscador y Filtros */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-6">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          {/* Buscador por nombre */}
-          <div>
-            <label htmlFor="search" className="block text-sm font-medium text-gray-700 mb-2">
-              Buscar por nombre
-            </label>
-            <input
-              id="search"
-              type="text"
-              placeholder="Buscar productos..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            />
-          </div>
-
-          {/* Filtro por categoría */}
-          <div>
-            <label htmlFor="category" className="block text-sm font-medium text-gray-700 mb-2">
-              Categoría
-            </label>
-            <select
-              id="category"
-              value={categoryFilter}
-              onChange={(e) => setCategoryFilter(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            >
-              <option value="">Todas las categorías</option>
-              {categories.map((category: string) => (
-                <option key={category} value={category}>
-                  {category}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          {/* Filtro por estado */}
-          <div>
-            <label htmlFor="state" className="block text-sm font-medium text-gray-700 mb-2">
-              Estado
-            </label>
-            <select
-              id="state"
-              value={stateFilter}
-              onChange={(e) => setStateFilter(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            >
-              <option value="">Todos los estados</option>
-              <option value="active">Activo</option>
-              <option value="inactive">Inactivo</option>
-            </select>
-          </div>
-
-          {/* Información del carrusel */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Carrusel
-            </label>
-            <div className="text-sm text-gray-600 bg-gray-50 px-3 py-2 rounded-lg">
-              {getTotalSelected()}/5 seleccionados
-            </div>
-          </div>
-        </div>
-
-        {/* Botones de limpieza */}
-        <div className="mt-4 flex gap-4">
-          {(searchTerm || categoryFilter || stateFilter) && (
-            <button
-              onClick={() => {
-                setSearchTerm('');
-                setCategoryFilter('');
-                setStateFilter('');
-              }}
-              className="text-sm text-blue-600 hover:text-blue-800 font-medium"
-            >
-              Limpiar filtros
-            </button>
-          )}
-          
-          {getTotalSelected() > 0 && (
-            <button
-              onClick={() => {
-                if (confirm('¿Estás seguro de que quieres limpiar toda la selección del carrusel?')) {
-                  // Limpiar localStorage directamente
-                  localStorage.removeItem('carousel-config');
-                  // Recargar la página para que el store se reinicialice
-                  window.location.reload();
-                }
-              }}
-              className="text-sm text-red-600 hover:text-red-800 font-medium"
-            >
-              🗑️ Limpiar carrusel ({getTotalSelected()} seleccionados)
-            </button>
-          )}
-        </div>
-      </div>
+      <ProductFilters
+        searchTerm={searchTerm}
+        setSearchTerm={setSearchTerm}
+        categoryFilter={categoryFilter}
+        setCategoryFilter={setCategoryFilter}
+        stateFilter={stateFilter}
+        setStateFilter={setStateFilter}
+        categories={categories}
+        totalSelected={getTotalSelected()}
+        onClearFilters={handleClearFilters}
+        onClearCarousel={handleClearCarousel}
+      />
 
       {filteredProducts.length === 0 ? (
-         <div className="bg-gray-50 rounded-lg p-8 text-center">
-           <h3 className="text-lg font-medium text-gray-600 mb-2">
-             {data && data.length === 0 ? 'No hay productos' : 'No se encontraron productos'}
-           </h3>
-           <p className="text-gray-500">
-             {data && data.length === 0 
-               ? 'Aún no se han creado productos en el sistema.' 
-               : 'Intenta ajustar los filtros de búsqueda.'}
-           </p>
-         </div>
-       ) : (
-        <div className="bg-white shadow-lg rounded-lg overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Producto
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Categoría
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Estado
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Carrusel
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Acciones
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
-                                 {filteredProducts.map((product: Product) => (
-                  <tr key={product.id} className="hover:bg-gray-50">
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="flex items-center">
-                        <div className="flex-shrink-0 h-12 w-12">
-                          <img
-                            className="h-12 w-12 rounded-lg object-cover"
-                            src={product.imageUrl}
-                            alt={product.title}
-                            onError={(e) => {
-                              const target = e.target as HTMLImageElement;
-                              target.src = 'https://via.placeholder.com/48x48?text=No+Image';
-                            }}
-                          />
-                        </div>
-                        <div className="ml-4">
-                          <div className="text-sm font-medium text-gray-900">
-                            {product.title}
-                          </div>
-                          <div className="text-sm text-gray-500 truncate max-w-xs">
-                            {product.description}
-                          </div>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                        {product.category?.name || 'Sin categoría'}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                        product.state === true
-                            ? 'bg-green-100 text-green-800'
-                          : 'bg-red-100 text-red-800'
-                      }`}>
-                        {product.state ? 'Activo' : 'Inactivo'}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <label className="flex items-center">
-                        <input
-                          type="checkbox"
-                          checked={isProductSelected(product.id)}
-                          onChange={() => toggleProduct(product.id)}
-                          disabled={!isProductSelected(product.id) && !canSelectMore()}
-                          className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
-                        />
-                        <span className="ml-2 text-sm text-gray-600">
-                          {isProductSelected(product.id) ? 'En carrusel' : 'Agregar'}
-                        </span>
-                      </label>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                      <button 
-                        onClick={() => handleEditProduct(product.id)}
-                        className="text-blue-600 hover:text-blue-900 font-medium flex items-center gap-1"
-                      >
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                        </svg>
-                        Editar
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
+        <EmptyState 
+          hasProducts={data && data.length > 0} 
+          filteredCount={filteredProducts.length} 
+        />
+      ) : (
+        <ProductTable
+          products={filteredProducts}
+          isProductSelected={isProductSelected}
+          canSelectMore={canSelectMore}
+          onToggleProduct={toggleProduct}
+          onEditProduct={handleEditProduct}
+        />
       )}
 
       <div className="mt-6 text-sm text-gray-500 text-center">

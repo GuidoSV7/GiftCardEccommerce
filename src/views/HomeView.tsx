@@ -11,11 +11,35 @@ import {getCategories, getProducts } from '../services/productService';
 
 import HomeHeader from '../components/home/HomeHeader';
 import { useQuery } from '@tanstack/react-query';
+import { useLocation } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 
 
 
 
 export const HomeView = () => {
+    const location = useLocation();
+    const [showErrorMessage, setShowErrorMessage] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
+
+    // Verificar si hay un mensaje de error en el state de la navegación
+    useEffect(() => {
+        if (location.state?.message) {
+            setErrorMessage(location.state.message);
+            setShowErrorMessage(true);
+            
+            // Limpiar el mensaje después de 5 segundos
+            const timer = setTimeout(() => {
+                setShowErrorMessage(false);
+                setErrorMessage('');
+                // Limpiar el state de la navegación
+                window.history.replaceState({}, document.title);
+            }, 5000);
+
+            return () => clearTimeout(timer);
+        }
+    }, [location.state]);
+
     // Queries individuales con TanStack Query
     const { data: offers = [], isLoading: offersLoading, error: offersError } = useQuery({
         queryKey: ['offers'],
@@ -57,6 +81,33 @@ export const HomeView = () => {
     return (
         <div style={{fontFamily: 'Manrope, Arial, system-ui, sans-serif'}} className="min-h-screen bg-gradient-to-b from-gray-700 via-gray-800 to-gray-900">
             <HomeHeader />
+            
+            {/* Error Message */}
+            {showErrorMessage && (
+                <div className="fixed top-20 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-md mx-4">
+                    <div className="bg-red-600 text-white px-4 py-3 rounded-lg shadow-lg flex items-center justify-between">
+                        <div className="flex items-center">
+                            <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                            </svg>
+                            <span className="text-sm font-medium">{errorMessage}</span>
+                        </div>
+                        <button 
+                            onClick={() => {
+                                setShowErrorMessage(false);
+                                setErrorMessage('');
+                                window.history.replaceState({}, document.title);
+                            }}
+                            className="ml-2 text-white hover:text-gray-200"
+                        >
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            )}
+
             {/* Carousel and Offers Section */}
             <div className="w-full pt-20 md:pt-24">
                 {/* Carousel Section */}
@@ -184,40 +235,29 @@ export const HomeView = () => {
                         ) : (
                             <div className="col-span-full">
                                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                                    {/* Categoría por defecto - Games */}
-                                    <div className="flex-1 bg-white/4 backdrop-blur-sm rounded-xl shadow-lg p-3 sm:p-4">
-                                        <h2 className="text-lg sm:text-xl font-bold text-white mb-2 sm:mb-3">Games</h2>
-                                        <div className="grid grid-cols-2 gap-2 sm:gap-4">
-                                            {[
-                                                { id: '1', title: 'Steam Wallet', imageUrl: 'https://via.placeholder.com/200x150/1e40af/ffffff?text=Steam' },
-                                                { id: '2', title: 'PlayStation Store', imageUrl: 'https://via.placeholder.com/200x150/006fcd/ffffff?text=PSN' },
-                                                { id: '3', title: 'Xbox Live', imageUrl: 'https://via.placeholder.com/200x150/107c10/ffffff?text=Xbox' },
-                                                { id: '4', title: 'Nintendo eShop', imageUrl: 'https://via.placeholder.com/200x150/e60012/ffffff?text=Nintendo' }
-                                            ].map((product) => (
-                                                <div key={product.id} className="bg-white/10 rounded-lg overflow-hidden hover:bg-white/20 transition-colors">
-                                                    <img 
-                                                        src={product.imageUrl} 
-                                                        alt={product.title}
-                                                        className="w-full h-20 object-cover"
-                                                    />
-                                                    <div className="p-2">
-                                                        <h3 className="text-white text-sm font-medium truncate">{product.title}</h3>
-                                                    </div>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    </div>
-
-                                    {/* Mensaje cuando no hay productos */}
-                                    <div className="col-span-full">
-                                        <div className="text-center py-12">
-                                            <div className="w-20 h-20 mx-auto mb-4 bg-gray-700 rounded-full flex items-center justify-center">
-                                                <svg className="w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    {/* Mensaje cuando no hay productos - Columna izquierda */}
+                                    <div className="flex-1 bg-white/4 backdrop-blur-sm rounded-xl shadow-lg p-6">
+                                        <div className="text-center py-8">
+                                            <div className="w-16 h-16 mx-auto mb-4 bg-gray-700 rounded-full flex items-center justify-center">
+                                                <svg className="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
                                                 </svg>
                                             </div>
-                                            <h3 className="text-xl font-bold text-white mb-2">No hay productos disponibles</h3>
-                                            <p className="text-gray-400">Vuelve pronto para descubrir nuestros productos</p>
+                                            <h3 className="text-lg font-bold text-white mb-2">No hay productos disponibles</h3>
+                                            <p className="text-gray-400 text-sm">Vuelve pronto para descubrir nuestros productos</p>
+                                        </div>
+                                    </div>
+
+                                    {/* Mensaje cuando no hay productos - Columna derecha */}
+                                    <div className="flex-1 bg-white/4 backdrop-blur-sm rounded-xl shadow-lg p-6">
+                                        <div className="text-center py-8">
+                                            <div className="w-16 h-16 mx-auto mb-4 bg-gray-700 rounded-full flex items-center justify-center">
+                                                <svg className="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                                                </svg>
+                                            </div>
+                                            <h3 className="text-lg font-bold text-white mb-2">No hay productos disponibles</h3>
+                                            <p className="text-gray-400 text-sm">Vuelve pronto para descubrir nuestros productos</p>
                                         </div>
                                     </div>
                                 </div>

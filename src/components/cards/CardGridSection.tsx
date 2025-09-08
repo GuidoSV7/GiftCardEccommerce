@@ -16,6 +16,7 @@ export const CardGridSection: React.FC<CardGridSectionProps> = ({ title, product
                             {products.map((product) => (
                 <CardItem
                     key={product.id}
+                    id={product.id}
                     image={product.imageUrl}
                     title={product.title}
                     alt={product.title}

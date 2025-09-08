@@ -77,20 +77,12 @@ export default function Sidebar() {
                   Crear Productos
                 </Link>
               </li>
-              <li>
-                <Link
-                  to="/products/metrics"
-                  className="flex items-center pl-11 pr-3 py-2 text-gray-300 hover:text-white hover:bg-gray-700 rounded-lg transition-colors duration-200"
-                >
-                  Ver Métricas
-                </Link>
-              </li>
             </ul>
           </li>
 
           {/* Ofertas Menú */}
-          <li>
-            <button
+            <li>
+            {/* <button
               onClick={() => setIsOffersOpen(!isOffersOpen)}
               className="flex items-center justify-between w-full hover:bg-gray-700 rounded-lg p-3 transition-colors duration-200"
             >
@@ -108,7 +100,8 @@ export default function Sidebar() {
               >
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
               </svg>
-            </button>
+            </button> */}
+            
 
             {/* Submenú de Ofertas */}
             <ul className={`mt-2 space-y-1 ${isOffersOpen ? 'block' : 'hidden'}`}>
@@ -177,14 +170,6 @@ export default function Sidebar() {
                   className="flex items-center pl-11 pr-3 py-2 text-gray-300 hover:text-white hover:bg-gray-700 rounded-lg transition-colors duration-200"
                 >
                   Crear Categoría
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/categories/metrics"
-                  className="flex items-center pl-11 pr-3 py-2 text-gray-300 hover:text-white hover:bg-gray-700 rounded-lg transition-colors duration-200"
-                >
-                  Ver Métricas
                 </Link>
               </li>
             </ul>

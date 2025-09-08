@@ -25,6 +25,18 @@ export async function getAllMembers() {
     }
 }
 
+export async function getMembers() {
+    try {
+        const { data } = await api.get('/users/members/all');
+        return data;
+    } catch (error) {
+        if (isAxiosError(error)) {
+            throw error.response?.data || error;
+        }
+        throw error;
+    }
+}
+
 export async function getMemberById(id: string) {
     try {
         const { data } = await api.get(`/users/${id}`);

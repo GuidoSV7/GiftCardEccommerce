@@ -1,11 +1,13 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import DashboardView from "./views/DashboardView";
+import MetricsView from "./views/MetricsView";
 
 import AppLayout from "./layouts/AppLayout";
 import AdminProtectedRoute from "./components/AdminProtectedRoute";
 import MemberProtectedRoute from "./components/MemberProtectedRoute";
 // import CreateProductView from "./views/products/CreateProductView";
 import { HomeView } from "./views/HomeView";
+import { ProductDetailView } from "./views/ProductDetailView";
 import RegisterView from "./views/RegisterView";
 import LoginView from "./views/LoginView";
 import MyAccountView from "./views/MyAccountView";
@@ -33,6 +35,7 @@ export default function router() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<HomeView />} index />
+        <Route path="/product/:id" element={<ProductDetailView />} />
         <Route path="/register" element={<RegisterView />} />
         <Route path="/login" element={<LoginView />} />
         
@@ -50,6 +53,7 @@ export default function router() {
         {/* Admin routes - Solo para usuarios con rol 'admin' o 'superadmin' */}
         <Route element={<AdminProtectedRoute><AppLayout /></AdminProtectedRoute>}>
           <Route path="/dashboard" element={<DashboardView />} index />
+          <Route path="/metrics" element={<MetricsView />} />
           <Route path="/products" element={<ProductsView />} />
           <Route path="/products/create" element={<CreateProductView />} />
           <Route path="/products/edit/:id" element={<EditProductView />} />
