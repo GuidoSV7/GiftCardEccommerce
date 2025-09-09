@@ -3,7 +3,7 @@ import api from "../lib/axios";
 import { dashboardProductSchema, type ProductFormData } from "../types";
 
 export interface Category {
-    id: number;
+    id: string;
     name: string;
 }
 

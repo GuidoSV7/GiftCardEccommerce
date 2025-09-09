@@ -24,8 +24,7 @@ export const useAuthStore = create<AuthState>()(
       isAuthenticated: false,
       
       setUser: (user: User, token: string) => {
-        console.log('AuthStore: Guardando usuario:', user);
-        console.log('AuthStore: Guardando token:', token ? 'Token presente' : 'Token ausente');
+
         
         set({ user, token, isAuthenticated: true });
         

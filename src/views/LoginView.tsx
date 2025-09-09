@@ -25,9 +25,9 @@ const LoginView: React.FC = () => {
     setError('');
 
     try {
-      console.log('Iniciando login con:', formData);
+
       const response = await login(formData);
-      console.log('Respuesta del login:', response);
+
       
       // Verificar que la respuesta tenga los datos necesarios
       if (!response || !response.id || !response.email || !response.roles || !response.token) {
@@ -63,9 +63,7 @@ const LoginView: React.FC = () => {
         navigate('/');
       }
     } catch (err: any) {
-      console.error('Error completo del login:', err);
-      console.error('Error response:', err.response);
-      console.error('Error data:', err.response?.data);
+
       
       const errorMessage = err.response?.data?.message || err.message || 'Error al iniciar sesión. Inténtalo de nuevo.';
       setError(errorMessage);

@@ -229,6 +229,7 @@ export const HomeView = () => {
                                     key={category.id}
                                     title={category.name}
                                     products={categoryProducts}
+                                    categoryId={category.id}
                                 />
                             );
                             })

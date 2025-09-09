@@ -1,4 +1,5 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { ScrollToTop } from "./components/ScrollToTop";
 import DashboardView from "./views/DashboardView";
 import MetricsView from "./views/MetricsView";
 
@@ -8,6 +9,7 @@ import MemberProtectedRoute from "./components/MemberProtectedRoute";
 // import CreateProductView from "./views/products/CreateProductView";
 import { HomeView } from "./views/HomeView";
 import { ProductDetailView } from "./views/ProductDetailView";
+import { CategoryProductsView } from "./views/CategoryProductsView";
 import RegisterView from "./views/RegisterView";
 import LoginView from "./views/LoginView";
 import MyAccountView from "./views/MyAccountView";
@@ -33,9 +35,11 @@ import NotFoundView from "./views/NotFoundView";
 export default function router() {
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <Routes>
         <Route path="/" element={<HomeView />} index />
         <Route path="/product/:id" element={<ProductDetailView />} />
+        <Route path="/category/:categoryId" element={<CategoryProductsView />} />
         <Route path="/register" element={<RegisterView />} />
         <Route path="/login" element={<LoginView />} />
         
