@@ -2,31 +2,17 @@ import React from 'react';
 import Logo from './Logo';
 import SearchBar from './SearchBar';
 import UserDropdown from './UserDropdown';
+import CategoryDropdown from './CategoryDropdown';
 
 interface DesktopHeaderProps {
   onLoginModalOpen: () => void;
 }
-
-const ChevronDownIcon = () => (
-  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-  </svg>
-);
 
 const LocationIcon = () => (
   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
   </svg>
-);
-
-
-
-const CategoryButton = () => (
-  <button className="flex items-center gap-2 bg-[#1c1f2c] text-white px-4 py-2 rounded-lg hover:bg-[#2c2f3c] transition-colors">
-    <span>Category</span>
-    <ChevronDownIcon />
-  </button>
 );
 
 const LocationButton = () => (
@@ -44,7 +30,7 @@ const DesktopHeader: React.FC<DesktopHeaderProps> = ({ onLoginModalOpen }) => {
 
       {/* Selector de Categoría */}
       <div className="flex items-center gap-6">
-        <CategoryButton />
+        <CategoryDropdown />
       </div>
 
       {/* Buscador */}

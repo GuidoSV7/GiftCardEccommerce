@@ -156,52 +156,148 @@ export const CategoryProductsView: React.FC = () => {
 
                         {/* Grid de productos */}
                         {categoryProducts.length > 0 ? (
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                                 {categoryProducts.map((product: Product) => (
                                     <div
                                         key={product.id}
-                                        className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow cursor-pointer"
+                                        className="group relative bg-gradient-to-br from-slate-800/80 via-blue-900/60 to-slate-900/80 backdrop-blur-sm rounded-xl overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer border border-blue-800/30 hover:border-blue-600/50 hover:scale-105"
                                         onClick={() => navigate(`/product/${product.id}`)}
+                                        style={{
+                                            boxShadow: `
+                                                0 10px 25px -5px rgba(0, 0, 0, 0.4),
+                                                0 0 0 1px rgba(59, 130, 246, 0.2),
+                                                inset 0 1px 0 rgba(255, 255, 255, 0.1)
+                                            `
+                                        }}
                                     >
-                                        <div className="flex">
-                                            {/* Sección izquierda - Logo/Imagen */}
-                                            <div className="w-24 h-24 bg-white flex items-center justify-center p-3">
-                                                <img
-                                                    src={product.imageUrl}
-                                                    alt={product.title}
-                                                    className="max-w-full max-h-full object-contain"
-                                                />
-                                            </div>
-                                            
-                                            {/* Sección derecha - Detalles */}
-                                            <div className="flex-1 bg-gray-50 p-4 flex flex-col justify-center">
-                                                <div>
-                                                    <h3 className="font-bold text-gray-900 text-lg mb-1">
+                                        {/* Background Image Effect */}
+                                        <div 
+                                            className="absolute inset-0 opacity-20 group-hover:opacity-30 transition-opacity duration-300"
+                                            style={{
+                                                backgroundImage: `url(${product.imageUrl})`,
+                                                backgroundSize: 'cover',
+                                                backgroundPosition: 'center',
+                                                backgroundRepeat: 'no-repeat'
+                                            }}
+                                        ></div>
+                                        
+                                        {/* Gradient Overlay */}
+                                        <div className="absolute inset-0 bg-gradient-to-br from-slate-900/40 via-blue-900/20 to-slate-800/30"></div>
+                                        
+                                        {/* Content */}
+                                        <div className="relative z-10 p-5">
+                                            <div className="flex items-center space-x-4">
+                                                {/* Product Image */}
+                                                <div className="relative">
+                                                    <div 
+                                                        className="w-24 h-24 rounded-lg overflow-hidden bg-white/10 backdrop-blur-sm border border-blue-500/20 flex items-center justify-center p-2 group-hover:bg-white/15 transition-colors duration-300"
+                                                        style={{
+                                                            boxShadow: `
+                                                                0 4px 15px rgba(0, 0, 0, 0.3),
+                                                                0 0 0 1px rgba(59, 130, 246, 0.3),
+                                                                inset 0 1px 0 rgba(255, 255, 255, 0.1)
+                                                            `
+                                                        }}
+                                                    >
+                                                        <img
+                                                            src={product.imageUrl}
+                                                            alt={product.title}
+                                                            className="w-full h-full object-contain"
+                                                        />
+                                                    </div>
+                                                    
+                                                    {/* Floating glow effect */}
+                                                    <div 
+                                                        className="absolute inset-0 rounded-lg blur-md opacity-20 -z-10 group-hover:opacity-40 transition-opacity duration-300"
+                                                        style={{
+                                                            background: `linear-gradient(45deg, rgba(59, 130, 246, 0.4), rgba(30, 64, 175, 0.4))`
+                                                        }}
+                                                    ></div>
+                                                </div>
+                                                
+                                                {/* Product Info */}
+                                                <div className="flex-1 min-w-0">
+                                                    <h3 className="font-bold text-white text-base mb-2 group-hover:text-blue-200 transition-colors duration-300 line-clamp-2">
                                                         {product.title}
                                                     </h3>
-                                                    <p className="text-gray-600 text-sm">
-                                                        {product.category.name}
-                                                    </p>
+                                                    <div className="flex items-center space-x-2">
+                                                        <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
+                                                        <p className="text-gray-300 text-sm font-medium">
+                                                            {product.category.name}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            {/* Hover Effect Indicator */}
+                                            <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                                <div className="w-7 h-7 bg-blue-500/20 rounded-full flex items-center justify-center">
+                                                    <svg className="w-4 h-4 text-blue-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                                                    </svg>
                                                 </div>
                                             </div>
                                         </div>
+                                        
+                                        {/* Bottom gradient accent */}
+                                        <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-500 to-blue-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                                     </div>
                                 ))}
                             </div>
                         ) : (
-                            <div className="text-center py-12">
-                                <div className="w-20 h-20 mx-auto mb-4 bg-gray-700 rounded-full flex items-center justify-center">
-                                    <svg className="w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-                                    </svg>
+                            <div className="text-center py-16">
+                                <div className="relative">
+                                    <div 
+                                        className="w-20 h-20 mx-auto mb-6 bg-gradient-to-br from-slate-800/80 via-blue-900/60 to-slate-900/80 backdrop-blur-sm rounded-xl flex items-center justify-center border border-blue-800/30"
+                                        style={{
+                                            boxShadow: `
+                                                0 10px 25px -5px rgba(0, 0, 0, 0.4),
+                                                0 0 0 1px rgba(59, 130, 246, 0.2),
+                                                inset 0 1px 0 rgba(255, 255, 255, 0.1)
+                                            `
+                                        }}
+                                    >
+                                        <svg className="w-10 h-10 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                                        </svg>
+                                    </div>
+                                    
+                                    {/* Glow effect */}
+                                    <div 
+                                        className="absolute inset-0 rounded-xl blur-lg opacity-20 -z-10"
+                                        style={{
+                                            background: `linear-gradient(45deg, rgba(59, 130, 246, 0.3), rgba(30, 64, 175, 0.3))`
+                                        }}
+                                    ></div>
                                 </div>
-                                <h3 className="text-xl font-bold text-white mb-2">No hay productos en esta categoría</h3>
-                                <p className="text-gray-400 mb-6">Vuelve pronto para descubrir nuevos productos</p>
+                                
+                                <h3 className="text-xl font-bold text-white mb-3">No hay productos en esta categoría</h3>
+                                <p className="text-gray-300 mb-8 max-w-md mx-auto">Vuelve pronto para descubrir nuevos productos increíbles en esta categoría</p>
+                                
                                 <button 
                                     onClick={handleBackToHome}
-                                    className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium transition-colors"
+                                    className="group relative bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-6 py-2 rounded-lg font-medium transition-all duration-300 hover:scale-105"
+                                    style={{
+                                        boxShadow: `
+                                            0 8px 20px rgba(59, 130, 246, 0.3),
+                                            0 0 0 1px rgba(59, 130, 246, 0.2)
+                                        `
+                                    }}
                                 >
-                                    Volver al inicio
+                                    <span className="relative z-10 flex items-center">
+                                        <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                                        </svg>
+                                        Volver al inicio
+                                    </span>
+                                    
+                                    {/* Button glow effect */}
+                                    <div 
+                                        className="absolute inset-0 rounded-lg blur-md opacity-0 group-hover:opacity-30 transition-opacity duration-300 -z-10"
+                                        style={{
+                                            background: `linear-gradient(45deg, rgba(59, 130, 246, 0.4), rgba(30, 64, 175, 0.4))`
+                                        }}
+                                    ></div>
                                 </button>
                             </div>
                         )}

@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { getProductById } from '../services/productService';
 import HomeHeader from '../components/home/HomeHeader';
 import { HomeFooter } from '../components/home/HomeFooter';
-import { ProductBanner, ProductOptions, ExpandableSection, OrderSummary } from '../components/product';
+import { ProductBanner, ProductOptions, ExpandableSection, OrderSummary, SimilarProducts } from '../components/product';
 
 export const ProductDetailView = () => {
     const { id } = useParams<{ id: string }>();
@@ -143,6 +143,12 @@ export const ProductDetailView = () => {
                                 onQuantityChange={setQuantity}
                             />
                         </div>
+                    </div>
+
+                    {/* Similar Products Section */}
+                    <div className="mt-12">
+                        
+                        <SimilarProducts product={product} />
                     </div>
                 </div>
             </div>

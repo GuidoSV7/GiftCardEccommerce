@@ -6,3 +6,4 @@ export { default as Logo } from './Logo';
 export { default as SearchBar } from './SearchBar';
 export { default as MobileHeader } from './MobileHeader';
 export { default as DesktopHeader } from './DesktopHeader';
+export { default as CategoryDropdown } from './CategoryDropdown';

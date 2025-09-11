@@ -19,7 +19,7 @@ export default function HomeHeader() {
 
   // Prevenir el scroll cuando el menú está abierto
   useEffect(() => {
-    if (menuOpen || loginPanelOpen || loginModalOpen) {
+    if (menuOpen || loginPanelOpen) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = 'unset';
@@ -27,7 +27,7 @@ export default function HomeHeader() {
     return () => {
       document.body.style.overflow = 'unset';
     };
-  }, [menuOpen, loginPanelOpen, loginModalOpen]);
+  }, [menuOpen, loginPanelOpen]);
 
   return (
     <header className="bg-[#080b14] py-3 fixed w-full top-0 z-50 shadow-lg">
@@ -53,11 +53,12 @@ export default function HomeHeader() {
         />
 
         {/* Vista Desktop */}
-        <DesktopHeader onLoginModalOpen={() => setLoginModalOpen(true)} />
+        <div className="relative">
+          <DesktopHeader onLoginModalOpen={() => setLoginModalOpen(true)} />
+          {/* Login Modal para Desktop */}
+          <LoginModal open={loginModalOpen} onClose={() => setLoginModalOpen(false)} />
+        </div>
       </div>
-
-      {/* Login Modal para Desktop */}
-      <LoginModal open={loginModalOpen} onClose={() => setLoginModalOpen(false)} />
     </header>
   );
 }

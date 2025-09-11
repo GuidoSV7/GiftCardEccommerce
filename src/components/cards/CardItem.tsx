@@ -18,7 +18,7 @@ export const CardItem: React.FC<CardItemProps> = ({ id, image, title, alt }) => 
     return (
         <div className="group cursor-pointer w-full" onClick={handleClick}>
             <div className="p-2 transition-all">
-                <div className="relative overflow-hidden rounded-2xl mb-2 w-full aspect-[4/3] sm:aspect-square">
+                <div className="relative overflow-hidden rounded-2xl mb-2 w-full aspect-[4/3] sm:aspect-[5/4]">
                     <img 
                         src={image}
                         alt={alt}
