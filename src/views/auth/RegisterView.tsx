@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { GoogleLoginButton } from '../components/auth/GoogleLoginButton';
+import { GoogleLoginButton } from '../../components/auth/GoogleLoginButton';
 
 const RegisterView: React.FC = () => {
   const navigate = useNavigate();

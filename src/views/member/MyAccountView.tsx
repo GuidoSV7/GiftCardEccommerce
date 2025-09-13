@@ -1,8 +1,8 @@
 import React from 'react';
-import HomeHeader from '../components/home/HomeHeader';
-import MemberSidebar from '../components/member/MemberSidebar';
-import { HomeFooter } from '../components/home/HomeFooter';
-import { useAuthStore } from '../stores/authStore';
+import HomeHeader from '../../components/home/HomeHeader';
+import MemberSidebar from '../../components/member/MemberSidebar';
+import { HomeFooter } from '../../components/home/HomeFooter';
+import { useAuthStore } from '../../stores/authStore';
 
 const MyAccountView: React.FC = () => {
   const { user } = useAuthStore();

@@ -1,9 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
-import { getOffers, type Offer } from '../../services/offerService';
+import { getOffers, type Offer } from '../../../services/offerService';
 import { useNavigate } from 'react-router-dom';
 import { useState, useMemo } from 'react';
-import { useCarouselStore } from '../../stores/carouselStore';
-import CarouselLimitModal from '../../components/CarouselLimitModal';
+import { useCarouselStore } from '../../../stores/carouselStore';
+import CarouselLimitModal from '../../../components/CarouselLimitModal';
 
 export default function OffersView() {
   const navigate = useNavigate();

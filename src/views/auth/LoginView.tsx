@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { login, type LoginCredentials } from '../services/authService';
-import { useAuthStore } from '../stores/authStore';
-import { GoogleLoginButton } from '../components/auth/GoogleLoginButton';
+import { login, type LoginCredentials } from '../../services/authService';
+import { useAuthStore } from '../../stores/authStore';
+import { GoogleLoginButton } from '../../components/auth/GoogleLoginButton';
 
 const LoginView: React.FC = () => {
   const navigate = useNavigate();

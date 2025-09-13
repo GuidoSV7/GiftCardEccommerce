@@ -1,9 +1,9 @@
 import { useForm } from "react-hook-form";
 
-import type { ProductFormData } from "../../types";
+import type { ProductFormData } from "../../../types";
 import { useNavigate } from "react-router-dom";
-import { createProduct } from "../../services/productService";
-import ProductForm from '../../components/dashboard/products/ProductForm';
+import { createProduct } from "../../../services/productService";
+import ProductForm from '../../../components/dashboard/products/ProductForm';
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 

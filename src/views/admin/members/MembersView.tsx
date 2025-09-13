@@ -1,14 +1,14 @@
 import { useQuery } from '@tanstack/react-query';
-import { getAllMembers } from '../../services/memberService';
+import { getAllMembers } from '../../../services/memberService';
 import { useState, useMemo } from 'react';
-import type { Member } from '../../services/memberService';
-import MembersHeader from '../../components/members/MembersHeader';
-import MembersStats from '../../components/members/MembersStats';
-import MembersFilters from '../../components/members/MembersFilters';
-import MembersTable from '../../components/members/MembersTable';
-import EditMemberModal from '../../components/members/EditMemberModal';
-import MembersLoadingState from '../../components/members/MembersLoadingState';
-import MembersErrorState from '../../components/members/MembersErrorState';
+import type { Member } from '../../../services/memberService';
+import MembersHeader from '../../../components/members/MembersHeader';
+import MembersStats from '../../../components/members/MembersStats';
+import MembersFilters from '../../../components/members/MembersFilters';
+import MembersTable from '../../../components/members/MembersTable';
+import EditMemberModal from '../../../components/members/EditMemberModal';
+import MembersLoadingState from '../../../components/members/MembersLoadingState';
+import MembersErrorState from '../../../components/members/MembersErrorState';
 
 export default function MembersView() {
   const [showEditModal, setShowEditModal] = useState(false);

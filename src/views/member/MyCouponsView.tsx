@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import HomeHeader from '../components/home/HomeHeader';
-import MemberSidebar from '../components/member/MemberSidebar';
-import { HomeFooter } from '../components/home/HomeFooter';
+import { HomeFooter } from '../../components/home/HomeFooter';
+import HomeHeader from '../../components/home/HomeHeader';
+import MemberSidebar from '../../components/member/MemberSidebar';
+
 
 const MyCouponsView: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);

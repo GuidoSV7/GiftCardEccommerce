@@ -1,7 +1,7 @@
 
 
 import { useState, useEffect } from 'react';
-import { useAuthStore } from '../stores/authStore';
+import { useAuthStore } from '../../stores/authStore';
 import { useNavigate } from 'react-router-dom';
 
 export default function DashboardView() {

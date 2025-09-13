@@ -1,10 +1,10 @@
 
 import { useForm } from 'react-hook-form';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { createCategory } from '../../services/categoryService';
+import { createCategory } from '../../../services/categoryService';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
-import type { CategoryFormData } from '../../types';
+import type { CategoryFormData } from '../../../types';
 
 export default function CreateCategoryView() {
   const navigate = useNavigate();

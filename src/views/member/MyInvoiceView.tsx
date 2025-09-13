@@ -1,7 +1,7 @@
 import React from 'react';
-import HomeHeader from '../components/home/HomeHeader';
-import MemberSidebar from '../components/member/MemberSidebar';
-import { HomeFooter } from '../components/home/HomeFooter';
+import HomeHeader from '../../components/home/HomeHeader';
+import MemberSidebar from '../../components/member/MemberSidebar';
+import { HomeFooter } from '../../components/home/HomeFooter';
 
 const MyInvoiceView: React.FC = () => {
   return (

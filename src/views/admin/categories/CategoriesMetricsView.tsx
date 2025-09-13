@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { getAllCategories } from '../../services/categoryService';
+import { getAllCategories } from '../../../services/categoryService';
 
 export default function CategoriesMetricsView() {
   const { data: categories, isLoading, error } = useQuery({

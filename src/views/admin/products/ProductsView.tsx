@@ -1,17 +1,17 @@
 
-import { getProductsAll, type Product } from '../../services/productService';
+import { getProductsAll, type Product } from '../../../services/productService';
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { useState, useMemo } from 'react';
-import { useCarouselStore } from '../../stores/carouselStore';
-import CarouselLimitModal from '../../components/CarouselLimitModal';
+import { useCarouselStore } from '../../../stores/carouselStore';
+import CarouselLimitModal from '../../../components/CarouselLimitModal';
 import { 
     ProductFilters, 
     ProductTable, 
     EmptyState, 
     LoadingState, 
     ErrorState 
-} from '../../components/products';
+} from '../../../components/products';
 
 export default function ProductsView() {
   const navigate = useNavigate();

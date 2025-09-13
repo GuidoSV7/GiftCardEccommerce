@@ -1,11 +1,11 @@
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { getProductById, updateProduct } from '../../services/productService';
+import { getProductById, updateProduct } from '../../../services/productService';
 import { toast } from 'react-toastify';
 import { useNavigate, useParams } from 'react-router-dom';
-import type { ProductFormData } from '../../types';
-import ProductForm from '../../components/dashboard/products/ProductForm';
+import type { ProductFormData } from '../../../types';
+import ProductForm from '../../../components/dashboard/products/ProductForm';
 
 export default function EditProductView() {
   const navigate = useNavigate();
