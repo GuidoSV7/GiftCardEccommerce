@@ -56,7 +56,10 @@ const UserDropdown: React.FC<UserDropdownProps> = ({ onLoginModalOpen }) => {
   if (!user) {
     return (
       <button 
-        onClick={onLoginModalOpen}
+        onClick={() => {
+          console.log('UserDropdown: Botón de login clickeado');
+          onLoginModalOpen?.();
+        }}
         className="flex items-center gap-2 bg-[#1c1f2c] text-white px-4 py-2 rounded-lg hover:bg-[#2c2f3c] transition-colors"
       >
         <UserIcon />

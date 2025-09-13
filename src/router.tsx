@@ -4,8 +4,10 @@ import DashboardView from "./views/DashboardView";
 import MetricsView from "./views/MetricsView";
 
 import AppLayout from "./layouts/AppLayout";
+import SupportLayout from "./layouts/SupportLayout";
 import AdminProtectedRoute from "./components/AdminProtectedRoute";
 import MemberProtectedRoute from "./components/MemberProtectedRoute";
+import SupportProtectedRoute from "./components/SupportProtectedRoute";
 // import CreateProductView from "./views/products/CreateProductView";
 import { HomeView } from "./views/HomeView";
 import { ProductDetailView } from "./views/ProductDetailView";
@@ -30,6 +32,11 @@ import CreateMemberView from "./views/members/CreateMemberView";
 import OffersView from "./views/offers/OffersView";
 import CreateOfferView from "./views/offers/CreateOfferView";
 import ActiveOffersView from "./views/offers/ActiveOffersView";
+import SupportDashboard from "./views/support/SupportDashboard";
+import ChatManagement from "./views/support/ChatManagement";
+import ActiveChatsView from "./views/support/ActiveChatsView";
+import PendingChatsView from "./views/support/PendingChatsView";
+import ClosedChatsView from "./views/support/ClosedChatsView";
 import NotFoundView from "./views/NotFoundView";
 
 export default function router() {
@@ -69,6 +76,15 @@ export default function router() {
           <Route path="/offers" element={<OffersView />} />
           <Route path="/offers/create" element={<CreateOfferView />} />
           <Route path="/offers/active" element={<ActiveOffersView />} />
+        </Route>
+
+        {/* Support routes - Solo para usuarios con rol 'support' */}
+        <Route element={<SupportProtectedRoute><SupportLayout /></SupportProtectedRoute>}>
+          <Route path="/support/dashboard" element={<SupportDashboard />} index />
+          <Route path="/support/chats" element={<ChatManagement />} />
+          <Route path="/support/active-chats" element={<ActiveChatsView />} />
+          <Route path="/support/pending-chats" element={<PendingChatsView />} />
+          <Route path="/support/closed-chats" element={<ClosedChatsView />} />
         </Route>
 
         {/* Ruta 404 - Debe ir al final */}

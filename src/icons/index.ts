@@ -5,3 +5,5 @@ export { default as CardsIcon } from './CardsIcon';
 export { default as InvoiceIcon } from './InvoiceIcon';
 export { default as GamesIcon } from './GamesIcon';
 export { default as CouponsIcon } from './CouponsIcon';
+export { default as ChatIcon } from './ChatIcon';
+

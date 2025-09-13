@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { GoogleLoginButton } from '../components/auth/GoogleLoginButton';
 
 const RegisterView: React.FC = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -20,8 +22,15 @@ const RegisterView: React.FC = () => {
     // Aquí implementarás la lógica de registro
   };
 
-  const handleGoogleLogin = () => {
-    console.log('Google login');
+  const handleGoogleLoginSuccess = () => {
+    console.log('Google login successful in RegisterView');
+    // Redirigir según el rol del usuario
+    navigate('/');
+  };
+
+  const handleGoogleLoginError = (error: string) => {
+    console.error('Google login error in RegisterView:', error);
+    // Aquí podrías mostrar un toast de error si tienes configurado
   };
 
   return (
@@ -137,15 +146,12 @@ const RegisterView: React.FC = () => {
 
                 {/* Google Login Button */}
                 <div className="flex justify-center">
-                  <button
-                    type="button"
-                    onClick={handleGoogleLogin}
-                    className="w-10 h-10 bg-gray-600/50 hover:bg-gray-600/70 rounded-full transition-colors flex items-center justify-center border border-gray-500/50"
-                  >
-                    <div className="w-5 h-5 bg-white rounded-full flex items-center justify-center">
-                      <span className="text-gray-800 font-bold text-xs">G</span>
-                    </div>
-                  </button>
+                  <GoogleLoginButton
+                    onSuccess={handleGoogleLoginSuccess}
+                    onError={handleGoogleLoginError}
+                    size="sm"
+                    variant="minimal"
+                  />
                 </div>
               </form>
             </div>

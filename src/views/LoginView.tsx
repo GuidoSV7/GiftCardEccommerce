@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { login, type LoginCredentials } from '../services/authService';
 import { useAuthStore } from '../stores/authStore';
+import { GoogleLoginButton } from '../components/auth/GoogleLoginButton';
 
 const LoginView: React.FC = () => {
   const navigate = useNavigate();
@@ -72,9 +73,13 @@ const LoginView: React.FC = () => {
     }
   };
 
-  const handleGoogleLogin = () => {
-    console.log('Google login');
-    // Aquí implementarías la lógica de Google OAuth
+  const handleGoogleLoginSuccess = () => {
+    console.log('Google login successful');
+  };
+
+  const handleGoogleLoginError = (error: string) => {
+    console.error('Google login error:', error);
+    setError(error);
   };
 
   const handleRegisterRedirect = () => {
@@ -195,15 +200,12 @@ const LoginView: React.FC = () => {
 
                 {/* Google Login */}
                 <div className="flex justify-center">
-                  <button
-                    type="button"
-                    onClick={handleGoogleLogin}
-                    className="w-10 h-10 bg-gray-600/50 hover:bg-gray-600/70 rounded-full transition-colors flex items-center justify-center border border-gray-500/50"
-                  >
-                    <div className="w-5 h-5 bg-white rounded-full flex items-center justify-center">
-                      <span className="text-gray-800 font-bold text-xs">G</span>
-                    </div>
-                  </button>
+                  <GoogleLoginButton
+                    onSuccess={handleGoogleLoginSuccess}
+                    onError={handleGoogleLoginError}
+                    size="md"
+                    variant="default"
+                  />
                 </div>
               </form>
 

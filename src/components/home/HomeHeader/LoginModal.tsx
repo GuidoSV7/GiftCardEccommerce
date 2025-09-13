@@ -28,13 +28,23 @@ const LoginModal: React.FC<LoginModalProps> = ({ open, onClose }) => {
   }, [open, onClose]);
 
   const handleLogin = () => {
-    navigate('/login');
-    onClose();
+    console.log('LoginModal: Navegando a /login');
+    onClose(); // Cerrar modal primero
+    
+    // Usar setTimeout para asegurar que el modal se cierre antes de navegar
+    setTimeout(() => {
+      navigate('/login');
+    }, 100);
   };
 
   const handleRegister = () => {
-    navigate('/register');
-    onClose();
+    console.log('LoginModal: Navegando a /register');
+    onClose(); // Cerrar modal primero
+    
+    // Usar setTimeout para asegurar que el modal se cierre antes de navegar
+    setTimeout(() => {
+      navigate('/register');
+    }, 100);
   };
 
   if (!open) return null;

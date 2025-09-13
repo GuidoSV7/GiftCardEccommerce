@@ -42,3 +42,28 @@ export type Product = z.infer<typeof productSchema>;
 export type ProductFormData = Pick<Product, "title" | "description" | "imageUrl" | "redeem" | "termsConditions" | "state"> & {
     categoryId: string;
 };
+
+/** Chat Support */
+export const chatMessageSchema = z.object({
+    id: z.string(),
+    message: z.string(),
+    sender: z.enum(['user', 'support']),
+    timestamp: z.string(),
+    isRead: z.boolean()
+});
+
+export const chatSessionSchema = z.object({
+    id: z.string(),
+    userId: z.string(),
+    status: z.enum(['active', 'closed', 'pending']),
+    createdAt: z.string(),
+    lastMessageAt: z.string(),
+    messages: z.array(chatMessageSchema)
+});
+
+export type ChatMessage = z.infer<typeof chatMessageSchema>;
+export type ChatSession = z.infer<typeof chatSessionSchema>;
+export type ChatMessageFormData = Pick<ChatMessage, "message">;
+
+// Re-export Google Auth types
+export * from './google-auth';

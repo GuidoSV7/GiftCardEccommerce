@@ -4,6 +4,7 @@ import { GameSection } from '../components/games/GameSection';
 
 import { CardGridSection } from '../components/cards/CardGridSection';
 import { HomeFooter } from '../components/home/HomeFooter';
+import { ChatButton } from '../components/chat/ChatButton';
 import { getOffers } from '../services/offerService';
 import { getGameCards } from '../services/gameCardService';
 import {getCategories, getProducts } from '../services/productService';
@@ -326,6 +327,9 @@ export const HomeView = () => {
                 {/* Footer específico para Home */}
                 <HomeFooter />
             </div>
+
+            {/* Chat Support Button */}
+            <ChatButton />
         </div>
     );
 };

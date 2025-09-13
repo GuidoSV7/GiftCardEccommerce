@@ -54,9 +54,15 @@ export default function HomeHeader() {
 
         {/* Vista Desktop */}
         <div className="relative">
-          <DesktopHeader onLoginModalOpen={() => setLoginModalOpen(true)} />
+          <DesktopHeader onLoginModalOpen={() => {
+            console.log('HomeHeader: Abriendo modal de login');
+            setLoginModalOpen(true);
+          }} />
           {/* Login Modal para Desktop */}
-          <LoginModal open={loginModalOpen} onClose={() => setLoginModalOpen(false)} />
+          <LoginModal open={loginModalOpen} onClose={() => {
+            console.log('HomeHeader: Cerrando modal de login');
+            setLoginModalOpen(false);
+          }} />
         </div>
       </div>
     </header>

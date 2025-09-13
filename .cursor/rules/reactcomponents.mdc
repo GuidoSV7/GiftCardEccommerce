@@ -1,0 +1,625 @@
+---
+globs: *.tsx
+alwaysApply: false
+---
+## �� Reglas de Desarrollo
+
+### 1. **Servicios y API**
+- ✅ **SIEMPRE** revisar si existe un service con el nombre del componente
+- ✅ **SIEMPRE** crear el service correspondiente si no existe
+- ✅ **SIEMPRE** preparar la estructura para el backend futuro
+- ✅ **SIEMPRE** usar la instancia de Axios de `src/lib/axios.ts`
+
+### 2. **Gestión de Estado**
+- ✅ **Zustand** para estado global (autenticación, carrito, etc.)
+- ✅ **TanStack Query** para datos del servidor
+- ✅ **useState/useReducer** solo para estado local del componente
+
+### 3. **Formularios**
+- ✅ **SIEMPRE** usar `react-hook-form`
+- ✅ **SIEMPRE** incluir validación
+- ✅ **SIEMPRE** manejar errores con toast notifications
+
+<### 4. **Manejo de Errores**
+- ✅ **SIEMPRE** usar try-catch en operaciones async
+- ✅ **SIEMPRE** mostrar errores con `toast.error()`
+- ✅ **SIEMPRE** manejar estados de loading
+
+
+
+## 🎯 Estructura de Componente Estándar
+
+### Para Vistas/Pages (Views)
+```tsx
+import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { toast } from "react-toastify";
+
+import type { [ComponentName]FormData } from "../../types";
+import { [actionName] } from "../../services/[serviceName]Service";
+import [ComponentName]Form from '../../components/[path]/[ComponentName]Form';
+
+export default function [ComponentName]View() {
+    const navigate = useNavigate();
+
+    // Valores iniciales del formulario
+    const initialValues: [ComponentName]FormData = {
+        // ... campos del formulario
+    };
+
+    // Configuración del formulario
+    const { register, handleSubmit, control, setValue, formState: { errors } } = useForm({
+        defaultValues: initialValues
+    });
+
+    // Mutación para operaciones CRUD
+    const mutation = useMutation({
+        mutationFn: [actionName],
+        onError: (error: any) => {
+            // Manejo de errores de Axios
+            if (error.response?.data?.message) {
+                if (Array.isArray(error.response.data.message)) {
+                    error.response.data.message.forEach((msg: string) => {
+                        toast.error(msg);
+                    });
+                } else {
+                    toast.error(error.response.data.message);
+                }
+            } else {
+                toast.error('Error al procesar la solicitud');
+            }
+        },
+        onSuccess: () => {
+            toast.success('Operación realizada exitosamente');
+            navigate("/[redirect-path]");
+        }
+    });
+
+    // Query para obtener datos
+    const { data, isLoading, error } = useQuery({
+        queryKey: ['[queryKey]'],
+        queryFn: [getDataFunction],
+        retry: 2,
+        staleTime: 5 * 60 * 1000, // 5 minutos
+    });
+
+    // Handler del formulario
+    const handleForm = async (formData: [ComponentName]FormData) => {
+        try {
+            await mutation.mutateAsync(formData);
+        } catch (error) {
+            console.error('Error en el formulario:', error);
+            return;
+        }
+    };
+
+    return (
+        <div className="container mx-auto">
+            <div className="rounded-lg p-4">
+                {/* Header */}
+                <div>
+                    <h1 className="text-4xl font-black text-gray-800">
+                        [Título de la Vista]
+                    </h1>
+                    <p className="text-xl font-light text-gray-500">
+                        [Descripción de la vista]
+                    </p>
+                </div>
+
+                {/* Contenido */}
+                <div className="bg-gray-50 p-4 rounded-md">
+                    <form 
+                        className="mt-10 bg-white shadow-lg p-10 rounded-lg"
+                        onSubmit={handleSubmit(handleForm)}
+                        noValidate
+                    >
+                        <[ComponentName]Form
+                            register={register}
+                            control={control}
+                            setValue={setValue}
+                            errors={errors}
+                        />
+
+                        <input 
+                            type="submit"
+                            value="[Texto del botón]"
+                            className="bg-blue-500 hover:bg-blue-600 w-full p-3 text-white uppercase font-bold cursor-pointer transition-colors"
+                        />
+                    </form>
+                </div>
+            </div>
+        </div>
+    );
+}
+```
+
+### Para Componentes Reutilizables
+```tsx
+import { useState, useEffect } from 'react';
+import { toast } from 'react-toastify';
+
+interface [ComponentName]Props {
+    // Definir props con tipos específicos
+    title: string;
+    onAction?: (data: any) => void;
+    isLoading?: boolean;
+}
+
+export const [ComponentName] = ({ 
+    title, 
+    onAction, 
+    isLoading = false 
+}: [ComponentName]Props) => {
+    const [localState, setLocalState] = useState('');
+
+    // Efectos
+    useEffect(() => {
+        // Lógica de efectos
+    }, []);
+
+    // Handlers
+    const handleAction = () => {
+        try {
+            // Lógica del componente
+            onAction?.(data);
+        } catch (error) {
+            toast.error('Error en la acción');
+        }
+    };
+
+    return (
+        <div className="[clases-tailwind]">
+            {/* JSX del componente */}
+        </div>
+    );
+};
+```
+
+## �� Reglas de Servicios
+
+### Estructura de Service
+```tsx
+import { axiosInstance } from '../lib/axios';
+
+export interface [Entity]Data {
+    // Definir interface de datos
+}
+
+export const [actionName] = async (data: [Entity]Data): Promise<any> => {
+    try {
+        const response = await axiosInstance.[method]('/[endpoint]', data);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+};
+```
+
+## 🎨 Reglas de Estilos
+
+### Clases Tailwind Preferidas
+- **Contenedores**: `container mx-auto`, `max-w-7xl mx-auto`
+- **Espaciado**: `p-4`, `m-4`, `space-y-4`, `gap-4`
+- **Colores**: `bg-blue-500`, `text-gray-800`, `border-gray-200`
+- **Estados**: `hover:bg-blue-600`, `focus:ring-2`, `disabled:opacity-50`
+- **Responsive**: `sm:`, `md:`, `lg:`, `xl:`
+
+### Componentes de UI Comunes
+- **Botones**: `bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg`
+- **Inputs**: `border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500`
+- **Cards**: `bg-white shadow-lg rounded-lg p-6`
+- **Loading**: `animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500`
+
+## ⚡ Mejores Prácticas
+
+### Performance
+- ✅ Usar `React.memo()` para componentes que se re-renderizan frecuentemente
+- ✅ Usar `useMemo()` y `useCallback()` cuando sea necesario
+- ✅ Implementar lazy loading para rutas
+
+### Accesibilidad
+- ✅ **SIEMPRE** incluir `aria-label` en botones sin texto
+- ✅ **SIEMPRE** usar `alt` en imágenes
+- ✅ **SIEMPRE** manejar navegación por teclado
+
+
+### Código Limpio
+- ✅ **SIEMPRE** usar TypeScript con tipos estrictos
+- ✅ **SIEMPRE** documentar props complejas
+- ✅ **SIEMPRE** seguir naming conventions consistentes
+- ✅ **SIEMPRE** usar destructuring para props
+
+## �� Documentación para Backend
+
+### Cuando NO existe un service, crear documentación `.md` con:
+
+#### Estructura del archivo `backend-requirements-[serviceName].md`:
+```markdown
+# Backend Requirements: [ServiceName]
+
+## 📋 Descripción
+Descripción detallada del servicio y su propósito.
+
+## ��️ Entidades
+
+### [EntityName]
+```typescript
+interface [EntityName] {
+    id: string;
+    // ... otros campos
+    createdAt: Date;
+    updatedAt: Date;
+}
+```
+
+## 🔗 Endpoints Requeridos
+
+### 1. [GET] /api/[entity]/all
+**Descripción:** Obtener todos los [entity]
+**Headers:** 
+- Authorization: Bearer {token}
+
+**Response:**
+```json
+{
+    "success": true,
+    "data": [EntityName][],
+    "message": "Lista obtenida exitosamente"
+}
+```
+
+### 2. [GET] /api/[entity]/:id
+**Descripción:** Obtener [entity] por ID
+**Headers:** 
+- Authorization: Bearer {token}
+
+**Response:**
+```json
+{
+    "success": true,
+    "data": [EntityName],
+    "message": "[Entity] obtenido exitosamente"
+}
+```
+
+### 3. [POST] /api/[entity]
+**Descripción:** Crear nuevo [entity]
+**Headers:** 
+- Authorization: Bearer {token}
+- Content-Type: application/json
+
+**Body:**
+```json
+{
+    "field1": "value1",
+    "field2": "value2"
+}
+```
+
+**Response:**
+```json
+{
+    "success": true,
+    "data": [EntityName],
+    "message": "[Entity] creado exitosamente"
+}
+```
+
+### 4. [PUT] /api/[entity]/:id
+**Descripción:** Actualizar [entity]
+**Headers:** 
+- Authorization: Bearer {token}
+- Content-Type: application/json
+
+**Body:**
+```json
+{
+    "field1": "newValue1",
+    "field2": "newValue2"
+}
+```
+
+**Response:**
+```json
+{
+    "success": true,
+    "data": [EntityName],
+    "message": "[Entity] actualizado exitosamente"
+}
+```
+
+### 5. [DELETE] /api/[entity]/:id
+**Descripción:** Eliminar [entity]
+**Headers:** 
+- Authorization: Bearer {token}
+
+**Response:**
+```json
+{
+    "success": true,
+    "message": "[Entity] eliminado exitosamente"
+}
+```
+
+## �� Validaciones
+
+### Crear [Entity]
+- [ ] Validar campos requeridos
+- [ ] Validar tipos de datos
+- [ ] Validar longitud de strings
+- [ ] Validar formato de emails (si aplica)
+- [ ] Validar unicidad (si aplica)
+
+### Actualizar [Entity]
+- [ ] Validar que el [entity] existe
+- [ ] Validar permisos del usuario
+- [ ] Validar campos requeridos
+- [ ] Validar tipos de datos
+
+### Eliminar [Entity]
+- [ ] Validar que el [entity] existe
+- [ ] Validar permisos del usuario
+- [ ] Validar dependencias (si las hay)
+
+## 🚨 Códigos de Error
+
+### 400 - Bad Request
+```json
+{
+    "success": false,
+    "message": ["Error de validación específico"],
+    "errors": {
+        "field": ["Error específico del campo"]
+    }
+}
+```
+
+### 401 - Unauthorized
+```json
+{
+    "success": false,
+    "message": "Token inválido o expirado"
+}
+```
+
+### 403 - Forbidden
+```json
+{
+    "success": false,
+    "message": "No tienes permisos para realizar esta acción"
+}
+```
+
+### 404 - Not Found
+```json
+{
+    "success": false,
+    "message": "[Entity] no encontrado"
+}
+```
+
+### 500 - Internal Server Error
+```json
+{
+    "success": false,
+    "message": "Error interno del servidor"
+}
+```
+
+## 📝 Notas para el Backend
+
+### Middleware Requerido
+- [ ] Validación de JWT token
+- [ ] Validación de permisos por rol
+- [ ] Rate limiting (si aplica)
+- [ ] Logging de requests
+
+### Base de Datos
+- [ ] Crear tabla [entity]
+- [ ] Crear índices necesarios
+- [ ] Configurar relaciones (si las hay)
+- [ ] Configurar soft delete (si aplica)
+
+
+
+## 🔄 Estados del Frontend
+
+### Loading States
+- `isLoading: boolean` - Para operaciones generales
+- `isCreating: boolean` - Para crear [entity]
+- `isUpdating: boolean` - Para actualizar [entity]
+- `isDeleting: boolean` - Para eliminar [entity]
+
+### Error States
+- `error: string | null` - Para errores generales
+- `validationErrors: object` - Para errores de validación específicos
+
+## 📱 Componentes Frontend que Consumirán estos Endpoints
+
+- `[ComponentName]View.tsx` - Vista principal
+- `[ComponentName]Form.tsx` - Formulario de creación/edición
+- `[ComponentName]List.tsx` - Lista de [entity]
+- `[ComponentName]Card.tsx` - Tarjeta individual de [entity]
+
+---
+
+**Fecha de Creación:** [Fecha actual]
+**Desarrollador Frontend:** [Nombre]
+**Prioridad:** Alta/Media/Baja
+**Estimación Backend:** [X] días
+```
+```
+
+**Línea 243** - En la sección "## 🚨 Errores Comunes a Evitar", agregar:
+```markdown
+- ❌ **NO** crear componentes sin documentación para el backend si no existe el service
+```
+
+## 📄 Ejemplo de Documentación para Chat
+
+Como ejemplo, aquí tienes la documentación que se crearía para el componente ChatSupport:
+
+```markdown
+# Backend Requirements: ChatSupport
+
+## 📋 Descripción
+Sistema de chat de soporte en tiempo real para que los usuarios puedan comunicarse con el equipo de soporte.
+
+## 🗄️ Entidades
+
+### ChatSession
+```typescript
+interface ChatSession {
+    id: string;
+    userId: string;
+    status: 'active' | 'closed' | 'pending';
+    createdAt: Date;
+    lastMessageAt: Date;
+    messages: ChatMessage[];
+}
+```
+
+### ChatMessage
+```typescript
+interface ChatMessage {
+    id: string;
+    sessionId: string;
+    message: string;
+    sender: 'user' | 'support';
+    timestamp: Date;
+    isRead: boolean;
+}
+```
+
+## �� Endpoints Requeridos
+
+### 1. [GET] /api/chat/session/active
+**Descripción:** Obtener sesión de chat activa del usuario
+**Headers:** 
+- Authorization: Bearer {token}
+
+**Response:**
+```json
+{
+    "success": true,
+    "data": ChatSession | null,
+    "message": "Sesión obtenida exitosamente"
+}
+```
+
+### 2. [POST] /api/chat/session
+**Descripción:** Crear nueva sesión de chat
+**Headers:** 
+- Authorization: Bearer {token}
+
+**Response:**
+```json
+{
+    "success": true,
+    "data": ChatSession,
+    "message": "Sesión creada exitosamente"
+}
+```
+
+### 3. [GET] /api/chat/session/:id/messages
+**Descripción:** Obtener mensajes de una sesión
+**Headers:** 
+- Authorization: Bearer {token}
+
+**Response:**
+```json
+{
+    "success": true,
+    "data": ChatMessage[],
+    "message": "Mensajes obtenidos exitosamente"
+}
+```
+
+### 4. [POST] /api/chat/message
+**Descripción:** Enviar mensaje
+**Headers:** 
+- Authorization: Bearer {token}
+- Content-Type: application/json
+
+**Body:**
+```json
+{
+    "message": "Hola, necesito ayuda"
+}
+```
+
+**Response:**
+```json
+{
+    "success": true,
+    "data": ChatMessage,
+    "message": "Mensaje enviado exitosamente"
+}
+```
+
+### 5. [PATCH] /api/chat/session/:id/close
+**Descripción:** Cerrar sesión de chat
+**Headers:** 
+- Authorization: Bearer {token}
+
+**Response:**
+```json
+{
+    "success": true,
+    "message": "Sesión cerrada exitosamente"
+}
+```
+
+### 6. [PATCH] /api/chat/session/:id/mark-read
+**Descripción:** Marcar mensajes como leídos
+**Headers:** 
+- Authorization: Bearer {token}
+
+**Response:**
+```json
+{
+    "success": true,
+    "message": "Mensajes marcados como leídos"
+}
+```
+
+## 📝 Notas para el Backend
+
+### Middleware Requerido
+- [ ] Validación de JWT token
+- [ ] WebSocket para mensajes en tiempo real
+- [ ] Rate limiting para evitar spam
+- [ ] Logging de mensajes para auditoría
+
+### Base de Datos
+- [ ] Crear tabla chat_sessions
+- [ ] Crear tabla chat_messages
+- [ ] Configurar índices por userId y sessionId
+- [ ] Configurar relaciones entre tablas
+
+---
+
+**Fecha de Creación:** 2024-12-19
+**Desarrollador Frontend:** AI Assistant
+**Prioridad:** Alta
+**Estimación Backend:** 3-5 días
+```
+
+Con esta actualización, cada vez que crees un componente que requiera un servicio que no existe, automáticamente se generará la documentación completa para el equipo de backend con todos los endpoints, validaciones, tipos de datos y especificaciones necesarias.
+
+## 🚨 Errores Comunes a Evitar
+
+- ❌ **NO** usar `any` como tipo
+- ❌ **NO** hacer llamadas directas a API sin usar services
+- ❌ **NO** manejar estado global con useState
+- ❌ **NO** olvidar manejar estados de loading y error
+- ❌ **NO** usar clases CSS personalizadas cuando Tailwind puede hacerlo
+- ❌ **NO** crear componentes sin interfaces TypeScript
+
+## 📚 Recursos Adicionales
+
+- [TanStack Query Docs](https://tanstack.com/query/latest)
+- [React Hook Form Docs](https://react-hook-form.com/)
+- [Zustand Docs](https://github.com/pmndrs/zustand)
+- [Tailwind CSS Docs](https://tailwindcss.com/docs)
