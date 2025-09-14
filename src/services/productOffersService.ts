@@ -25,11 +25,17 @@ export interface ProductWithOffer {
 export const getProductsWithOffers = async (): Promise<ProductWithOffer[]> => {
   try {
     console.log('Fetching products with offers...');
+    console.log('API Base URL:', import.meta.env.VITE_API_URL);
     const response = await api.get('/product-prices/offers');
     console.log('Products with offers response:', response.data);
+    console.log('Response status:', response.status);
+    console.log('Response headers:', response.headers);
     return response.data;
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error fetching products with offers:', error);
+    console.error('Error response:', error.response);
+    console.error('Error status:', error.response?.status);
+    console.error('Error data:', error.response?.data);
     throw error;
   }
 };

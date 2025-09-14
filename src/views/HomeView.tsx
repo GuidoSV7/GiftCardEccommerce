@@ -6,7 +6,8 @@ import { CardGridSection } from '../components/cards/CardGridSection';
 import { HomeFooter } from '../components/home/HomeFooter';
 import { ChatButton } from '../components/chat/ChatButton';
 import { getGameCards } from '../services/gameCardService';
-import {getCategories, getProducts, getProductsWithOffers } from '../services/productService';
+import {getCategories, getProducts } from '../services/productService';
+import { getProductsWithOffers } from '../services/productOffersService';
 
 
 import HomeHeader from '../components/home/HomeHeader';
@@ -77,6 +78,9 @@ export const HomeView = () => {
     if (categoriesError) console.error('Error en categorías:', categoriesError);
 
     console.log('Productos:', products);
+    console.log('Ofertas:', offers);
+    console.log('Ofertas loading:', offersLoading);
+    console.log('Ofertas error:', offersError);
 
     return (
         <div style={{fontFamily: 'Manrope, Arial, system-ui, sans-serif'}} className="min-h-screen bg-gradient-to-b from-gray-700 via-gray-800 to-gray-900">

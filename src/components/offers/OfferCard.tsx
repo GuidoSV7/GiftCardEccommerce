@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import type { ProductWithOffer } from '../../services/productService';
+import type { ProductWithOffer } from '../../services/productOffersService';
 
 interface OfferCardProps {
     product: ProductWithOffer;
