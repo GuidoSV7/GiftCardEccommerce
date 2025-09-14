@@ -17,6 +17,10 @@ export default function AdminProtectedRoute({ children }: AdminProtectedRoutePro
   if (user?.roles !== 'admin' && user?.roles !== 'superadmin') {
     if (user?.roles === 'member') {
       return <Navigate to="/member/my-account" replace />;
+    } else if (user?.roles === 'support') {
+      return <Navigate to="/support/dashboard" replace />;
+    } else if (user?.roles === 'reseller') {
+      return <Navigate to="/" replace />; // Temporal hasta definir rutas de reseller
     } else {
       return <Navigate to="/login" replace />;
     }

@@ -13,6 +13,10 @@ export default function MemberProtectedRoute() {
   if (user?.roles !== 'member') {
     if (user?.roles === 'admin' || user?.roles === 'superadmin') {
       return <Navigate to="/dashboard" replace />;
+    } else if (user?.roles === 'support') {
+      return <Navigate to="/support/dashboard" replace />;
+    } else if (user?.roles === 'reseller') {
+      return <Navigate to="/" replace />; // Temporal hasta definir rutas de reseller
     } else {
       return <Navigate to="/login" replace />;
     }

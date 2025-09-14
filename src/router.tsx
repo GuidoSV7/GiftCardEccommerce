@@ -8,6 +8,7 @@ import SupportLayout from "./layouts/SupportLayout";
 import AdminProtectedRoute from "./components/AdminProtectedRoute";
 import MemberProtectedRoute from "./components/MemberProtectedRoute";
 import SupportProtectedRoute from "./components/SupportProtectedRoute";
+import AuthRequiredRoute from "./components/AuthRequiredRoute";
 // import CreateProductView from "./views/products/CreateProductView";
 import { HomeView } from "./views/HomeView";
 import { ProductDetailView } from "./views/ProductDetailView";
@@ -24,12 +25,14 @@ import MyCouponsView from "./views/member/MyCouponsView";
 import CreateProductView from "./views/admin/products/CreateProductView";
 import ProductsView from "./views/admin/products/ProductsView";
 import EditProductView from "./views/admin/products/EditProductView";
+import ProductPricingView from "./views/admin/products/ProductPricingView";
 import CategoriesView from "./views/admin/categories/CategoriesView";
 import CreateCategoryView from "./views/admin/categories/CreateCategoryView";
 import CategoriesMetricsView from "./views/admin/categories/CategoriesMetricsView";
 import MembersView from "./views/admin/members/MembersView";
 import CreateMemberView from "./views/admin/members/CreateMemberView";
 import OffersView from "./views/admin/offers/OffersView";
+import ProductOffersView from "./views/admin/offers/ProductOffersView";
 import CreateOfferView from "./views/admin/offers/CreateOfferView";
 import ActiveOffersView from "./views/admin/offers/ActiveOffersView";
 import SupportDashboard from "./views/support/SupportDashboard";
@@ -45,8 +48,13 @@ export default function router() {
       <ScrollToTop />
       <Routes>
         <Route path="/" element={<HomeView />} index />
-        <Route path="/product/:id" element={<ProductDetailView />} />
-        <Route path="/category/:categoryId" element={<CategoryProductsView />} />
+        
+        {/* Rutas que requieren autenticación */}
+        <Route element={<AuthRequiredRoute />}>
+          <Route path="/product/:id" element={<ProductDetailView />} />
+          <Route path="/category/:categoryId" element={<CategoryProductsView />} />
+        </Route>
+        
         <Route path="/register" element={<RegisterView />} />
         <Route path="/login" element={<LoginView />} />
         
@@ -68,12 +76,14 @@ export default function router() {
           <Route path="/products" element={<ProductsView />} />
           <Route path="/products/create" element={<CreateProductView />} />
           <Route path="/products/edit/:id" element={<EditProductView />} />
+          <Route path="/products/pricing/:id" element={<ProductPricingView />} />
           <Route path="/categories" element={<CategoriesView />} />
           <Route path="/categories/create" element={<CreateCategoryView />} />
           <Route path="/categories/metrics" element={<CategoriesMetricsView />} />
           <Route path="/members" element={<MembersView />} />
           <Route path="/members/create" element={<CreateMemberView />} />
-          <Route path="/offers" element={<OffersView />} />
+          <Route path="/offers" element={<ProductOffersView />} />
+          <Route path="/offers/legacy" element={<OffersView />} />
           <Route path="/offers/create" element={<CreateOfferView />} />
           <Route path="/offers/active" element={<ActiveOffersView />} />
         </Route>

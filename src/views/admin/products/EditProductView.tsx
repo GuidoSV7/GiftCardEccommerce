@@ -120,6 +120,8 @@ export default function EditProductView() {
             control={control}
             setValue={setValue}
             errors={errors}
+            productId={id}
+            isEditMode={true}
           />
 
           {/* Botones */}

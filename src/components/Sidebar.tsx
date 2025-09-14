@@ -3,7 +3,7 @@ import { useState } from 'react';
 
 export default function Sidebar() {
   const [isProductsOpen, setIsProductsOpen] = useState(false);
-  const [isOffersOpen] = useState(false);
+  const [isOffersOpen, setIsOffersOpen] = useState(false);
   const [isCategoriesOpen, setIsCategoriesOpen] = useState(false);
   const [isMembersOpen, setIsMembersOpen] = useState(false);
 
@@ -81,8 +81,8 @@ export default function Sidebar() {
           </li>
 
           {/* Ofertas Menú */}
-            <li>
-            {/* <button
+          <li>
+            <button
               onClick={() => setIsOffersOpen(!isOffersOpen)}
               className="flex items-center justify-between w-full hover:bg-gray-700 rounded-lg p-3 transition-colors duration-200"
             >
@@ -100,7 +100,7 @@ export default function Sidebar() {
               >
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
               </svg>
-            </button> */}
+            </button>
             
 
             {/* Submenú de Ofertas */}
@@ -111,22 +111,6 @@ export default function Sidebar() {
                   className="flex items-center pl-11 pr-3 py-2 text-gray-300 hover:text-white hover:bg-gray-700 rounded-lg transition-colors duration-200"
                 >
                   Ver Ofertas
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/offers/create"
-                  className="flex items-center pl-11 pr-3 py-2 text-gray-300 hover:text-white hover:bg-gray-700 rounded-lg transition-colors duration-200"
-                >
-                  Crear Oferta
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/offers/active"
-                  className="flex items-center pl-11 pr-3 py-2 text-gray-300 hover:text-white hover:bg-gray-700 rounded-lg transition-colors duration-200"
-                >
-                  Ofertas Activas
                 </Link>
               </li>
             </ul>

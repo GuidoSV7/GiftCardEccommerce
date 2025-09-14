@@ -5,9 +5,8 @@ import { GameSection } from '../components/games/GameSection';
 import { CardGridSection } from '../components/cards/CardGridSection';
 import { HomeFooter } from '../components/home/HomeFooter';
 import { ChatButton } from '../components/chat/ChatButton';
-import { getOffers } from '../services/offerService';
 import { getGameCards } from '../services/gameCardService';
-import {getCategories, getProducts } from '../services/productService';
+import {getCategories, getProducts, getProductsWithOffers } from '../services/productService';
 
 
 import HomeHeader from '../components/home/HomeHeader';
@@ -43,8 +42,8 @@ export const HomeView = () => {
 
     // Queries individuales con TanStack Query
     const { data: offers = [], isLoading: offersLoading, error: offersError } = useQuery({
-        queryKey: ['offers'],
-        queryFn: getOffers,
+        queryKey: ['products-with-offers'],
+        queryFn: getProductsWithOffers,
         retry: 2,
         staleTime: 5 * 60 * 1000, // 5 minutos
     });
@@ -140,26 +139,20 @@ export const HomeView = () => {
                         <>
                         {/* Carrusel horizontal solo en móvil */}
                         <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory sm:hidden pb-2 -mx-2 px-2">
-                            {offers.map((offer) => (
-                                <div key={offer.id} className="min-w-0 w-full max-w-xs snap-center flex-shrink-0">
+                            {offers.map((product) => (
+                                <div key={product.id} className="min-w-0 w-full max-w-xs snap-center flex-shrink-0">
                                     <OfferCard
-                                        image={offer.image}
-                                        price={offer.price}
-                                        title={offer.title}
-                                        discount={offer.discount}
+                                        product={product}
                                     />
                                 </div>
                             ))}
                         </div>
                         {/* Grid en tablet y desktop */}
                         <div className="hidden sm:grid grid-cols-2 lg:grid-cols-4 gap-4">
-                            {offers.map((offer) => (
+                            {offers.map((product) => (
                                 <OfferCard
-                                    key={offer.id}
-                                    image={offer.image}
-                                    price={offer.price}
-                                    title={offer.title}
-                                    discount={offer.discount}
+                                    key={product.id}
+                                    product={product}
                                 />
                             ))}
                         </div>

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { getProductById } from '../services/productService';
+import type { ProductPrice } from '../services/productPricingService';
 import HomeHeader from '../components/home/HomeHeader';
 import { HomeFooter } from '../components/home/HomeFooter';
 import { ProductBanner, ProductOptions, ExpandableSection, OrderSummary, SimilarProducts } from '../components/product';
@@ -10,6 +11,7 @@ export const ProductDetailView = () => {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
     const [quantity, setQuantity] = useState(1);
+    const [selectedPrice, setSelectedPrice] = useState<ProductPrice | null>(null);
     const [expandedSections, setExpandedSections] = useState({
         description: false,
         redeem: false,
@@ -29,6 +31,10 @@ export const ProductDetailView = () => {
             ...prev,
             [section]: !prev[section]
         }));
+    };
+
+    const handlePriceSelected = (price: ProductPrice | null) => {
+        setSelectedPrice(price);
     };
 
     // Validar que el producto esté activo
@@ -97,11 +103,11 @@ export const ProductDetailView = () => {
 
                 <div className="container mx-auto px-6 sm:px-12 md:px-16 lg:px-24 xl:px-32 py-8">
                     {/* Main Product Layout - 2 Sections */}
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                         
                         {/* Left Section - Product Options and Details */}
-                        <div className="space-y-6">
-                            <ProductOptions product={product} />
+                        <div className="lg:col-span-2 space-y-6">
+                            <ProductOptions product={product} onPriceSelected={handlePriceSelected} />
 
                             {/* Expandable Sections */}
                             <div className="space-y-4">
@@ -140,6 +146,7 @@ export const ProductDetailView = () => {
                             <OrderSummary 
                                 product={product}
                                 quantity={quantity}
+                                selectedPrice={selectedPrice}
                                 onQuantityChange={setQuantity}
                             />
                         </div>

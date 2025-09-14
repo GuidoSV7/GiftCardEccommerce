@@ -23,11 +23,15 @@ export interface Product {
 
 export async function createProduct(formData: ProductFormData) {
     try {
-        const { data } = await api.post('/products', formData);
+        // Filtrar campos que no deben enviarse al backend
+        const { tempPrices, ...productData } = formData;
+        console.log('Enviando datos al backend:', productData);
+        
+        const { data } = await api.post('/products', productData);
         return data;
     } catch (error) {
         if (isAxiosError(error)) {
-            
+            console.error('Error del backend:', error.response?.data);
             throw error.response?.data || error;
         }
        
@@ -122,6 +126,70 @@ export const getProductsWithCategories = async (): Promise<Product[]> => {
         return response.data;
     } catch (error) {
         console.error('Error fetching products with categories:', error);
+        throw error;
+    }
+};
+
+// Interfaz para productos con ofertas
+export interface ProductWithOffer {
+    id: string;
+    title: string;
+    imageUrl: string;
+    offerPrice: {
+        id: string;
+        name: string;
+        value: number;
+        discountPercentage: number;
+        finalPrice: number;
+    };
+}
+
+// Función para obtener productos con ofertas activas
+export const getProductsWithOffers = async (): Promise<ProductWithOffer[]> => {
+    try {
+        // Obtener todos los productos
+        const products = await getProducts();
+        
+        // Obtener precios con ofertas para cada producto
+        const productsWithOffers: ProductWithOffer[] = [];
+        
+        for (const product of products) {
+            try {
+                // Obtener ofertas activas del producto
+                const offersResponse = await api.get(`/product-prices/product/${product.id}/offers`);
+                const offers = offersResponse.data;
+                
+                // Si hay ofertas, agregar el producto con la primera oferta activa
+                if (offers && offers.length > 0) {
+                    const activeOffer = offers.find((offer: any) => offer.state && offer.discountPercentage > 0);
+                    
+                    if (activeOffer) {
+                        const finalPrice = activeOffer.value * (1 - activeOffer.discountPercentage / 100);
+                        
+                        productsWithOffers.push({
+                            id: product.id,
+                            title: product.title,
+                            imageUrl: product.imageUrl,
+                            offerPrice: {
+                                id: activeOffer.id,
+                                name: activeOffer.name,
+                                value: activeOffer.value,
+                                discountPercentage: activeOffer.discountPercentage,
+                                finalPrice: finalPrice
+                            }
+                        });
+                    }
+                }
+            } catch (error) {
+                // Si hay error al obtener ofertas de un producto específico, continuar con el siguiente
+                console.warn(`Error fetching offers for product ${product.id}:`, error);
+                continue;
+            }
+        }
+        
+        return productsWithOffers;
+    } catch (error) {
+        console.error('Error fetching products with offers:', error);
         throw error;
     }
 };
