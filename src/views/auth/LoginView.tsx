@@ -56,17 +56,22 @@ const LoginView: React.FC = () => {
       if (response.roles === 'admin' || response.roles === 'superadmin') {
         console.log('Redirigiendo a dashboard para admin');
         navigate('/dashboard');
+      } else if (response.roles === 'support') {
+        console.log('Redirigiendo a dashboard de support');
+        navigate('/support/dashboard');
       } else if (response.roles === 'member') {
         console.log('Redirigiendo a home para member');
+        navigate('/');
+      } else if (response.roles === 'reseller') {
+        console.log('Redirigiendo a home para reseller');
         navigate('/');
       } else {
         console.log('Redirigiendo a home para rol desconocido:', response.roles);
         navigate('/');
       }
     } catch (err: any) {
-
-      
-      const errorMessage = err.response?.data?.message || err.message || 'Error al iniciar sesión. Inténtalo de nuevo.';
+      // Por seguridad, mostrar siempre un mensaje genérico
+      const errorMessage = 'Credenciales inválidas. Verifica tu email y contraseña.';
       setError(errorMessage);
     } finally {
       setLoading(false);

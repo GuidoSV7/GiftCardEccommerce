@@ -66,7 +66,7 @@ export const SupportSidebar = ({ isOpen, onClose }: SupportSidebarProps) => {
             <div className={`
                 fixed top-0 left-0 h-full bg-white shadow-xl z-50 transform transition-transform duration-300 ease-in-out
                 ${isOpen ? 'translate-x-0' : '-translate-x-full'}
-                lg:translate-x-0 lg:static lg:shadow-none
+                lg:translate-x-0 lg:fixed lg:shadow-xl
                 w-64
             `}>
                 <div className="flex flex-col h-full">
