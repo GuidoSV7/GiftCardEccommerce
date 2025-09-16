@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test WebSocket Simple</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .status { padding: 10px; margin: 10px 0; border-radius: 5px; }
+        .success { background-color: #d4edda; color: #155724; }
+        .error { background-color: #f8d7da; color: #721c24; }
+        .info { background-color: #d1ecf1; color: #0c5460; }
+        button { padding: 10px 20px; margin: 5px; cursor: pointer; }
+        #logs { height: 300px; overflow-y: auto; border: 1px solid #ccc; padding: 10px; background-color: #f8f9fa; }
+    </style>
+</head>
+<body>
+    <h1>🔧 Test WebSocket Simple</h1>
+    
+    <div id="status" class="status info">Estado: Desconectado</div>
+    
+    <button onclick="testConnection()">Probar Conexión</button>
+    <button onclick="clearLogs()">Limpiar Logs</button>
+    
+    <h3>Logs:</h3>
+    <div id="logs"></div>
+
+    <script>
+        function updateStatus(message, type = 'info') {
+            const statusDiv = document.getElementById('status');
+            statusDiv.textContent = `Estado: ${message}`;
+            statusDiv.className = `status ${type}`;
+        }
+
+        function addLog(message) {
+            const logsDiv = document.getElementById('logs');
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = document.createElement('div');
+            logEntry.innerHTML = `<span style="color: #666;">[${timestamp}]</span> ${message}`;
+            logsDiv.appendChild(logEntry);
+            logsDiv.scrollTop = logsDiv.scrollHeight;
+        }
+
+        function clearLogs() {
+            document.getElementById('logs').innerHTML = '';
+        }
+
+        function testConnection() {
+            addLog('🔄 Iniciando test de conexión...');
+            updateStatus('Conectando...', 'info');
+            
+            try {
+                const ws = new WebSocket('wss://api.digitalstream.es/chat');
+                
+                ws.onopen = function(event) {
+                    updateStatus('Conectado ✅', 'success');
+                    addLog('✅ WebSocket conectado exitosamente');
+                    addLog('🔗 URL: wss://api.digitalstream.es/chat');
+                    ws.close();
+                };
+                
+                ws.onerror = function(error) {
+                    updateStatus('Error de conexión ❌', 'error');
+                    addLog('❌ Error de conexión WebSocket');
+                    addLog('🔍 Verifica:');
+                    addLog('  - Que el backend esté corriendo');
+                    addLog('  - Que FRONTEND_URL=https://digitalstream.es en el backend');
+                    addLog('  - Que el namespace /chat esté configurado');
+                };
+                
+                ws.onclose = function(event) {
+                    updateStatus('Desconectado', 'info');
+                    addLog(`🔌 Conexión cerrada: ${event.code} - ${event.reason}`);
+                };
+                
+            } catch (error) {
+                updateStatus('Error al crear WebSocket ❌', 'error');
+                addLog(`❌ Error: ${error.message}`);
+            }
+        }
+
+        // Test automático al cargar
+        addLog('🚀 Test WebSocket iniciado');
+        addLog('💡 Haz clic en "Probar Conexión" para verificar la conectividad');
+    </script>
+</body>
+</html>
