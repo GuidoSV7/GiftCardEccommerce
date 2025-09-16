@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Chat para Members</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .section { margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 5px; }
+        .status { padding: 10px; margin: 10px 0; border-radius: 5px; }
+        .success { background-color: #d4edda; color: #155724; }
+        .error { background-color: #f8d7da; color: #721c24; }
+        .info { background-color: #d1ecf1; color: #0c5460; }
+        .warning { background-color: #fff3cd; color: #856404; }
+        button { padding: 10px 20px; margin: 5px; cursor: pointer; }
+        input { padding: 8px; margin: 5px; width: 300px; }
+        #logs { height: 400px; overflow-y: auto; border: 1px solid #ccc; padding: 10px; background-color: #f8f9fa; font-family: monospace; font-size: 12px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 Test Chat para Members</h1>
+        
+        <div class="section">
+            <h3>1. Configuración</h3>
+            <input type="text" id="tokenInput" placeholder="Token JWT del Member" />
+            <button onclick="loadUserInfo()">Cargar Info del Usuario</button>
+            <div id="userInfo"></div>
+        </div>
+
+        <div class="section">
+            <h3>2. Test de Sesión Activa</h3>
+            <button onclick="checkActiveSession()">Verificar Sesión Activa</button>
+            <div id="sessionInfo"></div>
+        </div>
+
+        <div class="section">
+            <h3>3. Crear Sesión de Chat</h3>
+            <button onclick="createSession()">Crear Nueva Sesión</button>
+            <div id="createSessionResult"></div>
+        </div>
+
+        <div class="section">
+            <h3>4. Test de WebSocket</h3>
+            <button onclick="testWebSocket()">Conectar WebSocket</button>
+            <div id="websocketStatus"></div>
+        </div>
+
+        <div class="section">
+            <h3>5. Enviar Mensaje</h3>
+            <input type="text" id="messageInput" placeholder="Mensaje a enviar" />
+            <button onclick="sendMessage()">Enviar Mensaje</button>
+            <div id="sendMessageResult"></div>
+        </div>
+
+        <div class="section">
+            <h3>6. Logs Detallados</h3>
+            <button onclick="clearLogs()">Limpiar Logs</button>
+            <div id="logs"></div>
+        </div>
+    </div>
+
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+    <script>
+        let socket = null;
+        let currentSession = null;
+        let userToken = '';
+
+        function addLog(message, type = 'info') {
+            const logsDiv = document.getElementById('logs');
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = document.createElement('div');
+            logEntry.innerHTML = `<span style="color: #666;">[${timestamp}]</span> <span style="color: ${type === 'error' ? '#dc3545' : type === 'success' ? '#28a745' : type === 'warning' ? '#ffc107' : '#17a2b8'}">${message}</span>`;
+            logsDiv.appendChild(logEntry);
+            logsDiv.scrollTop = logsDiv.scrollHeight;
+        }
+
+        function clearLogs() {
+            document.getElementById('logs').innerHTML = '';
+        }
+
+        function setResult(elementId, message, type = 'info') {
+            const element = document.getElementById(elementId);
+            element.innerHTML = `<div class="status ${type}">${message}</div>`;
+        }
+
+        // 1. Cargar información del usuario
+        async function loadUserInfo() {
+            userToken = document.getElementById('tokenInput').value;
+            if (!userToken) {
+                addLog('⚠️ Ingresa un token JWT', 'warning');
+                return;
+            }
+
+            addLog('🔄 Decodificando token JWT...');
+            
+            try {
+                // Decodificar el JWT (parte del payload)
+                const payload = JSON.parse(atob(userToken.split('.')[1]));
+                addLog(`✅ Token decodificado: ${JSON.stringify(payload, null, 2)}`, 'success');
+                
+                setResult('userInfo', `
+                    <strong>Usuario:</strong> ${payload.sub}<br>
+                    <strong>Rol:</strong> ${payload.roles}<br>
+                    <strong>Email:</strong> ${payload.email || 'N/A'}<br>
+                    <strong>Exp:</strong> ${new Date(payload.exp * 1000).toLocaleString()}
+                `, 'success');
+                
+            } catch (error) {
+                addLog(`❌ Error decodificando token: ${error.message}`, 'error');
+                setResult('userInfo', `❌ Error: ${error.message}`, 'error');
+            }
+        }
+
+        // 2. Verificar sesión activa
+        async function checkActiveSession() {
+            if (!userToken) {
+                addLog('⚠️ Primero carga el token del usuario', 'warning');
+                return;
+            }
+
+            addLog('🔄 Verificando sesión activa...');
+            
+            try {
+                const response = await fetch('https://api.digitalstream.es/api/chat/session/active', {
+                    headers: {
+                        'Authorization': `Bearer ${userToken}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    addLog(`✅ Sesión activa encontrada: ${JSON.stringify(data, null, 2)}`, 'success');
+                    currentSession = data.data?.id;
+                    setResult('sessionInfo', `✅ Sesión activa: ${currentSession || 'N/A'}`, 'success');
+                } else {
+                    const errorData = await response.json();
+                    addLog(`⚠️ No hay sesión activa: ${JSON.stringify(errorData)}`, 'warning');
+                    setResult('sessionInfo', `⚠️ No hay sesión activa`, 'warning');
+                }
+            } catch (error) {
+                addLog(`❌ Error verificando sesión: ${error.message}`, 'error');
+                setResult('sessionInfo', `❌ Error: ${error.message}`, 'error');
+            }
+        }
+
+        // 3. Crear sesión
+        async function createSession() {
+            if (!userToken) {
+                addLog('⚠️ Primero carga el token del usuario', 'warning');
+                return;
+            }
+
+            addLog('🔄 Creando nueva sesión de chat...');
+            
+            try {
+                const response = await fetch('https://api.digitalstream.es/api/chat/session', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${userToken}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({})
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    addLog(`✅ Sesión creada: ${JSON.stringify(data, null, 2)}`, 'success');
+                    currentSession = data.data?.id;
+                    setResult('createSessionResult', `✅ Sesión creada: ${currentSession}`, 'success');
+                } else {
+                    const errorData = await response.json();
+                    addLog(`❌ Error creando sesión: ${JSON.stringify(errorData)}`, 'error');
+                    setResult('createSessionResult', `❌ Error: ${errorData.message || 'Desconocido'}`, 'error');
+                }
+            } catch (error) {
+                addLog(`❌ Error creando sesión: ${error.message}`, 'error');
+                setResult('createSessionResult', `❌ Error: ${error.message}`, 'error');
+            }
+        }
+
+        // 4. Test WebSocket
+        function testWebSocket() {
+            if (!userToken) {
+                addLog('⚠️ Primero carga el token del usuario', 'warning');
+                return;
+            }
+
+            addLog('🔄 Conectando WebSocket...');
+            
+            try {
+                socket = io('https://api.digitalstream.es/chat', {
+                    auth: {
+                        token: userToken
+                    },
+                    transports: ['websocket', 'polling'],
+                    timeout: 5000
+                });
+                
+                socket.on('connect', () => {
+                    addLog('✅ WebSocket conectado', 'success');
+                    setResult('websocketStatus', '✅ WebSocket conectado', 'success');
+                    
+                    if (currentSession) {
+                        addLog(`🔗 Uniéndose a sesión: ${currentSession}`);
+                        socket.emit('join-session', { sessionId: currentSession });
+                    }
+                });
+                
+                socket.on('connected', (data) => {
+                    addLog(`📨 Autenticado: ${JSON.stringify(data)}`);
+                });
+                
+                socket.on('session-joined', (data) => {
+                    addLog(`🔗 Unido a sesión: ${JSON.stringify(data)}`);
+                });
+                
+                socket.on('new-message', (message) => {
+                    addLog(`📨 Mensaje recibido: ${JSON.stringify(message)}`);
+                });
+                
+                socket.on('connect_error', (error) => {
+                    addLog(`❌ Error de conexión: ${error.message}`, 'error');
+                    setResult('websocketStatus', `❌ Error: ${error.message}`, 'error');
+                });
+                
+                socket.on('error', (error) => {
+                    addLog(`❌ Error WebSocket: ${JSON.stringify(error)}`, 'error');
+                });
+                
+            } catch (error) {
+                addLog(`❌ Error creando WebSocket: ${error.message}`, 'error');
+                setResult('websocketStatus', `❌ Error: ${error.message}`, 'error');
+            }
+        }
+
+        // 5. Enviar mensaje
+        function sendMessage() {
+            const message = document.getElementById('messageInput').value;
+            if (!message) {
+                addLog('⚠️ Ingresa un mensaje', 'warning');
+                return;
+            }
+            if (!socket) {
+                addLog('⚠️ Primero conecta el WebSocket', 'warning');
+                return;
+            }
+            if (!currentSession) {
+                addLog('⚠️ No hay sesión activa', 'warning');
+                return;
+            }
+
+            addLog(`📤 Enviando mensaje: ${message}`);
+            
+            try {
+                socket.emit('send-message', {
+                    sessionId: currentSession,
+                    message: message
+                });
+                
+                addLog('✅ Mensaje enviado via WebSocket', 'success');
+                setResult('sendMessageResult', '✅ Mensaje enviado', 'success');
+                document.getElementById('messageInput').value = '';
+                
+            } catch (error) {
+                addLog(`❌ Error enviando mensaje: ${error.message}`, 'error');
+                setResult('sendMessageResult', `❌ Error: ${error.message}`, 'error');
+            }
+        }
+
+        // Auto-test al cargar
+        addLog('🚀 Test de Chat para Members iniciado');
+        addLog('💡 Sigue los pasos en orden para diagnosticar el problema');
+    </script>
+</body>
+</html>
