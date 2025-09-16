@@ -4,7 +4,7 @@ import type { ChatSession, ChatMessage, ChatMessageFormData } from '../types';
 // Obtener sesión de chat activa del usuario
 export const getActiveChatSession = async (): Promise<ChatSession | null> => {
     try {
-        const response = await api.get('/api/chat/session/active');
+        const response = await api.get('/chat/session/active');
         return response.data.data;
     } catch (error) {
         throw error;
@@ -14,7 +14,7 @@ export const getActiveChatSession = async (): Promise<ChatSession | null> => {
 // Crear nueva sesión de chat
 export const createChatSession = async (): Promise<ChatSession> => {
     try {
-        const response = await api.post('/api/chat/session');
+        const response = await api.post('/chat/session');
         return response.data.data;
     } catch (error) {
         throw error;
@@ -24,7 +24,7 @@ export const createChatSession = async (): Promise<ChatSession> => {
 // Obtener mensajes de una sesión
 export const getChatMessages = async (sessionId: string): Promise<ChatMessage[]> => {
     try {
-        const response = await api.get(`/api/chat/session/${sessionId}/messages`);
+        const response = await api.get(`/chat/session/${sessionId}/messages`);
         return response.data.data;
     } catch (error) {
         throw error;
@@ -34,7 +34,7 @@ export const getChatMessages = async (sessionId: string): Promise<ChatMessage[]>
 // Enviar mensaje
 export const sendChatMessage = async (data: ChatMessageFormData): Promise<ChatMessage> => {
     try {
-        const response = await api.post('/api/chat/message', data);
+        const response = await api.post('/chat/message', data);
         return response.data.data;
     } catch (error) {
         throw error;
@@ -44,7 +44,7 @@ export const sendChatMessage = async (data: ChatMessageFormData): Promise<ChatMe
 // Cerrar sesión de chat
 export const closeChatSession = async (sessionId: string): Promise<void> => {
     try {
-        await api.patch(`/api/chat/session/${sessionId}/close`);
+        await api.patch(`/chat/session/${sessionId}/close`);
     } catch (error) {
         throw error;
     }
@@ -53,7 +53,7 @@ export const closeChatSession = async (sessionId: string): Promise<void> => {
 // Marcar mensajes como leídos
 export const markMessagesAsRead = async (sessionId: string): Promise<void> => {
     try {
-        await api.patch(`/api/chat/session/${sessionId}/mark-read`);
+        await api.patch(`/chat/session/${sessionId}/mark-read`);
     } catch (error) {
         throw error;
     }
@@ -64,7 +64,7 @@ export const markMessagesAsRead = async (sessionId: string): Promise<void> => {
 // Obtener todas las sesiones de chat (para soporte)
 export const getAllChatSessions = async (): Promise<ChatSession[]> => {
     try {
-        const response = await api.get('/api/chat/sessions/all');
+        const response = await api.get('/chat/sessions/all');
         return response.data.data;
     } catch (error) {
         throw error;
@@ -74,7 +74,7 @@ export const getAllChatSessions = async (): Promise<ChatSession[]> => {
 // Obtener sesiones de chat por estado (para soporte)
 export const getChatSessionsByStatus = async (status: 'active' | 'closed' | 'pending'): Promise<ChatSession[]> => {
     try {
-        const response = await api.get(`/api/chat/sessions/status/${status}`);
+        const response = await api.get(`/chat/sessions/status/${status}`);
         return response.data.data;
     } catch (error) {
         throw error;
@@ -84,7 +84,7 @@ export const getChatSessionsByStatus = async (status: 'active' | 'closed' | 'pen
 // Asignar sesión de chat a un agente de soporte
 export const assignChatSession = async (sessionId: string, supportAgentId: string): Promise<void> => {
     try {
-        await api.patch(`/api/chat/session/${sessionId}/assign`, { supportAgentId });
+        await api.patch(`/chat/session/${sessionId}/assign`, { supportAgentId });
     } catch (error) {
         throw error;
     }
@@ -93,7 +93,7 @@ export const assignChatSession = async (sessionId: string, supportAgentId: strin
 // Responder como soporte
 export const sendSupportMessage = async (sessionId: string, message: string): Promise<ChatMessage> => {
     try {
-        const response = await api.post(`/api/chat/session/${sessionId}/support-message`, { message });
+        const response = await api.post(`/chat/session/${sessionId}/support-message`, { message });
         return response.data.data;
     } catch (error) {
         throw error;
@@ -109,7 +109,7 @@ export const getChatStats = async (): Promise<{
     averageResponseTime: number;
 }> => {
     try {
-        const response = await api.get('/api/chat/stats');
+        const response = await api.get('/chat/stats');
         return response.data.data;
     } catch (error) {
         throw error;
