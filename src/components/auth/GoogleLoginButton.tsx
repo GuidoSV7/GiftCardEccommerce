@@ -44,7 +44,7 @@ export const GoogleLoginButton = ({
             }
 
             // Inicializar Google Identity Services
-            await new Promise<void>((resolve, reject) => {
+            await new Promise<void>(() => {
                 window.google.accounts.id.initialize({
                     client_id: googleAuthConfig.clientId,
                     callback: async (response: CredentialResponse) => {

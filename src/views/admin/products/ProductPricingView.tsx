@@ -1,14 +1,11 @@
-import { useEffect } from 'react';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { getProductById } from '../../../services/productService';
-import { toast } from 'react-toastify';
 import { useNavigate, useParams } from 'react-router-dom';
 import ProductPricing from '../../../components/dashboard/products/ProductPricing';
 
 export default function ProductPricingView() {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
-  const queryClient = useQueryClient();
   
   // Obtener el producto actual
   const { data: product, isLoading: productLoading, error: productError } = useQuery({

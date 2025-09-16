@@ -1,24 +1,35 @@
 import { useQuery } from '@tanstack/react-query';
 import { getChatStats, getAllChatSessions } from '../../services/chatService';
+import { useChatStable } from '../../hooks/useChatStable';
 import { Link } from 'react-router-dom';
 
 export default function SupportDashboard() {
-    // Query para obtener estadísticas
-    const { data: stats, isLoading: statsLoading, error: statsError } = useQuery({
+    // Hook estable para estadísticas en tiempo real
+    const { stats: wsStats, isConnected } = useChatStable({
+        onStatsUpdate: (stats) => {
+            console.log('Estadísticas actualizadas:', stats);
+        }
+    });
+
+    // Query para obtener estadísticas (solo carga inicial)
+    const { data: initialStats, isLoading: statsLoading } = useQuery({
         queryKey: ['chatStats'],
         queryFn: getChatStats,
         retry: 2,
         staleTime: 30 * 1000, // 30 segundos
-        refetchInterval: 60000, // Refetch cada minuto
+        // Eliminamos refetchInterval - ahora se actualiza via WebSocket
     });
 
-    // Query para obtener sesiones recientes
+    // Usar estadísticas del WebSocket si están disponibles, sino las iniciales
+    const stats = wsStats || initialStats;
+
+    // Query para obtener sesiones recientes (solo carga inicial)
     const { data: recentSessions = [], isLoading: sessionsLoading } = useQuery({
         queryKey: ['recentChatSessions'],
         queryFn: getAllChatSessions,
         retry: 2,
         staleTime: 30 * 1000,
-        refetchInterval: 30000, // Refetch cada 30 segundos
+        // Eliminamos refetchInterval - ahora se actualiza via WebSocket
     });
 
     const formatTime = (timestamp: string) => {
@@ -61,10 +72,22 @@ export default function SupportDashboard() {
         <div className="space-y-6">
             {/* Header */}
             <div>
-                <h1 className="text-3xl font-bold text-gray-900">Dashboard de Soporte</h1>
-                <p className="text-gray-600 mt-2">
-                    Gestiona y responde a las consultas de los usuarios
-                </p>
+                <div className="flex items-center justify-between">
+                    <div>
+                        <h1 className="text-3xl font-bold text-gray-900">Dashboard de Soporte</h1>
+                        <p className="text-gray-600 mt-2">
+                            Gestiona y responde a las consultas de los usuarios
+                        </p>
+                    </div>
+                    <div className="flex items-center">
+                        <div className={`w-3 h-3 rounded-full mr-2 ${
+                            isConnected ? 'bg-green-400' : 'bg-red-400'
+                        }`}></div>
+                        <span className="text-sm text-gray-600">
+                            {isConnected ? 'Tiempo Real' : 'Desconectado'}
+                        </span>
+                    </div>
+                </div>
             </div>
 
             {/* Stats Cards */}

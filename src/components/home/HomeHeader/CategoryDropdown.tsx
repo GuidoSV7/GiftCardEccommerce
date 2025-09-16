@@ -91,7 +91,7 @@ const CategoryDropdown: React.FC<CategoryDropdownProps> = ({ className = "" }) =
               </div>
             ) : categories.length > 0 ? (
               <div className="max-h-64 overflow-y-auto">
-                {categories.map((category) => (
+                {categories.map((category: any) => (
                   <button
                     key={category.id}
                     onClick={() => handleCategorySelect(category)}

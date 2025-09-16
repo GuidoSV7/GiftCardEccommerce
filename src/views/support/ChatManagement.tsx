@@ -1,26 +1,49 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'react-toastify';
 import { useForm } from 'react-hook-form';
 import { 
     getAllChatSessions, 
     getChatSessionsByStatus, 
-    sendSupportMessage, 
-    assignChatSession,
-    getChatMessages 
+    assignChatSession
 } from '../../services/chatService';
-import type { ChatMessageFormData } from '../../types';
+import { useChatStable } from '../../hooks/useChatStable';
+import type { ChatMessageFormData, ChatMessage, ChatSession } from '../../types';
 
 export default function ChatManagement() {
     const [selectedStatus, setSelectedStatus] = useState<'all' | 'active' | 'pending' | 'closed'>('all');
     const [selectedSession, setSelectedSession] = useState<string | null>(null);
+    const [sessions, setSessions] = useState<ChatSession[]>([]);
     const queryClient = useQueryClient();
 
     // Configuración del formulario para responder
     const { register, handleSubmit, reset, formState: { errors } } = useForm<ChatMessageFormData>();
 
-    // Query para obtener sesiones según el filtro
-    const { data: sessions = [], isLoading: sessionsLoading, error: sessionsError } = useQuery({
+    // Hook estable para soporte
+    const {
+        isConnected,
+        messages,
+        isTyping,
+        sendMessage,
+        sendTyping
+    } = useChatStable({
+        sessionId: selectedSession || undefined,
+        onNewMessage: (message: ChatMessage) => {
+            console.log('Nuevo mensaje recibido:', message);
+        },
+        onNewPendingSession: (data) => {
+            console.log('Nueva sesión pendiente:', data);
+            toast.info('Nueva sesión de chat pendiente');
+            // Refrescar la lista de sesiones
+            queryClient.invalidateQueries({ queryKey: ['chatSessions'] });
+        },
+        onStatsUpdate: (stats) => {
+            console.log('Estadísticas actualizadas:', stats);
+        }
+    });
+
+    // Query para obtener sesiones según el filtro (solo carga inicial)
+    const { data: initialSessions = [], isLoading: sessionsLoading } = useQuery({
         queryKey: ['chatSessions', selectedStatus],
         queryFn: () => {
             if (selectedStatus === 'all') {
@@ -29,37 +52,16 @@ export default function ChatManagement() {
             return getChatSessionsByStatus(selectedStatus);
         },
         retry: 2,
-        staleTime: 10 * 1000, // 10 segundos
-        refetchInterval: 30000, // Refetch cada 30 segundos
+        staleTime: 30 * 1000, // 30 segundos
+        // Eliminamos refetchInterval - ahora se actualiza via WebSocket
     });
 
-    // Query para obtener mensajes de la sesión seleccionada
-    const { data: messages = [], isLoading: messagesLoading } = useQuery({
-        queryKey: ['chatMessages', selectedSession],
-        queryFn: () => getChatMessages(selectedSession!),
-        retry: 2,
-        staleTime: 5 * 1000, // 5 segundos
-        refetchInterval: 5000, // Refetch cada 5 segundos
-        enabled: !!selectedSession,
-    });
+    // Actualizar sesiones cuando cambian los datos iniciales
+    useEffect(() => {
+        setSessions(initialSessions);
+    }, [initialSessions]);
 
-    // Mutación para enviar mensaje de soporte
-    const sendMessageMutation = useMutation({
-        mutationFn: ({ sessionId, message }: { sessionId: string; message: string }) =>
-            sendSupportMessage(sessionId, message),
-        onError: (error: any) => {
-            if (error.response?.data?.message) {
-                toast.error(error.response.data.message);
-            } else {
-                toast.error('Error al enviar mensaje');
-            }
-        },
-        onSuccess: () => {
-            toast.success('Mensaje enviado exitosamente');
-            reset();
-            queryClient.invalidateQueries({ queryKey: ['chatMessages', selectedSession] });
-        }
-    });
+    // Ya no necesitamos mutación para enviar mensaje - se hace via WebSocket
 
     // Mutación para asignar sesión
     const assignSessionMutation = useMutation({
@@ -114,16 +116,23 @@ export default function ChatManagement() {
     };
 
     const handleSendMessage = async (data: ChatMessageFormData) => {
-        if (!selectedSession) return;
+        if (!selectedSession || !isConnected) {
+            toast.error('No hay conexión con el servidor');
+            return;
+        }
         
         try {
-            await sendMessageMutation.mutateAsync({
-                sessionId: selectedSession,
-                message: data.message
-            });
+            // Enviar mensaje via WebSocket
+            sendMessage(data.message);
+            reset();
         } catch (error) {
             console.error('Error al enviar mensaje:', error);
+            toast.error('Error al enviar mensaje');
         }
+    };
+
+    const handleTyping = (isTyping: boolean) => {
+        sendTyping(isTyping);
     };
 
     const handleAssignSession = (sessionId: string) => {
@@ -136,10 +145,22 @@ export default function ChatManagement() {
         <div className="space-y-6">
             {/* Header */}
             <div>
-                <h1 className="text-3xl font-bold text-gray-900">Gestión de Chats</h1>
-                <p className="text-gray-600 mt-2">
-                    Administra y responde a las conversaciones de los usuarios
-                </p>
+                <div className="flex items-center justify-between">
+                    <div>
+                        <h1 className="text-3xl font-bold text-gray-900">Gestión de Chats</h1>
+                        <p className="text-gray-600 mt-2">
+                            Administra y responde a las conversaciones de los usuarios
+                        </p>
+                    </div>
+                    <div className="flex items-center">
+                        <div className={`w-3 h-3 rounded-full mr-2 ${
+                            isConnected ? 'bg-green-400' : 'bg-red-400'
+                        }`}></div>
+                        <span className="text-sm text-gray-600">
+                            {isConnected ? 'Conectado' : 'Desconectado'}
+                        </span>
+                    </div>
+                </div>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -256,11 +277,7 @@ export default function ChatManagement() {
 
                             {/* Messages Area */}
                             <div className="flex-1 overflow-y-auto p-4 space-y-3">
-                                {messagesLoading ? (
-                                    <div className="flex justify-center items-center h-full">
-                                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-                                    </div>
-                                ) : messages.length === 0 ? (
+                                {messages.length === 0 ? (
                                     <div className="text-center text-gray-500 text-sm">
                                         <p>No hay mensajes en esta conversación</p>
                                     </div>
@@ -287,6 +304,19 @@ export default function ChatManagement() {
                                         </div>
                                     ))
                                 )}
+                                
+                                {/* Typing indicator */}
+                                {isTyping && isTyping.isTyping && isTyping.userRole === 'user' && (
+                                    <div className="flex justify-start">
+                                        <div className="bg-gray-200 text-gray-800 px-3 py-2 rounded-lg text-sm">
+                                            <div className="flex space-x-1">
+                                                <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
+                                                <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+                                                <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
                             </div>
 
                             {/* Input Area */}
@@ -300,20 +330,19 @@ export default function ChatManagement() {
                                         type="text"
                                         placeholder="Escribe tu respuesta..."
                                         className="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                        disabled={sendMessageMutation.isPending}
+                                        disabled={!isConnected}
+                                        onFocus={() => handleTyping(true)}
+                                        onBlur={() => handleTyping(false)}
+                                        onKeyDown={() => handleTyping(true)}
                                     />
                                     <button
                                         type="submit"
-                                        disabled={sendMessageMutation.isPending || !!errors.message}
+                                        disabled={!isConnected || !!errors.message}
                                         className="bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
                                     >
-                                        {sendMessageMutation.isPending ? (
-                                            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-                                        ) : (
-                                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-                                            </svg>
-                                        )}
+                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                                        </svg>
                                     </button>
                                 </form>
                                 {errors.message && (

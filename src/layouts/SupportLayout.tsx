@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import { SupportSidebar } from '../components/support/SupportSidebar';
+import { ChatNotification } from '../components/chat/ChatNotification';
 
 export default function SupportLayout() {
     const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -15,6 +16,9 @@ export default function SupportLayout() {
 
     return (
         <div className="min-h-screen bg-gray-50">
+            {/* Notificaciones de chat */}
+            <ChatNotification enabled={true} />
+            
             {/* Sidebar */}
             <SupportSidebar isOpen={sidebarOpen} onClose={closeSidebar} />
             
