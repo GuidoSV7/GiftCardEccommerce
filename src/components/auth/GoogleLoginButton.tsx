@@ -73,8 +73,31 @@ export const GoogleLoginButton = ({
                     client_id: googleAuthConfig.clientId,
                     callback: async (response: CredentialResponse) => {
                         try {
+                            // Validar que response.credential existe
+                            if (!response.credential) {
+                                throw new Error('No se recibió credencial de Google');
+                            }
+
                             // Decodificar el JWT token
-                            const payload: GoogleJWTPayload = JSON.parse(atob(response.credential.split('.')[1]));
+                            const parts = response.credential.split('.');
+                            if (parts.length !== 3) {
+                                throw new Error('Formato de token JWT inválido');
+                            }
+
+                            const payload: GoogleJWTPayload = JSON.parse(atob(parts[1]));
+                            
+                            // Validar que los campos requeridos existen
+                            if (!payload.sub) {
+                                throw new Error('ID de Google no encontrado en el token');
+                            }
+                            if (!payload.email) {
+                                throw new Error('Email no encontrado en el token de Google');
+                            }
+                            if (!payload.name) {
+                                throw new Error('Nombre no encontrado en el token de Google');
+                            }
+
+                            console.log('Google payload:', payload);
                             
                             const googleData: GoogleAuthData = {
                                 googleId: payload.sub,
@@ -120,7 +143,20 @@ export const GoogleLoginButton = ({
                     },
                     error_callback: (error: unknown) => {
                         console.error('Google Auth Error:', error);
-                        const errorMessage = googleAuthConfig.messages.error;
+                        let errorMessage = googleAuthConfig.messages.error;
+                        
+                        // Personalizar mensaje de error según el tipo
+                        if (typeof error === 'object' && error !== null) {
+                            const errorObj = error as any;
+                            if (errorObj.type === 'popup_closed') {
+                                errorMessage = 'Se cerró la ventana de Google. Intenta nuevamente.';
+                            } else if (errorObj.type === 'popup_blocked') {
+                                errorMessage = 'El navegador bloqueó la ventana de Google. Permite ventanas emergentes.';
+                            } else if (errorObj.type === 'access_denied') {
+                                errorMessage = 'Acceso denegado. Intenta nuevamente.';
+                            }
+                        }
+                        
                         toast.error(errorMessage);
                         onError?.(errorMessage);
                         setIsLoading(false);
