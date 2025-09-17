@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useAuthStore } from '../../stores/authStore';
@@ -24,8 +24,23 @@ export const GoogleLoginButton = ({
     disabled = false
 }: GoogleLoginButtonProps) => {
     const [isLoading, setIsLoading] = useState(false);
+    const [isGoogleLoaded, setIsGoogleLoaded] = useState(false);
     const navigate = useNavigate();
     const { setUser } = useAuthStore();
+
+    // Check if Google Identity Services is loaded
+    useEffect(() => {
+        const checkGoogleLoaded = () => {
+            if (typeof window !== 'undefined' && window.google && window.google.accounts) {
+                setIsGoogleLoaded(true);
+            } else {
+                // Retry after a short delay
+                setTimeout(checkGoogleLoaded, 100);
+            }
+        };
+
+        checkGoogleLoaded();
+    }, []);
 
     const handleGoogleLogin = async () => {
         if (isLoading || disabled) return;
@@ -33,14 +48,23 @@ export const GoogleLoginButton = ({
         setIsLoading(true);
 
         try {
+            // Debug: Mostrar información completa del dominio
+            console.log('=== GOOGLE AUTH DEBUG ===');
+            console.log('Current URL:', window.location.href);
+            console.log('Current Origin:', window.location.origin);
+            console.log('Current Host:', window.location.host);
+            console.log('Current Protocol:', window.location.protocol);
+            console.log('Google Client ID:', googleAuthConfig.clientId);
+            console.log('========================');
+
             // Verificar configuración
             if (!validateGoogleConfig()) {
-                throw new Error('Configuración de Google Auth incompleta');
+                throw new Error('Configuración de Google Auth incompleta. Por favor, configure VITE_GOOGLE_CLIENT_ID en su archivo .env');
             }
 
             // Verificar si Google Identity Services está disponible
-            if (typeof window.google === 'undefined') {
-                throw new Error('Google Identity Services no está disponible');
+            if (!isGoogleLoaded || typeof window.google === 'undefined') {
+                throw new Error('Google Identity Services no está disponible. Por favor, espere un momento e intente nuevamente.');
             }
 
             // Inicializar Google Identity Services
@@ -152,7 +176,7 @@ export const GoogleLoginButton = ({
             <button
                 type="button"
                 onClick={handleGoogleLogin}
-                disabled={isLoading || disabled}
+                disabled={isLoading || disabled || !isGoogleLoaded}
                 className={`
                     ${getSizeClasses()} 
                     ${getVariantClasses()}
@@ -163,8 +187,9 @@ export const GoogleLoginButton = ({
                     ${className}
                 `}
                 aria-label="Iniciar sesión con Google"
+                title={!isGoogleLoaded ? "Cargando Google Identity Services..." : "Iniciar sesión con Google"}
             >
-                {isLoading ? (
+                {isLoading || !isGoogleLoaded ? (
                     <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></div>
                 ) : (
                     <div className="w-5 h-5 bg-white rounded-full flex items-center justify-center">
