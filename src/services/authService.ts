@@ -12,6 +12,7 @@ export interface LoginResponse {
     roles: string;
     token: string;
     adminData: any | null;
+    userName?: string;
 }
 
 export interface CreateUserData {
@@ -38,6 +39,7 @@ export interface GoogleAuthResponse {
     token: string;
     adminData: any | null;
     isNewUser?: boolean;
+    userName?: string;
 }
 
 export async function login(credentials: LoginCredentials): Promise<LoginResponse> {

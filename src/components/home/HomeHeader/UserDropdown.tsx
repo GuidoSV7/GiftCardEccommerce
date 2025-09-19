@@ -11,17 +11,23 @@ import {
   CouponsIcon
 } from '../../../icons';
 
-// Función para generar un nombre de usuario amigable
-const generateFriendlyUsername = (email: string): string => {
-  if (!email) return 'Usuario';
+// Función para obtener el nombre de usuario (prioriza userName de BD, fallback a email)
+const getUserDisplayName = (user: any): string => {
+  if (user?.userName) {
+    return user.userName;
+  }
   
-  const username = email.split('@')[0];
-  // Capitalizar la primera letra y reemplazar puntos/guiones con espacios
-  return username
-    .replace(/[._-]/g, ' ')
-    .split(' ')
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(' ');
+  if (user?.email) {
+    const username = user.email.split('@')[0];
+    // Capitalizar la primera letra y reemplazar puntos/guiones con espacios
+    return username
+      .replace(/[._-]/g, ' ')
+      .split(' ')
+      .map((word: string) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ');
+  }
+  
+  return 'Usuario';
 };
 
 const UserIcon = () => (
@@ -97,7 +103,7 @@ const UserDropdown: React.FC<UserDropdownProps> = ({ onLoginModalOpen }) => {
         className={getButtonStyle()}
       >
         <UserIcon />
-        <span>{generateFriendlyUsername(user.email || '')}</span>
+        <span>{getUserDisplayName(user)}</span>
       </button>
 
       {/* Dropdown */}
@@ -110,7 +116,7 @@ const UserDropdown: React.FC<UserDropdownProps> = ({ onLoginModalOpen }) => {
                 <UserIcon />
               </div>
               <div>
-                <p className="text-white font-bold text-sm">{generateFriendlyUsername(user.email || '')}</p>
+                <p className="text-white font-bold text-sm">{getUserDisplayName(user)}</p>
                 <p className="text-gray-400 text-xs">{user.email}</p>
               </div>
             </div>

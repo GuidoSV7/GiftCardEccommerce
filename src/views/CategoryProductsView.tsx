@@ -1,10 +1,317 @@
-
-import React from 'react';
+t add .
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { getCategories, getProductByCategoryId, getProducts, type Product } from '../services/productService';
 import HomeHeader from '../components/home/HomeHeader';
 import { HomeFooter } from '../components/home/HomeFooter';
+
+// Hook para extraer colores dominantes de una imagen
+const useImageColors = (imageUrl: string) => {
+    const [colors, setColors] = useState<{ primary: string; secondary: string } | null>(null);
+
+    useEffect(() => {
+        if (!imageUrl) return;
+
+        const extractColors = async () => {
+            try {
+                console.log('🎨 Extracting colors from:', imageUrl);
+                
+                const img = new Image();
+                
+                // Para Cloudinary, configurar CORS desde el inicio
+                const loadImage = () => new Promise<HTMLImageElement>((resolve, reject) => {
+                    img.onload = () => {
+                        console.log('✅ Image loaded successfully:', imageUrl);
+                        resolve(img);
+                    };
+                    img.onerror = (error) => {
+                        console.log('❌ Image failed to load:', imageUrl, error);
+                        reject(error);
+                    };
+                    
+                    // Para Cloudinary, usar crossOrigin desde el principio
+                    img.crossOrigin = 'anonymous';
+                    img.src = imageUrl;
+                });
+
+                const loadedImg = await loadImage();
+                
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                if (!ctx) throw new Error('Canvas context not available');
+
+                // Tamaño óptimo para análisis
+                const size = 64;
+                canvas.width = size;
+                canvas.height = size;
+                ctx.drawImage(loadedImg, 0, 0, size, size);
+
+                const imageData = ctx.getImageData(0, 0, size, size);
+                const data = imageData.data;
+
+                // Algoritmo mejorado de clustering de colores
+                const pixels: number[][] = [];
+
+                // Recopilar todos los píxeles válidos
+                for (let i = 0; i < data.length; i += 4) {
+                    const r = data[i];
+                    const g = data[i + 1];
+                    const b = data[i + 2];
+                    const a = data[i + 3];
+
+                    // Filtrar píxeles transparentes, muy claros, muy oscuros y grises
+                    const brightness = (r + g + b) / 3;
+                    const max = Math.max(r, g, b);
+                    const min = Math.min(r, g, b);
+                    const saturation = max === 0 ? 0 : (max - min) / max;
+                    
+                    if (a > 128 && 
+                        brightness > 30 && brightness < 240 && // No muy oscuro ni muy claro
+                        saturation > 0.1) { // Mínima saturación
+                        pixels.push([r, g, b]);
+                    }
+                }
+
+                if (pixels.length === 0) {
+                    console.log('⚠️ No valid pixels found, trying with relaxed filters...');
+                    // Segundo intento con filtros más relajados
+                    for (let i = 0; i < data.length; i += 4) {
+                        const r = data[i];
+                        const g = data[i + 1];
+                        const b = data[i + 2];
+                        const a = data[i + 3];
+
+                        const brightness = (r + g + b) / 3;
+                        if (a > 128 && brightness > 20 && brightness < 250) {
+                            pixels.push([r, g, b]);
+                        }
+                    }
+                }
+                
+                if (pixels.length === 0) throw new Error('No valid pixels found');
+
+                // Algoritmo K-means simplificado para encontrar colores dominantes
+                const findDominantColors = (pixels: number[][], k: number = 5) => {
+                    // Inicializar centroides aleatoriamente
+                    const centroids: number[][] = [];
+                    for (let i = 0; i < k; i++) {
+                        const randomPixel = pixels[Math.floor(Math.random() * pixels.length)];
+                        centroids.push([...randomPixel]);
+                    }
+
+                    // Iterar para encontrar mejores centroides
+                    for (let iteration = 0; iteration < 10; iteration++) {
+                        const clusters: number[][][] = Array(k).fill(null).map(() => []);
+                        
+                        // Asignar cada píxel al centroide más cercano
+                        pixels.forEach(pixel => {
+                            let minDistance = Infinity;
+                            let closestCentroid = 0;
+                            
+                            centroids.forEach((centroid, index) => {
+                                const distance = Math.sqrt(
+                                    Math.pow(pixel[0] - centroid[0], 2) +
+                                    Math.pow(pixel[1] - centroid[1], 2) +
+                                    Math.pow(pixel[2] - centroid[2], 2)
+                                );
+                                
+                                if (distance < minDistance) {
+                                    minDistance = distance;
+                                    closestCentroid = index;
+                                }
+                            });
+                            
+                            clusters[closestCentroid].push(pixel);
+                        });
+
+                        // Actualizar centroides
+                        clusters.forEach((cluster, index) => {
+                            if (cluster.length > 0) {
+                                centroids[index] = [
+                                    Math.round(cluster.reduce((sum, p) => sum + p[0], 0) / cluster.length),
+                                    Math.round(cluster.reduce((sum, p) => sum + p[1], 0) / cluster.length),
+                                    Math.round(cluster.reduce((sum, p) => sum + p[2], 0) / cluster.length)
+                                ];
+                            }
+                        });
+                    }
+
+                    // Ordenar por tamaño de cluster y saturación
+                    const clustersWithInfo = centroids.map((centroid) => {
+                        const clusterSize = pixels.filter(pixel => {
+                            const distance = Math.sqrt(
+                                Math.pow(pixel[0] - centroid[0], 2) +
+                                Math.pow(pixel[1] - centroid[1], 2) +
+                                Math.pow(pixel[2] - centroid[2], 2)
+                            );
+                            return distance < 50; // Threshold para pertenecer al cluster
+                        }).length;
+
+                        const [r, g, b] = centroid;
+                        const max = Math.max(r, g, b);
+                        const min = Math.min(r, g, b);
+                        const saturation = max === 0 ? 0 : (max - min) / max;
+                        const brightness = (r + g + b) / 3;
+
+                        return {
+                            color: centroid,
+                            size: clusterSize,
+                            saturation,
+                            brightness,
+                            score: clusterSize * (1 + saturation * 2) * (brightness > 80 && brightness < 200 ? 1.5 : brightness > 50 ? 1 : 0.3)
+                        };
+                    });
+
+                    return clustersWithInfo
+                        .filter(c => c.size > 0)
+                        .sort((a, b) => b.score - a.score);
+                };
+
+                const dominantColors = findDominantColors(pixels);
+                
+                if (dominantColors.length > 0) {
+                    const primaryColor = dominantColors[0].color;
+                    const secondaryColor = dominantColors.length > 1 
+                        ? dominantColors[1].color 
+                        : primaryColor.map(c => Math.max(0, c - 40));
+
+                    // Aplicar boost de saturación y brillo
+                    const enhanceColor = (color: number[]) => {
+                        const [r, g, b] = color;
+                        const max = Math.max(r, g, b);
+                        const min = Math.min(r, g, b);
+                        const saturation = max === 0 ? 0 : (max - min) / max;
+                        const brightness = (r + g + b) / 3;
+                        
+                        // Si el color es muy oscuro o desaturado, aplicar boost más agresivo
+                        let boostFactor = 1.2;
+                        if (brightness < 60) boostFactor = 2.0;
+                        else if (brightness < 100) boostFactor = 1.6;
+                        else if (saturation < 0.3) boostFactor = 1.8;
+                        else if (saturation < 0.5) boostFactor = 1.4;
+                        
+                        // Asegurar que el color tenga al menos cierto brillo mínimo
+                        const minBrightness = 80;
+                        const enhancedR = Math.min(255, Math.max(minBrightness, Math.round(r * boostFactor)));
+                        const enhancedG = Math.min(255, Math.max(minBrightness, Math.round(g * boostFactor)));
+                        const enhancedB = Math.min(255, Math.max(minBrightness, Math.round(b * boostFactor)));
+                        
+                        return [enhancedR, enhancedG, enhancedB];
+                    };
+
+                    const enhancedPrimary = enhanceColor(primaryColor);
+                    const enhancedSecondary = enhanceColor(secondaryColor);
+
+                    const primary = `rgb(${enhancedPrimary[0]}, ${enhancedPrimary[1]}, ${enhancedPrimary[2]})`;
+                    const secondary = `rgb(${enhancedSecondary[0]}, ${enhancedSecondary[1]}, ${enhancedSecondary[2]})`;
+
+                    console.log('🎨 Colors extracted successfully:', { primary, secondary, from: imageUrl });
+                    setColors({ primary, secondary });
+                } else {
+                    throw new Error('No dominant colors found');
+                }
+
+            } catch (error) {
+                console.log('❌ Color extraction failed for:', imageUrl, error);
+                
+                // Fallback basado en hash del URL para consistencia
+                const hash = imageUrl.split('').reduce((a, b) => {
+                    a = ((a << 5) - a) + b.charCodeAt(0);
+                    return a & a;
+                }, 0);
+                
+                const fallbackColors = [
+                    { primary: 'rgb(255, 193, 7)', secondary: 'rgb(255, 152, 0)' },    // Amarillo/Naranja
+                    { primary: 'rgb(0, 123, 255)', secondary: 'rgb(0, 86, 179)' },     // Azul Steam
+                    { primary: 'rgb(255, 87, 34)', secondary: 'rgb(216, 67, 21)' },    // Naranja Free Fire
+                    { primary: 'rgb(76, 175, 80)', secondary: 'rgb(56, 142, 60)' },    // Verde
+                    { primary: 'rgb(156, 39, 176)', secondary: 'rgb(123, 31, 162)' },  // Púrpura
+                    { primary: 'rgb(244, 67, 54)', secondary: 'rgb(198, 40, 40)' },    // Rojo
+                ];
+                
+                const colorIndex = Math.abs(hash) % fallbackColors.length;
+                const selectedFallback = fallbackColors[colorIndex];
+                console.log('🔄 Using fallback colors:', selectedFallback, 'for:', imageUrl);
+                setColors(selectedFallback);
+            }
+        };
+
+        extractColors();
+    }, [imageUrl]);
+
+    return colors;
+};
+
+// Componente para cada tarjeta de producto con color sólido dinámico
+const ProductCard: React.FC<{ product: Product; onClick: () => void }> = ({ product, onClick }) => {
+    const colors = useImageColors(product.imageUrl);
+    
+    // Debug: mostrar los colores que se están usando
+    console.log('🎯 ProductCard rendering with colors:', colors, 'for product:', product.title);
+
+    return (
+        <div
+            className="group relative rounded-xl overflow-hidden hover:scale-[1.02] transition-all duration-300 cursor-pointer h-32 shadow-xl hover:shadow-2xl"
+            onClick={onClick}
+             style={{
+                 backgroundColor: colors?.primary || 'rgb(99, 102, 241)',
+                 backgroundImage: colors 
+                     ? `linear-gradient(135deg, ${colors.primary}, ${colors.secondary})`
+                     : 'linear-gradient(135deg, rgb(99, 102, 241), rgb(67, 56, 202))',
+                 border: colors 
+                     ? `1px solid ${colors.primary}`
+                     : '1px solid rgb(99, 102, 241)'
+             }}
+        >
+            <div className="flex h-full">
+                {/* Product Image - Lado izquierdo */}
+                <div className="w-28 h-full flex-shrink-0 relative">
+                    <img
+                        src={product.imageUrl}
+                        alt={product.title}
+                        className="w-full h-full object-cover rounded-l-xl"
+                    />
+                </div>
+                
+                {/* Product Info - Lado derecho */}
+                <div className="flex-1 min-w-0 p-4 flex flex-col justify-center relative">
+                    <h3 className="font-bold text-white text-base mb-2 group-hover:text-white/90 transition-colors duration-300 truncate drop-shadow-sm">
+                        {product.title}
+                    </h3>
+                    <p className="text-white/80 text-sm drop-shadow-sm">
+                        {product.category.name}
+                    </p>
+                    
+                     {/* Decorative element */}
+                     <div 
+                         className="absolute bottom-2 left-4 w-8 h-0.5 rounded-full opacity-60"
+                         style={{
+                             background: colors?.primary || 'rgba(255, 255, 255, 0.6)'
+                         }}
+                     />
+                </div>
+                
+                 {/* Arrow indicator */}
+                 <div className="flex-shrink-0 p-4 flex items-center opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-2 group-hover:translate-x-0">
+                     <div 
+                         className="w-8 h-8 rounded-full flex items-center justify-center backdrop-blur-sm"
+                         style={{
+                             background: colors
+                                 ? `${colors.secondary}CC`
+                                 : 'rgba(255, 255, 255, 0.2)',
+                             border: `1px solid ${colors?.primary || 'rgba(255, 255, 255, 0.3)'}60`
+                         }}
+                     >
+                         <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                     </svg>
+                     </div>
+                 </div>
+            </div>
+        </div>
+    );
+};
 
 export const CategoryProductsView: React.FC = () => {
     const { categoryId } = useParams<{ categoryId: string }>();
@@ -154,94 +461,15 @@ export const CategoryProductsView: React.FC = () => {
                     {/* Contenido principal */}
                     <div className="flex-1 p-6 lg:p-8 lg:pl-4">
 
-                        {/* Grid de productos */}
+                        {/* Grid de productos - Estilo launcher de juegos */}
                         {categoryProducts.length > 0 ? (
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                                 {categoryProducts.map((product: Product) => (
-                                    <div
+                                    <ProductCard
                                         key={product.id}
-                                        className="group relative bg-gradient-to-br from-slate-800/80 via-blue-900/60 to-slate-900/80 backdrop-blur-sm rounded-xl overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer border border-blue-800/30 hover:border-blue-600/50 hover:scale-105"
+                                        product={product}
                                         onClick={() => navigate(`/product/${product.id}`)}
-                                        style={{
-                                            boxShadow: `
-                                                0 10px 25px -5px rgba(0, 0, 0, 0.4),
-                                                0 0 0 1px rgba(59, 130, 246, 0.2),
-                                                inset 0 1px 0 rgba(255, 255, 255, 0.1)
-                                            `
-                                        }}
-                                    >
-                                        {/* Background Image Effect */}
-                                        <div 
-                                            className="absolute inset-0 opacity-20 group-hover:opacity-30 transition-opacity duration-300"
-                                            style={{
-                                                backgroundImage: `url(${product.imageUrl})`,
-                                                backgroundSize: 'cover',
-                                                backgroundPosition: 'center',
-                                                backgroundRepeat: 'no-repeat'
-                                            }}
-                                        ></div>
-                                        
-                                        {/* Gradient Overlay */}
-                                        <div className="absolute inset-0 bg-gradient-to-br from-slate-900/40 via-blue-900/20 to-slate-800/30"></div>
-                                        
-                                        {/* Content */}
-                                        <div className="relative z-10 p-5">
-                                            <div className="flex items-center space-x-4">
-                                                {/* Product Image */}
-                                                <div className="relative">
-                                                    <div 
-                                                        className="w-24 h-24 rounded-lg overflow-hidden bg-white/10 backdrop-blur-sm border border-blue-500/20 flex items-center justify-center p-2 group-hover:bg-white/15 transition-colors duration-300"
-                                                        style={{
-                                                            boxShadow: `
-                                                                0 4px 15px rgba(0, 0, 0, 0.3),
-                                                                0 0 0 1px rgba(59, 130, 246, 0.3),
-                                                                inset 0 1px 0 rgba(255, 255, 255, 0.1)
-                                                            `
-                                                        }}
-                                                    >
-                                                        <img
-                                                            src={product.imageUrl}
-                                                            alt={product.title}
-                                                            className="w-full h-full object-contain"
-                                                        />
-                                                    </div>
-                                                    
-                                                    {/* Floating glow effect */}
-                                                    <div 
-                                                        className="absolute inset-0 rounded-lg blur-md opacity-20 -z-10 group-hover:opacity-40 transition-opacity duration-300"
-                                                        style={{
-                                                            background: `linear-gradient(45deg, rgba(59, 130, 246, 0.4), rgba(30, 64, 175, 0.4))`
-                                                        }}
-                                                    ></div>
-                                                </div>
-                                                
-                                                {/* Product Info */}
-                                                <div className="flex-1 min-w-0">
-                                                    <h3 className="font-bold text-white text-base mb-2 group-hover:text-blue-200 transition-colors duration-300 line-clamp-2">
-                                                        {product.title}
-                                                    </h3>
-                                                    <div className="flex items-center space-x-2">
-                                                        <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
-                                                        <p className="text-gray-300 text-sm font-medium">
-                                                            {product.category.name}
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            
-                                            {/* Hover Effect Indicator */}
-                                            <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                                <div className="w-7 h-7 bg-blue-500/20 rounded-full flex items-center justify-center">
-                                                    <svg className="w-4 h-4 text-blue-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                                                    </svg>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        
-                                        {/* Bottom gradient accent */}
-                                        <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-blue-500 to-blue-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                                    </div>
+                                    />
                                 ))}
                             </div>
                         ) : (

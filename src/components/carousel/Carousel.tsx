@@ -65,13 +65,19 @@ export const Carousel: React.FC = () => {
             selectedProducts,
             selectedOffers,
             allProductsCount: allProducts?.length || 0,
-            allOffersCount: allOffers?.length || 0
+            allOffersCount: allOffers?.length || 0,
+            firstProduct: allProducts?.[0] ? { id: allProducts[0].id, type: typeof allProducts[0].id } : null,
+            firstOffer: allOffers?.[0] ? { id: allOffers[0].id, type: typeof allOffers[0].id } : null
         });
         
         // Agregar ofertas seleccionadas (solo las que están explícitamente seleccionadas)
         if (selectedOffers.length > 0 && allOffers) {
             selectedOffers.forEach(offerId => {
-                const offer = allOffers.find(o => o.id === parseInt(offerId));
+                // Intentar comparación directa primero, luego parseInt si es necesario
+                let offer = allOffers.find(o => o.id.toString() === offerId);
+                if (!offer) {
+                    offer = allOffers.find(o => o.id === parseInt(offerId));
+                }
                 if (offer) {
                     items.push({
                         id: `offer-${offer.id}`,
@@ -89,7 +95,7 @@ export const Carousel: React.FC = () => {
         // Agregar productos seleccionados (solo los que están explícitamente seleccionados y activos)
         if (selectedProducts.length > 0 && allProducts) {
             selectedProducts.forEach(productId => {
-                const product = allProducts.find((p: any) => p.id === parseInt(productId));
+                const product = allProducts.find((p: any) => p.id === productId);
                 if (product && product.state === true) { // state = activo/inactivo del producto
                     items.push({
                         id: `product-${product.id}`,

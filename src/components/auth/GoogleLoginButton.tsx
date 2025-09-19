@@ -113,7 +113,8 @@ export const GoogleLoginButton = ({
                             setUser({
                                 id: authResponse.id,
                                 email: authResponse.email,
-                                roles: authResponse.roles
+                                roles: authResponse.roles,
+                                userName: authResponse.userName
                             }, authResponse.token);
 
                             // Mostrar mensaje de éxito
