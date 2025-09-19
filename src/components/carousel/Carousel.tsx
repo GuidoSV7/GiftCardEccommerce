@@ -71,7 +71,7 @@ export const Carousel: React.FC = () => {
         // Agregar ofertas seleccionadas (solo las que están explícitamente seleccionadas)
         if (selectedOffers.length > 0 && allOffers) {
             selectedOffers.forEach(offerId => {
-                const offer = allOffers.find(o => o.id.toString() === offerId);
+                const offer = allOffers.find(o => o.id === parseInt(offerId));
                 if (offer) {
                     items.push({
                         id: `offer-${offer.id}`,
@@ -89,7 +89,7 @@ export const Carousel: React.FC = () => {
         // Agregar productos seleccionados (solo los que están explícitamente seleccionados y activos)
         if (selectedProducts.length > 0 && allProducts) {
             selectedProducts.forEach(productId => {
-                const product = allProducts.find((p: any) => p.id === productId);
+                const product = allProducts.find((p: any) => p.id === parseInt(productId));
                 if (product && product.state === true) { // state = activo/inactivo del producto
                     items.push({
                         id: `product-${product.id}`,

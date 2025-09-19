@@ -11,6 +11,19 @@ import {
   CouponsIcon
 } from '../../../icons';
 
+// Función para generar un nombre de usuario amigable
+const generateFriendlyUsername = (email: string): string => {
+  if (!email) return 'Usuario';
+  
+  const username = email.split('@')[0];
+  // Capitalizar la primera letra y reemplazar puntos/guiones con espacios
+  return username
+    .replace(/[._-]/g, ' ')
+    .split(' ')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+};
+
 const UserIcon = () => (
   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
@@ -84,7 +97,7 @@ const UserDropdown: React.FC<UserDropdownProps> = ({ onLoginModalOpen }) => {
         className={getButtonStyle()}
       >
         <UserIcon />
-        <span>{user.email ? user.email.split('@')[0] : 'Usuario'}</span>
+        <span>{generateFriendlyUsername(user.email || '')}</span>
       </button>
 
       {/* Dropdown */}
@@ -97,7 +110,7 @@ const UserDropdown: React.FC<UserDropdownProps> = ({ onLoginModalOpen }) => {
                 <UserIcon />
               </div>
               <div>
-                <p className="text-white font-bold text-sm">{user.email ? user.email.split('@')[0] : 'Usuario'}</p>
+                <p className="text-white font-bold text-sm">{generateFriendlyUsername(user.email || '')}</p>
                 <p className="text-gray-400 text-xs">{user.email}</p>
               </div>
             </div>
