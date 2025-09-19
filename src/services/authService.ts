@@ -67,7 +67,8 @@ export async function createUser(userData: CreateUserData) {
 export async function googleAuth(googleData: GoogleAuthData): Promise<GoogleAuthResponse> {
     try {
         const { data } = await api.post('/auth/google', googleData);
-        return data;
+        // The backend wraps the response in a data property
+        return data.data;
     } catch (error) {
         if (isAxiosError(error)) {
             throw error.response?.data || error;

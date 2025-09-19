@@ -84,7 +84,7 @@ const UserDropdown: React.FC<UserDropdownProps> = ({ onLoginModalOpen }) => {
         className={getButtonStyle()}
       >
         <UserIcon />
-        <span>{user.email.split('@')[0]}</span>
+        <span>{user.email ? user.email.split('@')[0] : 'Usuario'}</span>
       </button>
 
       {/* Dropdown */}
@@ -97,7 +97,7 @@ const UserDropdown: React.FC<UserDropdownProps> = ({ onLoginModalOpen }) => {
                 <UserIcon />
               </div>
               <div>
-                <p className="text-white font-bold text-sm">{user.email.split('@')[0]}</p>
+                <p className="text-white font-bold text-sm">{user.email ? user.email.split('@')[0] : 'Usuario'}</p>
                 <p className="text-gray-400 text-xs">{user.email}</p>
               </div>
             </div>

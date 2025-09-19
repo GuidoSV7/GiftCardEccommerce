@@ -17,6 +17,7 @@ export default function DashboardView() {
 
   // Función para generar un nombre amigable
   const generateFriendlyName = (email: string) => {
+    if (!email) return 'Usuario';
     const username = email.split('@')[0];
     // Capitalizar la primera letra y reemplazar puntos/guiones con espacios
     return username
@@ -30,8 +31,8 @@ export default function DashboardView() {
   useEffect(() => {
     if (user && isAuthenticated) {
       setUserData({
-        name: generateFriendlyName(user.email),
-        email: user.email,
+        name: generateFriendlyName(user.email || ''),
+        email: user.email || '',
         role: user.roles === 'admin' ? 'Administrador' : 'Miembro'
       });
     }

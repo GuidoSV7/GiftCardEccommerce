@@ -49,7 +49,7 @@ const MyAccountView: React.FC = () => {
                         <span className="text-2xl">👤</span>
                       </div>
                       <div>
-                        <h2 className="text-xl font-bold text-white">{user.email.split('@')[0]}</h2>
+                        <h2 className="text-xl font-bold text-white">{user.email ? user.email.split('@')[0] : 'Usuario'}</h2>
                       </div>
                     </div>
                     <button className="bg-transparent text-white px-4 py-2 rounded-lg border border-gray-600 hover:bg-gray-800 transition-colors duration-200 flex items-center">
