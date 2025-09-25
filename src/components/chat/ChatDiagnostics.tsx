@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useChatStable } from '../../hooks/useChatStable';
 import { envConfig } from '../../config/env.config';
+import { io } from 'socket.io-client';
 
 interface ChatDiagnosticsProps {
   sessionId?: string;
@@ -30,7 +31,7 @@ export const ChatDiagnostics = ({ sessionId }: ChatDiagnosticsProps) => {
   useEffect(() => {
     const testApiConnection = async () => {
       try {
-        const response = await fetch(`${envConfig.apiUrl}/api/health`, {
+        const response = await fetch(`${envConfig.apiUrl}/health`, {
           method: 'GET',
           timeout: 5000
         } as any);
@@ -49,34 +50,48 @@ export const ChatDiagnostics = ({ sessionId }: ChatDiagnosticsProps) => {
     testApiConnection();
   }, []);
 
-  // Test de conexión WebSocket
+  // Test de conexión WebSocket usando Socket.IO
   useEffect(() => {
-    const testWsConnection = () => {
+    const testSocketIOConnection = () => {
       try {
-        // Usar la URL correcta para WebSocket con namespace
-        const wsUrl = envConfig.wsUrl.replace('http', 'ws').replace('https', 'wss');
-        const ws = new WebSocket(`${wsUrl}/chat`);
+        // Usar Socket.IO en lugar de WebSocket nativo
+        const socket = io(envConfig.wsUrl, {
+          transports: ['polling'],
+          timeout: 5000,
+          forceNew: true
+        });
         
-        ws.onopen = () => {
+        socket.on('connect', () => {
           setConnectionTest(prev => ({ ...prev, ws: 'success' }));
-          ws.close();
-        };
+          socket.disconnect();
+        });
         
-        ws.onerror = () => {
+        socket.on('connect_error', (error) => {
+          console.error('Socket.IO connection error:', error);
           setConnectionTest(prev => ({ ...prev, ws: 'error' }));
-        };
+        });
         
-        ws.onclose = () => {
-          // Connection closed normally
-        };
+        // Timeout después de 5 segundos
+        setTimeout(() => {
+          if (!socket.connected) {
+            socket.disconnect();
+            setConnectionTest(prev => ({ ...prev, ws: 'error' }));
+          }
+        }, 5000);
+        
       } catch (error) {
-        console.error('Error testing WebSocket connection:', error);
+        console.error('Error testing Socket.IO connection:', error);
         setConnectionTest(prev => ({ ...prev, ws: 'error' }));
       }
     };
 
-    testWsConnection();
+    testSocketIOConnection();
   }, []);
+
+  // Ocultar el botón de diagnósticos en producción
+  if (!envConfig.isDevelopment) {
+    return null;
+  }
 
   if (!isOpen) {
     return (

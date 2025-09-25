@@ -1,5 +1,6 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { ScrollToTop } from "./components/ScrollToTop";
+import { TokenExpirationHandler } from "./components/TokenExpirationHandler";
 import DashboardView from "./views/admin/DashboardView";
 import MetricsView from "./views/admin/MetricsView";
 
@@ -37,6 +38,7 @@ import CreateOfferView from "./views/admin/offers/CreateOfferView";
 import ActiveOffersView from "./views/admin/offers/ActiveOffersView";
 import SupportDashboard from "./views/support/SupportDashboard";
 import ChatManagement from "./views/support/ChatManagement";
+import ChatDetailView from "./views/support/ChatDetailView";
 import ActiveChatsView from "./views/support/ActiveChatsView";
 import PendingChatsView from "./views/support/PendingChatsView";
 import ClosedChatsView from "./views/support/ClosedChatsView";
@@ -45,8 +47,9 @@ import NotFoundView from "./views/NotFoundView";
 export default function router() {
   return (
     <BrowserRouter>
-      <ScrollToTop />
-      <Routes>
+      <TokenExpirationHandler>
+        <ScrollToTop />
+        <Routes>
         <Route path="/" element={<HomeView />} index />
         
         {/* Rutas que requieren autenticación */}
@@ -92,6 +95,7 @@ export default function router() {
         <Route element={<SupportProtectedRoute><SupportLayout /></SupportProtectedRoute>}>
           <Route path="/support/dashboard" element={<SupportDashboard />} index />
           <Route path="/support/chats" element={<ChatManagement />} />
+          <Route path="/support/chats/:id" element={<ChatDetailView />} />
           <Route path="/support/active-chats" element={<ActiveChatsView />} />
           <Route path="/support/pending-chats" element={<PendingChatsView />} />
           <Route path="/support/closed-chats" element={<ClosedChatsView />} />
@@ -99,7 +103,8 @@ export default function router() {
 
         {/* Ruta 404 - Debe ir al final */}
         <Route path="*" element={<NotFoundView />} />
-      </Routes>
+        </Routes>
+      </TokenExpirationHandler>
     </BrowserRouter>
   )
 }

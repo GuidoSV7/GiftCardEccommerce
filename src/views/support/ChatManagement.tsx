@@ -5,7 +5,8 @@ import { useForm } from 'react-hook-form';
 import { 
     getAllChatSessions, 
     getChatSessionsByStatus, 
-    assignChatSession
+    takeChatSession,
+    releaseChatSession
 } from '../../services/chatService';
 import { useChatStable } from '../../hooks/useChatStable';
 import type { ChatMessageFormData, ChatMessage, ChatSession } from '../../types';
@@ -63,19 +64,34 @@ export default function ChatManagement() {
 
     // Ya no necesitamos mutación para enviar mensaje - se hace via WebSocket
 
-    // Mutación para asignar sesión
-    const assignSessionMutation = useMutation({
-        mutationFn: ({ sessionId, supportAgentId }: { sessionId: string; supportAgentId: string }) =>
-            assignChatSession(sessionId, supportAgentId),
+    // Mutación para tomar sesión
+    const takeSessionMutation = useMutation({
+        mutationFn: (sessionId: string) => takeChatSession(sessionId),
         onError: (error: any) => {
             if (error.response?.data?.message) {
                 toast.error(error.response.data.message);
             } else {
-                toast.error('Error al asignar sesión');
+                toast.error('Error al tomar sesión');
             }
         },
         onSuccess: () => {
-            toast.success('Sesión asignada exitosamente');
+            toast.success('Sesión tomada exitosamente');
+            queryClient.invalidateQueries({ queryKey: ['chatSessions'] });
+        }
+    });
+
+    // Mutación para liberar sesión
+    const releaseSessionMutation = useMutation({
+        mutationFn: (sessionId: string) => releaseChatSession(sessionId),
+        onError: (error: any) => {
+            if (error.response?.data?.message) {
+                toast.error(error.response.data.message);
+            } else {
+                toast.error('Error al liberar sesión');
+            }
+        },
+        onSuccess: () => {
+            toast.success('Sesión liberada exitosamente');
             queryClient.invalidateQueries({ queryKey: ['chatSessions'] });
         }
     });
@@ -135,10 +151,12 @@ export default function ChatManagement() {
         sendTyping(isTyping);
     };
 
-    const handleAssignSession = (sessionId: string) => {
-        // En un caso real, obtendrías el ID del agente de soporte actual
-        const supportAgentId = 'current-support-agent-id';
-        assignSessionMutation.mutate({ sessionId, supportAgentId });
+    const handleTakeSession = (sessionId: string) => {
+        takeSessionMutation.mutate(sessionId);
+    };
+
+    const handleReleaseSession = (sessionId: string) => {
+        releaseSessionMutation.mutate(sessionId);
     };
 
     return (
@@ -267,12 +285,22 @@ export default function ChatManagement() {
                                         <p className="text-xs text-gray-500">Chat de soporte</p>
                                     </div>
                                 </div>
-                                <button
-                                    onClick={() => handleAssignSession(selectedSession)}
-                                    className="px-3 py-1 text-xs bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-                                >
-                                    Asignar
-                                </button>
+                                <div className="flex space-x-2">
+                                    <button
+                                        onClick={() => handleTakeSession(selectedSession)}
+                                        disabled={takeSessionMutation.isPending}
+                                        className="px-3 py-1 text-xs bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50"
+                                    >
+                                        {takeSessionMutation.isPending ? 'Tomando...' : 'Tomar Chat'}
+                                    </button>
+                                    <button
+                                        onClick={() => handleReleaseSession(selectedSession)}
+                                        disabled={releaseSessionMutation.isPending}
+                                        className="px-3 py-1 text-xs bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50"
+                                    >
+                                        {releaseSessionMutation.isPending ? 'Liberando...' : 'Liberar'}
+                                    </button>
+                                </div>
                             </div>
 
                             {/* Messages Area */}

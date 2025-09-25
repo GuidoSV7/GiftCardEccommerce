@@ -27,12 +27,13 @@ api.interceptors.response.use(
         // Si el token es inválido o expiró, limpiar la autenticación
         if (error.response?.status === 401) {
             console.log('Token inválido o expirado, limpiando autenticación');
-            localStorage.removeItem('token');
-            localStorage.removeItem('user');
-            // Redirigir al login si no estamos ya ahí
-            if (window.location.pathname !== '/login') {
-                window.location.href = '/login';
-            }
+            
+            // Disparar evento personalizado para que el hook useTokenExpiration lo capture
+            window.dispatchEvent(new CustomEvent('auth-error', { 
+                detail: { 
+                    message: 'Tu sesión ha expirado. Por favor, inicia sesión nuevamente.' 
+                } 
+            }));
         }
         return Promise.reject(error);
     }

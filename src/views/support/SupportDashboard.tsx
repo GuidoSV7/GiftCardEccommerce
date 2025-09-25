@@ -1,36 +1,76 @@
-import { useQuery } from '@tanstack/react-query';
-import { getChatStats, getAllChatSessions } from '../../services/chatService';
-import { useChatStable } from '../../hooks/useChatStable';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { getAllChatSessions, takeChatSession } from '../../services/chatService';
 import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { useState, useMemo } from 'react';
 
 export default function SupportDashboard() {
-    // Hook estable para estadísticas en tiempo real
-    const { stats: wsStats, isConnected } = useChatStable({
-        onStatsUpdate: (stats) => {
-            console.log('Estadísticas actualizadas:', stats);
+    const queryClient = useQueryClient();
+    
+    // Estados para filtros y búsqueda
+    const [searchTerm, setSearchTerm] = useState('');
+    const [statusFilter, setStatusFilter] = useState('all');
+    const [dateFilter, setDateFilter] = useState('all');
+
+
+    // Query para obtener todas las sesiones de chat
+    const { data: allSessions = [], isLoading: sessionsLoading } = useQuery({
+        queryKey: ['allChatSessions'],
+        queryFn: getAllChatSessions,
+        retry: 2,
+        staleTime: 10 * 1000, // 10 segundos para actualizaciones más frecuentes
+        refetchInterval: 15 * 1000, // Refetch cada 15 segundos
+    });
+
+    // Contar chats activos del usuario actual
+    const currentUserActiveChats = useMemo(() => {
+        // Obtener el ID del usuario desde el token JWT en lugar de localStorage
+        const token = localStorage.getItem('token');
+        let currentUserId = localStorage.getItem('userId');
+        
+        // Si hay token, decodificar para obtener el ID real
+        if (token) {
+            try {
+                const payload = JSON.parse(atob(token.split('.')[1]));
+                currentUserId = payload.id || payload.sub;
+            } catch (error) {
+                console.warn('⚠️ Error decodificando JWT, usando localStorage:', error);
+            }
+        }
+        
+        const activeChats = allSessions.filter(session => 
+            session.status === 'active' && 
+            session.supportAgent?.userId === currentUserId
+        );
+        
+        console.log('🔍 Contando chats activos:', {
+            currentUserId,
+            totalSessions: allSessions.length,
+            activeSessions: allSessions.filter(s => s.status === 'active').length,
+            userActiveChats: activeChats.length,
+            activeChats: activeChats.map(c => ({ id: c.id, supportAgent: c.supportAgent }))
+        });
+        
+        return activeChats.length;
+    }, [allSessions]);
+
+    // Mutación para tomar un chat
+    const takeChatMutation = useMutation({
+        mutationFn: takeChatSession,
+        onSuccess: () => {
+            toast.success('Chat tomado exitosamente');
+            queryClient.invalidateQueries({ queryKey: ['allChatSessions'] });
+        },
+        onError: (error: any) => {
+            if (error.response?.status === 409) {
+                const errorMessage = error.response?.data?.message || 'Este chat ya está siendo atendido por otro agente';
+                toast.error(errorMessage);
+            } else {
+                toast.error(error.response?.data?.message || 'Error al tomar el chat');
+            }
         }
     });
 
-    // Query para obtener estadísticas (solo carga inicial)
-    const { data: initialStats, isLoading: statsLoading } = useQuery({
-        queryKey: ['chatStats'],
-        queryFn: getChatStats,
-        retry: 2,
-        staleTime: 30 * 1000, // 30 segundos
-        // Eliminamos refetchInterval - ahora se actualiza via WebSocket
-    });
-
-    // Usar estadísticas del WebSocket si están disponibles, sino las iniciales
-    const stats = wsStats || initialStats;
-
-    // Query para obtener sesiones recientes (solo carga inicial)
-    const { data: recentSessions = [], isLoading: sessionsLoading } = useQuery({
-        queryKey: ['recentChatSessions'],
-        queryFn: getAllChatSessions,
-        retry: 2,
-        staleTime: 30 * 1000,
-        // Eliminamos refetchInterval - ahora se actualiza via WebSocket
-    });
 
     const formatTime = (timestamp: string) => {
         return new Date(timestamp).toLocaleString('es-ES', {
@@ -68,167 +108,186 @@ export default function SupportDashboard() {
         }
     };
 
+    // Función para obtener el nombre del usuario
+    const getUserName = (session: any) => {
+        if (session.user?.name) {
+            return session.user.name;
+        }
+        if (session.user?.email) {
+            return session.user.email.split('@')[0];
+        }
+        return `Usuario ${session.userId.slice(-4)}`;
+    };
+
+    // Función para filtrar sesiones
+    const filteredSessions = useMemo(() => {
+        return allSessions.filter((session) => {
+            // Filtro por término de búsqueda (nombre del usuario)
+            const userName = getUserName(session).toLowerCase();
+            const matchesSearch = searchTerm === '' || userName.includes(searchTerm.toLowerCase());
+            
+            // Filtro por estado
+            const matchesStatus = statusFilter === 'all' || session.status === statusFilter;
+            
+            // Filtro por fecha
+            let matchesDate = true;
+            if (dateFilter !== 'all') {
+                const sessionDate = new Date(session.createdAt);
+                const now = new Date();
+                
+                switch (dateFilter) {
+                    case 'today':
+                        matchesDate = sessionDate.toDateString() === now.toDateString();
+                        break;
+                    case 'week':
+                        const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+                        matchesDate = sessionDate >= weekAgo;
+                        break;
+                    case 'month':
+                        const monthAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+                        matchesDate = sessionDate >= monthAgo;
+                        break;
+                }
+            }
+            
+            return matchesSearch && matchesStatus && matchesDate;
+        });
+    }, [allSessions, searchTerm, statusFilter, dateFilter]);
+
     return (
         <div className="space-y-6">
             {/* Header */}
             <div>
                 <div className="flex items-center justify-between">
                     <div>
-                        <h1 className="text-3xl font-bold text-gray-900">Dashboard de Soporte</h1>
+                        <h1 className="text-3xl font-bold text-gray-900">Gestión de Chats</h1>
                         <p className="text-gray-600 mt-2">
                             Gestiona y responde a las consultas de los usuarios
                         </p>
-                    </div>
-                    <div className="flex items-center">
-                        <div className={`w-3 h-3 rounded-full mr-2 ${
-                            isConnected ? 'bg-green-400' : 'bg-red-400'
-                        }`}></div>
-                        <span className="text-sm text-gray-600">
-                            {isConnected ? 'Tiempo Real' : 'Desconectado'}
-                        </span>
-                    </div>
-                </div>
-            </div>
-
-            {/* Stats Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                {/* Total Sessions */}
-                <div className="bg-white rounded-lg shadow p-6">
-                    <div className="flex items-center">
-                        <div className="p-2 bg-blue-100 rounded-lg">
-                            <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                            </svg>
-                        </div>
-                        <div className="ml-4">
-                            <p className="text-sm font-medium text-gray-600">Total Sesiones</p>
-                            <p className="text-2xl font-bold text-gray-900">
-                                {statsLoading ? '...' : stats?.totalSessions || 0}
-                            </p>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Active Sessions */}
-                <div className="bg-white rounded-lg shadow p-6">
-                    <div className="flex items-center">
-                        <div className="p-2 bg-green-100 rounded-lg">
-                            <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                        </div>
-                        <div className="ml-4">
-                            <p className="text-sm font-medium text-gray-600">Chats Activos</p>
-                            <p className="text-2xl font-bold text-gray-900">
-                                {statsLoading ? '...' : stats?.activeSessions || 0}
-                            </p>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Pending Sessions */}
-                <div className="bg-white rounded-lg shadow p-6">
-                    <div className="flex items-center">
-                        <div className="p-2 bg-yellow-100 rounded-lg">
-                            <svg className="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                        </div>
-                        <div className="ml-4">
-                            <p className="text-sm font-medium text-gray-600">Pendientes</p>
-                            <p className="text-2xl font-bold text-gray-900">
-                                {statsLoading ? '...' : stats?.pendingSessions || 0}
-                            </p>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Average Response Time */}
-                <div className="bg-white rounded-lg shadow p-6">
-                    <div className="flex items-center">
-                        <div className="p-2 bg-purple-100 rounded-lg">
-                            <svg className="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                            </svg>
-                        </div>
-                        <div className="ml-4">
-                            <p className="text-sm font-medium text-gray-600">Tiempo Promedio</p>
-                            <p className="text-2xl font-bold text-gray-900">
-                                {statsLoading ? '...' : `${stats?.averageResponseTime || 0}m`}
-                            </p>
+                        <div className="mt-2 flex items-center space-x-4">
+                            <span className="text-sm text-gray-500">
+                                Chats activos: <span className="font-semibold text-blue-600">{currentUserActiveChats}/2</span>
+                            </span>
+                            {currentUserActiveChats >= 2 && (
+                                <span className="text-xs text-red-600 bg-red-100 px-2 py-1 rounded">
+                                    Límite alcanzado
+                                </span>
+                            )}
                         </div>
                     </div>
                 </div>
             </div>
 
-            {/* Quick Actions */}
+            {/* Search and Filters */}
             <div className="bg-white rounded-lg shadow p-6">
-                <h2 className="text-lg font-semibold text-gray-900 mb-4">Acciones Rápidas</h2>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <Link
-                        to="/support/active-chats"
-                        className="flex items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
-                    >
-                        <div className="p-2 bg-green-100 rounded-lg mr-3">
-                            <svg className="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                            </svg>
-                        </div>
-                        <div>
-                            <h3 className="font-medium text-gray-900">Chats Activos</h3>
-                            <p className="text-sm text-gray-600">Responder conversaciones en curso</p>
-                        </div>
-                    </Link>
+                    {/* Búsqueda por nombre */}
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                            Buscar por nombre
+                        </label>
+                        <input
+                            type="text"
+                            placeholder="Nombre del usuario..."
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        />
+                    </div>
 
-                    <Link
-                        to="/support/pending-chats"
-                        className="flex items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
-                    >
-                        <div className="p-2 bg-yellow-100 rounded-lg mr-3">
-                            <svg className="w-5 h-5 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                        </div>
-                        <div>
-                            <h3 className="font-medium text-gray-900">Chats Pendientes</h3>
-                            <p className="text-sm text-gray-600">Atender nuevas consultas</p>
-                        </div>
-                    </Link>
+                    {/* Filtro por estado */}
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                            Filtrar por estado
+                        </label>
+                        <select
+                            value={statusFilter}
+                            onChange={(e) => setStatusFilter(e.target.value)}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        >
+                            <option value="all">Todos los estados</option>
+                            <option value="pending">Pendientes</option>
+                            <option value="active">Activos</option>
+                            <option value="closed">Cerrados</option>
+                        </select>
+                    </div>
 
-                    <Link
-                        to="/support/chats"
-                        className="flex items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
-                    >
-                        <div className="p-2 bg-blue-100 rounded-lg mr-3">
-                            <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-                            </svg>
+                    {/* Filtro por fecha */}
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                            Filtrar por fecha
+                        </label>
+                        <select
+                            value={dateFilter}
+                            onChange={(e) => setDateFilter(e.target.value)}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        >
+                            <option value="all">Todas las fechas</option>
+                            <option value="today">Hoy</option>
+                            <option value="week">Última semana</option>
+                            <option value="month">Último mes</option>
+                        </select>
+                    </div>
+                </div>
+
+                {/* Chats pendientes (sin atender) */}
+                {allSessions.filter(session => session.status === 'pending').length > 0 && (
+                    <div className="mt-6 bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                        <div className="flex items-center justify-between">
+                            <div>
+                                <h3 className="text-lg font-semibold text-yellow-800">
+                                    ⚠️ Chats Pendientes
+                                </h3>
+                                <p className="text-sm text-yellow-700 mt-1">
+                                    {allSessions.filter(session => session.status === 'pending').length} chat(s) esperando atención
+                                </p>
+                            </div>
+                            <div className="text-right">
+                                <p className="text-sm text-yellow-600">
+                                    Prioridad: Alta
+                                </p>
+                            </div>
                         </div>
-                        <div>
-                            <h3 className="font-medium text-gray-900">Gestión General</h3>
-                            <p className="text-sm text-gray-600">Ver todos los chats</p>
-                        </div>
-                    </Link>
+                    </div>
+                )}
+
+                {/* Resultados de búsqueda */}
+                <div className="mt-4 flex items-center justify-between">
+                    <p className="text-sm text-gray-600">
+                        Mostrando {filteredSessions.length} de {allSessions.length} chats
+                    </p>
+                    {(searchTerm || statusFilter !== 'all' || dateFilter !== 'all') && (
+                        <button
+                            onClick={() => {
+                                setSearchTerm('');
+                                setStatusFilter('all');
+                                setDateFilter('all');
+                            }}
+                            className="text-sm text-blue-600 hover:text-blue-800 font-medium"
+                        >
+                            Limpiar filtros
+                        </button>
+                    )}
                 </div>
             </div>
 
-            {/* Recent Sessions */}
+            {/* Chat Sessions Table */}
             <div className="bg-white rounded-lg shadow">
                 <div className="px-6 py-4 border-b border-gray-200">
-                    <h2 className="text-lg font-semibold text-gray-900">Sesiones Recientes</h2>
+                    <h2 className="text-lg font-semibold text-gray-900">Todos los Chats</h2>
                 </div>
                 <div className="overflow-x-auto">
                     {sessionsLoading ? (
                         <div className="p-6 text-center">
                             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
-                            <p className="text-gray-600 mt-2">Cargando sesiones...</p>
+                            <p className="text-gray-600 mt-2">Cargando chats...</p>
                         </div>
-                    ) : recentSessions.length === 0 ? (
+                    ) : filteredSessions.length === 0 ? (
                         <div className="p-6 text-center text-gray-500">
                             <svg className="w-12 h-12 mx-auto mb-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
                             </svg>
-                            <p>No hay sesiones de chat disponibles</p>
+                            <p>No hay chats que coincidan con los filtros</p>
                         </div>
                     ) : (
                         <table className="min-w-full divide-y divide-gray-200">
@@ -249,7 +308,7 @@ export default function SupportDashboard() {
                                 </tr>
                             </thead>
                             <tbody className="bg-white divide-y divide-gray-200">
-                                {recentSessions.slice(0, 10).map((session) => (
+                                {filteredSessions.map((session) => (
                                     <tr key={session.id} className="hover:bg-gray-50">
                                         <td className="px-6 py-4 whitespace-nowrap">
                                             <div className="flex items-center">
@@ -260,7 +319,7 @@ export default function SupportDashboard() {
                                                 </div>
                                                 <div>
                                                     <div className="text-sm font-medium text-gray-900">
-                                                        Usuario {session.userId.slice(-4)}
+                                                        {getUserName(session)}
                                                     </div>
                                                     <div className="text-sm text-gray-500">
                                                         {formatTime(session.createdAt)}
@@ -269,20 +328,55 @@ export default function SupportDashboard() {
                                             </div>
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap">
-                                            <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(session.status)}`}>
-                                                {getStatusText(session.status)}
-                                            </span>
+                                            <div className="flex flex-col space-y-1">
+                                                <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(session.status)}`}>
+                                                    {getStatusText(session.status)}
+                                                </span>
+                                                {session.status === 'active' && session.supportAgent && (
+                                                    <span className="text-xs text-gray-600">
+                                                        Atendido por: {session.supportAgent.name || session.supportAgent.email}
+                                                    </span>
+                                                )}
+                                            </div>
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                                             {formatTime(session.lastMessageAt)}
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                            <Link
-                                                to={`/support/chats/${session.id}`}
-                                                className="text-blue-600 hover:text-blue-900 transition-colors"
-                                            >
-                                                Ver Chat
-                                            </Link>
+                                            <div className="flex space-x-2">
+                                                {session.status === 'pending' ? (
+                                                    <div className="flex flex-col space-y-1">
+                                                        <button
+                                                            onClick={() => takeChatMutation.mutate(session.id)}
+                                                            disabled={takeChatMutation.isPending || currentUserActiveChats >= 2}
+                                                            className="bg-green-600 text-white px-3 py-1 rounded text-xs hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                                                        >
+                                                            {takeChatMutation.isPending ? 'Tomando...' : 'Tomar Chat'}
+                                                        </button>
+                                                        {currentUserActiveChats >= 2 && (
+                                                            <span className="text-xs text-red-600 text-center">
+                                                                Límite de 2 chats alcanzado
+                                                            </span>
+                                                        )}
+                                                    </div>
+                                                ) : session.status === 'active' ? (
+                                                    <div className="flex flex-col space-y-1">
+                                                        <Link
+                                                            to={`/support/chats/${session.id}`}
+                                                            className="bg-blue-600 text-white px-3 py-1 rounded text-xs hover:bg-blue-700 transition-colors text-center"
+                                                        >
+                                                            Ver Chat
+                                                        </Link>
+                                                        {session.supportAgent && (
+                                                            <span className="text-xs text-gray-500 text-center">
+                                                                Atendido por: {session.supportAgent.name || session.supportAgent.email}
+                                                            </span>
+                                                        )}
+                                                    </div>
+                                                ) : (
+                                                    <span className="text-gray-500 text-xs">Chat cerrado</span>
+                                                )}
+                                            </div>
                                         </td>
                                     </tr>
                                 ))}

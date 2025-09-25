@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useCallback } from 'react';
+import { useEffect, useRef, useState, useCallback, useMemo } from 'react';
 import { io, Socket } from 'socket.io-client';
 import { useAuthStore } from '../stores/authStore';
 import { websocketConfig } from '../config/websocket.config';
@@ -30,6 +30,9 @@ export const useChatSocket = (options: UseChatSocketOptions = {}) => {
   const { token, user } = useAuthStore();
   const typingTimeoutRef = useRef<number | null>(null);
   
+  // Estabilizar la configuración del WebSocket
+  const stableWebsocketConfig = useMemo(() => websocketConfig, []);
+  
   // Usar refs para los callbacks para evitar recrearlos en cada render
   const optionsRef = useRef(options);
   optionsRef.current = options;
@@ -48,63 +51,109 @@ export const useChatSocket = (options: UseChatSocketOptions = {}) => {
   }, []);
 
   useEffect(() => {
-    if (!token || !user) return;
+    if (!token || !user || !options.sessionId) return;
 
-    // Usar la URL específica para WebSockets
-    const wsUrl = websocketConfig.wsUrl;
-    console.log('🔌 Conectando a WebSocket:', `${wsUrl}/chat`);
+    // Usar la URL de la API para WebSocket (Socket.IO maneja el protocolo automáticamente)
+    const wsUrl = stableWebsocketConfig.wsUrl;
+    console.log('🔌 Conectando a WebSocket:', `${wsUrl}`);
+    console.log('🔑 Token disponible:', token ? 'Sí' : 'No');
+    console.log('🔑 Token length:', token ? token.length : 0);
+    console.log('🔑 Token (primeros 50 chars):', token ? token.substring(0, 50) + '...' : 'No token');
+    console.log('👤 Usuario:', user);
 
-    const newSocket = io(`${wsUrl}/chat`, {
+    const newSocket = io(`${wsUrl}`, {
       auth: { 
-        token,
-        Authorization: `Bearer ${token}` // Incluir Authorization header explícitamente
+        token
       },
-      transports: ['websocket', 'polling'], // Fallback a polling si WebSocket falla
+      transports: ['websocket', 'polling'], // Priorizar WebSocket primero
       autoConnect: true,
-      reconnection: websocketConfig.reconnection.enabled,
-      reconnectionAttempts: websocketConfig.reconnection.attempts,
-      reconnectionDelay: websocketConfig.reconnection.delay,
-      reconnectionDelayMax: websocketConfig.reconnection.maxDelay,
-      timeout: websocketConfig.timeout.connection,
+      reconnection: stableWebsocketConfig.reconnection.enabled,
+      reconnectionAttempts: stableWebsocketConfig.reconnection.attempts,
+      reconnectionDelay: stableWebsocketConfig.reconnection.delay,
+      reconnectionDelayMax: stableWebsocketConfig.reconnection.maxDelay,
+      timeout: stableWebsocketConfig.timeout.connection,
       forceNew: true, // Forzar nueva conexión
       // Configuración adicional para manejar errores
       withCredentials: true,
-      upgrade: true,
-      extraHeaders: {
-        'Authorization': `Bearer ${token}`
-      }
+      upgrade: true
     });
 
     // Eventos de conexión
     newSocket.on('connect', () => {
       setIsConnected(true);
       console.log('✅ Conectado al chat WebSocket');
+      console.log('🔌 Socket ID:', newSocket.id);
+      console.log('🔌 Transport:', newSocket.io.engine.transport.name);
     });
 
     newSocket.on('disconnect', (reason) => {
       setIsConnected(false);
       console.log('❌ Desconectado del chat WebSocket:', reason);
+      console.log('🔌 Socket ID:', newSocket.id);
     });
 
     newSocket.on('connect_error', (error) => {
       setIsConnected(false);
       console.error('❌ Error de conexión WebSocket:', error);
+      console.error('🔌 Error details:', error.message);
+    });
+
+    // Eventos adicionales para debugging
+    newSocket.on('reconnect', (attemptNumber) => {
+      console.log('🔄 Reconectado al WebSocket, intento:', attemptNumber);
+    });
+
+    newSocket.on('reconnect_attempt', (attemptNumber) => {
+      console.log('🔄 Intentando reconectar, intento:', attemptNumber);
+    });
+
+    newSocket.on('reconnect_error', (error) => {
+      console.error('❌ Error de reconexión:', error);
     });
 
     newSocket.on('connected', (data) => {
       console.log('🔗 Autenticado en el chat:', data);
     });
 
+    // Evento para debugging de errores del servidor
+    newSocket.on('error', (error) => {
+      console.error('❌ Error del servidor WebSocket:', error);
+    });
+
+    // Eventos de expiración de token
+    newSocket.on('token-expired', (data) => {
+      console.error('🔑 Token expirado:', data);
+      // Disparar evento personalizado para que el hook useTokenExpiration lo capture
+      window.dispatchEvent(new CustomEvent('token-expired', { detail: data }));
+    });
+
+    newSocket.on('auth-error', (data) => {
+      console.error('🔑 Error de autenticación:', data);
+      // Disparar evento personalizado para que el hook useTokenExpiration lo capture
+      window.dispatchEvent(new CustomEvent('auth-error', { detail: data }));
+    });
+
+    // Evento para debugging de eventos personalizados
+    newSocket.onAny((event, ...args) => {
+      console.log('📡 Evento WebSocket recibido:', event, args);
+    });
+
     // Eventos de mensajes
     newSocket.on('new-message', (message: ChatMessage) => {
+      console.log('💬 Nuevo mensaje recibido via WebSocket:', message);
       setMessages(prev => {
         // Evitar duplicados
         const exists = prev.some(msg => msg.id === message.id);
-        if (exists) return prev;
+        if (exists) {
+          console.log('⚠️ Mensaje duplicado ignorado:', message.id);
+          return prev;
+        }
+        console.log('✅ Mensaje añadido a la lista:', message.id);
         return [...prev, message];
       });
       
       if (optionsRef.current.onNewMessage) {
+        console.log('🔄 Ejecutando callback onNewMessage');
         optionsRef.current.onNewMessage(message);
       }
     });
@@ -174,7 +223,7 @@ export const useChatSocket = (options: UseChatSocketOptions = {}) => {
       clearTypingTimeout();
       newSocket.close();
     };
-  }, [token, user]); // Solo dependencias estables
+  }, [token, user, stableWebsocketConfig, options.sessionId]); // Dependencias estables
 
   // Unirse a una sesión
   useEffect(() => {
@@ -185,11 +234,15 @@ export const useChatSocket = (options: UseChatSocketOptions = {}) => {
 
   // Funciones para enviar eventos
   const sendMessage = useCallback((message: string) => {
+    console.log('📤 Enviando mensaje:', { message, sessionId: options.sessionId, socketConnected: !!socket });
     if (socket && options.sessionId) {
       socket.emit('send-message', { 
         sessionId: options.sessionId, 
         message 
       });
+      console.log('✅ Mensaje enviado via WebSocket');
+    } else {
+      console.error('❌ No se puede enviar mensaje:', { socket: !!socket, sessionId: options.sessionId });
     }
   }, [socket, options.sessionId]);
 

@@ -1,7 +1,7 @@
 export const envConfig = {
   // URLs de la API
-  apiUrl: import.meta.env.VITE_API_URL || 'http://localhost:3001',
-  wsUrl: import.meta.env.VITE_WS_URL || import.meta.env.VITE_API_URL || 'http://localhost:3001',
+  apiUrl: import.meta.env.VITE_API_URL || 'http://localhost:3000',
+  wsUrl: import.meta.env.VITE_WS_URL || 'http://localhost:3000',
   
   // Configuración de Google OAuth
   googleClientId: import.meta.env.VITE_GOOGLE_CLIENT_ID || '',

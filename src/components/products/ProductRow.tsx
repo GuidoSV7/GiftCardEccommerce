@@ -31,7 +31,7 @@ export const ProductRow = ({
                     <div className="flex-shrink-0 h-12 w-12">
                         <img
                             className="h-12 w-12 rounded-lg object-cover"
-                            src={product.imageUrl}
+                            src={product.squareImageUrl || product.rectangularImageUrl || product.smallSquareImageUrl || 'https://via.placeholder.com/48x48?text=No+Image'}
                             alt={product.title}
                             onError={(e) => {
                                 const target = e.target as HTMLImageElement;

@@ -6,7 +6,7 @@ interface ProductBannerProps {
 }
 
 export const ProductBanner = ({ product }: ProductBannerProps) => {
-    const { isHorizontal, isVertical } = useImageDimensions(product.imageUrl);
+    const { isHorizontal, isVertical } = useImageDimensions(product.rectangularImageUrl || product.squareImageUrl || product.smallSquareImageUrl || '');
     return (
         <div className="relative">
             {/* Floating shadow for main banner */}
@@ -54,7 +54,7 @@ export const ProductBanner = ({ product }: ProductBannerProps) => {
                 <div 
                     className="absolute inset-0 bg-cover bg-center bg-no-repeat"
                     style={{
-                        backgroundImage: `url(${product.imageUrl})`,
+                        backgroundImage: `url(${product.rectangularImageUrl || product.squareImageUrl || product.smallSquareImageUrl || ''})`,
                         backgroundPosition: 'right center',
                         backgroundSize: isHorizontal 
                             ? '40% auto'  // Horizontal: más pequeño para no dominar
@@ -111,7 +111,7 @@ export const ProductBanner = ({ product }: ProductBannerProps) => {
                                 {/* Product image */}
                                 <div className="w-full h-full flex items-center justify-center p-4">
                                     <img 
-                                        src={product.imageUrl}
+                                        src={product.squareImageUrl || product.rectangularImageUrl || product.smallSquareImageUrl || ''}
                                         alt={product.title}
                                         className={`object-contain ${
                                             isHorizontal 

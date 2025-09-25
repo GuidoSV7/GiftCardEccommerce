@@ -20,30 +20,6 @@ export const SupportSidebar = ({ isOpen, onClose }: SupportSidebarProps) => {
             label: 'Dashboard',
             icon: <ChatIcon className="w-5 h-5" />,
             description: 'Panel principal de soporte'
-        },
-        {
-            path: '/support/chats',
-            label: 'Gestión de Chats',
-            icon: <ChatIcon className="w-5 h-5" />,
-            description: 'Ver y responder chats'
-        },
-        {
-            path: '/support/active-chats',
-            label: 'Chats Activos',
-            icon: <ChatIcon className="w-5 h-5" />,
-            description: 'Chats en curso'
-        },
-        {
-            path: '/support/pending-chats',
-            label: 'Chats Pendientes',
-            icon: <ChatIcon className="w-5 h-5" />,
-            description: 'Chats esperando respuesta'
-        },
-        {
-            path: '/support/closed-chats',
-            label: 'Chats Cerrados',
-            icon: <ChatIcon className="w-5 h-5" />,
-            description: 'Historial de chats'
         }
     ];
 

@@ -2,6 +2,7 @@ import { useState, useCallback } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { 
     getChatMessages, 
+    getChatMessagesForSupport,
     sendChatMessage, 
     markMessagesAsRead 
 } from '../services/chatService';
@@ -11,6 +12,7 @@ interface UseChatFallbackOptions {
   sessionId?: string;
   enabled?: boolean;
   refetchInterval?: number;
+  isSupportView?: boolean; // Para usar el endpoint correcto
 }
 
 export const useChatFallback = (options: UseChatFallbackOptions = {}) => {
@@ -20,13 +22,14 @@ export const useChatFallback = (options: UseChatFallbackOptions = {}) => {
   const {
     sessionId,
     enabled = true,
-    refetchInterval = 5000
+    refetchInterval = 5000,
+    isSupportView = false
   } = options;
 
   // Query para obtener mensajes con polling
   const { data: fetchedMessages = [], isLoading: messagesLoading } = useQuery({
-    queryKey: ['chatMessages', sessionId],
-    queryFn: () => getChatMessages(sessionId!),
+    queryKey: ['chatMessages', sessionId, isSupportView ? 'support' : 'user'],
+    queryFn: () => isSupportView ? getChatMessagesForSupport(sessionId!) : getChatMessages(sessionId!),
     retry: 2,
     staleTime: 5000, // 5 segundos - aumentar para reducir refetches
     refetchInterval: enabled ? refetchInterval : false,
@@ -41,7 +44,7 @@ export const useChatFallback = (options: UseChatFallbackOptions = {}) => {
     mutationFn: sendChatMessage,
     onSuccess: () => {
       // Invalidar la query para refrescar los mensajes
-      queryClient.invalidateQueries({ queryKey: ['chatMessages', sessionId] });
+      queryClient.invalidateQueries({ queryKey: ['chatMessages', sessionId, isSupportView ? 'support' : 'user'] });
     }
   });
 
@@ -49,7 +52,7 @@ export const useChatFallback = (options: UseChatFallbackOptions = {}) => {
   const markReadMutation = useMutation({
     mutationFn: (sessionId: string) => markMessagesAsRead(sessionId),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['chatMessages', sessionId] });
+      queryClient.invalidateQueries({ queryKey: ['chatMessages', sessionId, isSupportView ? 'support' : 'user'] });
     }
   });
 

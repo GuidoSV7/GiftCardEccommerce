@@ -5,11 +5,12 @@ import { useState } from 'react';
 import type { ProductFormData } from '../../../types';
 import { getCategories } from '../../../services/categoryService';
 import HtmlEditorModal from './HtmlEditorModal';
-import ImageUpload from './ImageUpload';
+import MultiImageUpload from './MultiImageUpload';
 import CategoryModal from './CategoryModal';
 import HtmlContentButtons from './HtmlContentButtons';
 import { TitleField, StateField, CategoryField } from './FormField';
 import ProductPricing from './ProductPricing';
+import CostFields from './CostFields';
 
 type ProductFormProps = {
     register: UseFormRegister<ProductFormData>
@@ -35,9 +36,19 @@ export default function ProductForm({ register, control, setValue, errors, produ
     });
 
 
-    const imageUrl = useWatch({
+    const squareImageUrl = useWatch({
         control,
-        name: "imageUrl"
+        name: "squareImageUrl"
+    });
+
+    const rectangularImageUrl = useWatch({
+        control,
+        name: "rectangularImageUrl"
+    });
+
+    const smallSquareImageUrl = useWatch({
+        control,
+        name: "smallSquareImageUrl"
     });
 
     const description = useWatch({
@@ -108,9 +119,15 @@ export default function ProductForm({ register, control, setValue, errors, produ
             />
                     <input
                         type="hidden"
-                        {...register("imageUrl", {
-                            required: "La imagen es obligatoria"
-                        })}
+                        {...register("squareImageUrl")}
+                    />
+                    <input
+                        type="hidden"
+                        {...register("rectangularImageUrl")}
+                    />
+                    <input
+                        type="hidden"
+                        {...register("smallSquareImageUrl")}
                     />
                     
             {/* Botones para editar contenido HTML */}
@@ -135,11 +152,23 @@ export default function ProductForm({ register, control, setValue, errors, produ
             {/* Campos del formulario */}
             <TitleField register={register} errors={errors} />
             
-            <ImageUpload
-                imageUrl={imageUrl}
-                onImageChange={(url) => setValue("imageUrl", url)}
-                error={errors.imageUrl?.message}
+            <MultiImageUpload
+                squareImageUrl={squareImageUrl}
+                rectangularImageUrl={rectangularImageUrl}
+                smallSquareImageUrl={smallSquareImageUrl}
+                onImageChange={(type, url) => {
+                    if (type === 'square') setValue("squareImageUrl", url);
+                    if (type === 'rectangular') setValue("rectangularImageUrl", url);
+                    if (type === 'smallSquare') setValue("smallSquareImageUrl", url);
+                }}
+                errors={{
+                    squareImageUrl: errors.squareImageUrl?.message,
+                    rectangularImageUrl: errors.rectangularImageUrl?.message,
+                    smallSquareImageUrl: errors.smallSquareImageUrl?.message,
+                }}
             />
+
+            <CostFields register={register} errors={errors} />
 
             <StateField register={register} />
 

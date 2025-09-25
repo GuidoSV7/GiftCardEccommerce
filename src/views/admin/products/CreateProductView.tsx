@@ -15,9 +15,12 @@ export default function CreateProductView() {
     const initialValues: ProductFormData = {
         title: "",
         description: "",
-        imageUrl: "",
+        squareImageUrl: "",
+        rectangularImageUrl: "",
+        smallSquareImageUrl: "",
         redeem: "",
         termsConditions: "",
+        purchaseCost: 0,
         state: true,  
         categoryId: "0"
     }
@@ -120,8 +123,13 @@ export default function CreateProductView() {
                         const missingFields = [];
                         
                         if (!formValues.title) missingFields.push('title');
-                        if (!formValues.imageUrl) missingFields.push('imageUrl');
+                        if (!formValues.purchaseCost || formValues.purchaseCost <= 0) missingFields.push('purchaseCost');
                         if (!formValues.categoryId || formValues.categoryId === "0") missingFields.push('categoryId');
+                        
+                        // Las imágenes son opcionales, pero al menos una debe estar presente
+                        if (!formValues.squareImageUrl && !formValues.rectangularImageUrl && !formValues.smallSquareImageUrl) {
+                            missingFields.push('al menos una imagen');
+                        }
                         
                         // Los campos description, redeem y termsConditions son opcionales
                         

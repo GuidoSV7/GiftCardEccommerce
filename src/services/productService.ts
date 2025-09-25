@@ -11,14 +11,17 @@ export interface Product {
     id: string;
     title: string;
     description: string;
-    imageUrl: string;
     redeem: string;
     termsConditions: string;
     state: boolean;
+    purchaseCost: number | string;
     category: {
         id: string;
         name: string;
     };
+    squareImageUrl?: string;
+    rectangularImageUrl?: string;
+    smallSquareImageUrl?: string;
 }
 
 export async function createProduct(formData: ProductFormData) {
@@ -41,19 +44,27 @@ export async function createProduct(formData: ProductFormData) {
 
 export async function getProducts() {
     try {
+        console.log('🔄 Obteniendo productos...');
         const { data } = await api.get('/products');
+        console.log('📦 Datos recibidos del backend:', data);
+        
         const response = dashboardProductSchema.safeParse(data);
+        console.log('✅ Validación del esquema:', response.success);
+        
         if(response.success) {
+            console.log('✅ Productos validados correctamente:', response.data.length);
             return response.data;
         }
+        
+        console.error('❌ Error en validación del esquema:', response.error);
+        console.log('📦 Datos que fallaron la validación:', data);
         return []; // Return empty array if parsing fails
         
     } catch (error) {
+        console.error('❌ Error al obtener productos:', error);
         if (isAxiosError(error)) {
-            
             throw error.response?.data || error;
         }
-       
         throw error;
     }
 }
@@ -169,7 +180,7 @@ export const getProductsWithOffers = async (): Promise<ProductWithOffer[]> => {
                         productsWithOffers.push({
                             id: product.id,
                             title: product.title,
-                            imageUrl: product.imageUrl,
+                            imageUrl: product.squareImageUrl || product.rectangularImageUrl || product.smallSquareImageUrl || '',
                             offerPrice: {
                                 id: activeOffer.id,
                                 name: activeOffer.name,

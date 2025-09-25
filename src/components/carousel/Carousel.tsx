@@ -99,7 +99,7 @@ export const Carousel: React.FC = () => {
                 if (product && product.state === true) { // state = activo/inactivo del producto
                     items.push({
                         id: `product-${product.id}`,
-                        image: product.imageUrl,
+                        image: product.rectangularImageUrl || product.squareImageUrl || product.smallSquareImageUrl || 'https://via.placeholder.com/800x600?text=No+Image',
                         title: product.title,
                         subtitle: product.category?.name || 'Producto destacado',
                         brand: 'PRODUCTO',

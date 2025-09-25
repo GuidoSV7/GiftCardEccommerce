@@ -24,7 +24,7 @@ export const ChatSupport = ({ isOpen, onClose }: ChatSupportProps) => {
     // Configuración del formulario
     const { register, handleSubmit, reset, formState: { errors } } = useForm<ChatMessageFormData>();
 
-    // Hook estable (WebSocket + Fallback)
+    // Hook estable (WebSocket + Fallback) - solo cuando el chat está abierto
     const {
         isConnected,
         messages,
@@ -36,7 +36,7 @@ export const ChatSupport = ({ isOpen, onClose }: ChatSupportProps) => {
         mode,
         retryWebSocket
     } = useChatStable({
-        sessionId: currentSession?.id,
+        sessionId: isOpen ? currentSession?.id : null,
         onNewMessage: () => {
             // Auto-scroll cuando llega un nuevo mensaje
             setTimeout(() => {
@@ -54,7 +54,7 @@ export const ChatSupport = ({ isOpen, onClose }: ChatSupportProps) => {
     });
 
     // Query para obtener sesión activa (solo al abrir)
-    const { data: activeSession } = useQuery({
+    const { data: activeSession, isLoading: isLoadingActiveSession } = useQuery({
         queryKey: ['chatSession'],
         queryFn: getActiveChatSession,
         retry: 2,
@@ -103,8 +103,21 @@ export const ChatSupport = ({ isOpen, onClose }: ChatSupportProps) => {
     useEffect(() => {
         if (activeSession) {
             setCurrentSession(activeSession);
+            console.log('✅ Sesión activa encontrada:', activeSession.id);
+        } else if (!isLoadingActiveSession && isOpen) {
+            // Solo limpiar la sesión si no está cargando y el chat está abierto
+            setCurrentSession(null);
+            console.log('ℹ️ No hay sesión activa');
         }
-    }, [activeSession]);
+    }, [activeSession, isLoadingActiveSession, isOpen]);
+
+    // Limpiar sesión cuando el chat se cierra
+    useEffect(() => {
+        if (!isOpen) {
+            setCurrentSession(null);
+            console.log('🧹 Chat cerrado, limpiando sesión');
+        }
+    }, [isOpen]);
 
     // Scroll automático a los mensajes nuevos
     useEffect(() => {
@@ -161,7 +174,7 @@ export const ChatSupport = ({ isOpen, onClose }: ChatSupportProps) => {
             {/* Componente de diagnósticos */}
             <ChatDiagnostics sessionId={currentSession?.id} />
             
-            <div className="bg-white rounded-lg shadow-2xl w-80 h-96 flex flex-col border border-gray-200">
+            <div className="bg-white rounded-lg shadow-2xl w-80 h-[400px] flex flex-col border border-gray-200 overflow-hidden">
                 {/* Header */}
                 <div className="bg-blue-600 text-white p-4 rounded-t-lg flex justify-between items-center">
                     <div className="flex items-center">
@@ -169,21 +182,6 @@ export const ChatSupport = ({ isOpen, onClose }: ChatSupportProps) => {
                             isConnected ? 'bg-green-400' : 'bg-red-400'
                         }`}></div>
                         <h3 className="font-semibold">Soporte en Vivo</h3>
-                        <span className={`text-xs ml-2 px-2 py-1 rounded ${
-                            mode === 'websocket' 
-                                ? 'bg-green-600 text-white' 
-                                : 'bg-yellow-600 text-white'
-                        }`}>
-                            {mode === 'websocket' ? 'Tiempo Real' : 'Modo Fallback'}
-                        </span>
-                        {mode === 'fallback' && (
-                            <button
-                                onClick={retryWebSocket}
-                                className="text-xs text-blue-200 hover:text-white ml-2 underline"
-                            >
-                                Reintentar WebSocket
-                            </button>
-                        )}
                     </div>
                     <button
                         onClick={handleCloseChat}
@@ -196,8 +194,14 @@ export const ChatSupport = ({ isOpen, onClose }: ChatSupportProps) => {
                 </div>
 
                 {/* Content */}
-                <div className="flex-1 flex flex-col">
-                    {!currentSession ? (
+                <div className="flex-1 flex flex-col min-h-0">
+                    {isLoadingActiveSession ? (
+                        /* Estado de carga - Verificando sesión activa */
+                        <div className="flex-1 flex flex-col items-center justify-center p-6 text-center">
+                            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mb-4"></div>
+                            <p className="text-gray-600 text-sm">Verificando sesión activa...</p>
+                        </div>
+                    ) : !currentSession ? (
                         /* Estado inicial - Iniciar chat */
                         <div className="flex-1 flex flex-col items-center justify-center p-6 text-center">
                             <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-4">
@@ -223,7 +227,7 @@ export const ChatSupport = ({ isOpen, onClose }: ChatSupportProps) => {
                         /* Chat activo */
                         <>
                             {/* Messages Area */}
-                            <div className="flex-1 overflow-y-auto p-4 space-y-3">
+                            <div className="flex-1 overflow-y-auto p-4 space-y-3 min-h-0 max-h-72 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
                                 {messages.length === 0 ? (
                                     <div className="text-center text-gray-500 text-sm">
                                         <p>¡Hola! ¿En qué puedo ayudarte hoy?</p>

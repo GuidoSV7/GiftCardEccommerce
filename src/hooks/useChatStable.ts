@@ -11,6 +11,7 @@ interface UseChatStableOptions {
   onNewPendingSession?: (data: { sessionId: string; userId: string; timestamp: string }) => void;
   onStatsUpdate?: (stats: any) => void;
   fallbackEnabled?: boolean;
+  isSupportView?: boolean; // Para usar el endpoint correcto en fallback
 }
 
 export const useChatStable = (options: UseChatStableOptions = {}) => {
@@ -59,28 +60,39 @@ export const useChatStable = (options: UseChatStableOptions = {}) => {
     }
   });
 
-  // Hook de WebSocket con callbacks estables (solo cuando useWebSocket es true)
+  // Hook de WebSocket con callbacks estables (solo cuando useWebSocket es true y hay sessionId)
   const socketResult = useChatSocket(
-    useWebSocket ? {
+    useWebSocket && options.sessionId ? {
       sessionId: options.sessionId,
       ...stableCallbacks.current
     } : {}
   );
 
-  // Hook de fallback (solo cuando useWebSocket es false)
+  // Hook de fallback (solo cuando useWebSocket es false y hay sessionId)
   const fallbackResult = useChatFallback(
-    !useWebSocket ? {
+    !useWebSocket && options.sessionId ? {
       sessionId: options.sessionId,
       enabled: fallbackEnabledRef.current,
-      refetchInterval: 5000
+      refetchInterval: 5000,
+      isSupportView: options.isSupportView
     } : { enabled: false }
   );
 
-  // Detectar fallos de WebSocket
+  // Detectar fallos de WebSocket (solo cuando hay sessionId)
   useEffect(() => {
+    if (!options.sessionId) return;
+    
+    console.log('🔍 Verificando estado WebSocket:', {
+      useWebSocket,
+      isConnected: socketResult.isConnected,
+      connectionAttempts,
+      maxConnectionAttempts
+    });
+    
     if (useWebSocket && !socketResult.isConnected) {
       setConnectionAttempts(prev => {
         const newAttempts = prev + 1;
+        console.log(`🔄 Intento de conexión WebSocket: ${newAttempts}/${maxConnectionAttempts}`);
         if (newAttempts >= maxConnectionAttempts && fallbackEnabledRef.current) {
           console.warn('⚠️ WebSocket falló, cambiando a modo fallback (polling)');
           setUseWebSocket(false);
@@ -88,9 +100,10 @@ export const useChatStable = (options: UseChatStableOptions = {}) => {
         return newAttempts;
       });
     } else if (useWebSocket && socketResult.isConnected) {
+      console.log('✅ WebSocket conectado exitosamente, reseteando intentos');
       setConnectionAttempts(0);
     }
-  }, [useWebSocket, socketResult.isConnected, maxConnectionAttempts]);
+  }, [useWebSocket, socketResult.isConnected, maxConnectionAttempts, options.sessionId]);
 
   // Cambiar automáticamente a fallback si hay errores de conexión persistentes
   useEffect(() => {

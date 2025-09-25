@@ -43,9 +43,12 @@ export default function EditProductView() {
     if (product) {
       setValue('title', product.title);
       setValue('description', product.description);
-      setValue('imageUrl', product.imageUrl);
+      setValue('squareImageUrl', product.squareImageUrl || '');
+      setValue('rectangularImageUrl', product.rectangularImageUrl || '');
+      setValue('smallSquareImageUrl', product.smallSquareImageUrl || '');
       setValue('redeem', product.redeem);
       setValue('termsConditions', product.termsConditions);
+      setValue('purchaseCost', product.purchaseCost);
       setValue('state', product.state);
       
       // Asignar directamente el ID de la categoría del producto

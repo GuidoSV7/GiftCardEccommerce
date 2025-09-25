@@ -59,10 +59,17 @@ export const HomeView = () => {
 
     const { data: products = [], isLoading: productsLoading, error: productsError } = useQuery({
         queryKey: ['products'],
-        queryFn: getProducts,
-        retry: 2,
-        staleTime: 30 * 1000, // 30 segundos en lugar de 5 minutos
+        queryFn: getProducts
     });
+
+    // Debug: Log productos cuando cambien
+    useEffect(() => {
+        console.log('🏠 Productos en HomeView:', products);
+        console.log('🏠 Loading productos:', productsLoading);
+        if (productsError) {
+            console.error('❌ Error productos:', productsError);
+        }
+    }, [products, productsLoading, productsError]);
 
     const { data: categories = [], isLoading: categoriesLoading, error: categoriesError } = useQuery({
         queryKey: ['categories'],
