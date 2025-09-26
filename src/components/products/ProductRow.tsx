@@ -16,11 +16,16 @@ export const ProductRow = ({
     onEdit
 }: ProductRowProps) => {
     const handleToggleSelection = () => {
+        console.log('🖱️ ProductRow - handleToggleSelection llamado:', { productId: product.id, isSelected, productState: product.state });
+        
         // Validar que el producto esté activo antes de permitir selección
         if (!product.state && !isSelected) {
+            console.log('⚠️ ProductRow - Producto inactivo, no se puede agregar');
             alert('No se puede agregar un producto inactivo al carrusel');
             return;
         }
+        
+        console.log('✅ ProductRow - Llamando onToggleSelection con:', product.id);
         onToggleSelection(product.id);
     };
 

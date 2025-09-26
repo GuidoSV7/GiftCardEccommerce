@@ -37,7 +37,7 @@ export default function ProductPricingView() {
           <h2 className="text-2xl font-bold text-gray-800 mb-2">Producto no encontrado</h2>
           <p className="text-gray-600 mb-4">El producto que buscas no existe o ha sido eliminado</p>
           <button
-            onClick={() => navigate('/products')}
+            onClick={() => navigate('/dashboard/products')}
             className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors"
           >
             Volver a Productos
@@ -153,13 +153,13 @@ export default function ProductPricingView() {
         </button>
         <div className="flex gap-3">
           <button
-            onClick={() => navigate(`/products/edit/${product.id}`)}
+            onClick={() => navigate(`/dashboard/products/edit/${product.id}`)}
             className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors"
           >
             Editar Producto
           </button>
           <button
-            onClick={() => navigate('/products')}
+            onClick={() => navigate('/dashboard/products')}
             className="px-6 py-3 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg transition-colors"
           >
             Finalizar

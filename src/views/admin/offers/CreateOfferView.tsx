@@ -40,7 +40,7 @@ export default function CreateOfferView() {
       toast.success('Oferta creada exitosamente');
       queryClient.invalidateQueries({ queryKey: ['offers'] });
       reset();
-      navigate('/offers');
+      navigate('/dashboard/offers');
     },
     onError: (error: Error) => {
       toast.error(error.message || 'Error al crear la oferta');
@@ -161,7 +161,7 @@ export default function CreateOfferView() {
           <div className="flex gap-4 pt-4">
             <button
               type="button"
-              onClick={() => navigate('/offers')}
+              onClick={() => navigate('/dashboard/offers')}
               className="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium py-3 px-6 rounded-lg transition-colors"
             >
               Cancelar

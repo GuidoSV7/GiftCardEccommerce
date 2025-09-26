@@ -79,7 +79,7 @@ export const SimilarProducts = ({ product }: SimilarProductsProps) => {
                         <div className="bg-gray-800/50 border border-gray-700 rounded-lg p-3 hover:border-blue-500 transition-colors">
                             <div className="relative overflow-hidden rounded-lg mb-2 w-full aspect-[4/3]">
                                 <img 
-                                    src={similarProduct.imageUrl}
+                                    src={similarProduct.squareImageUrl}
                                     alt={similarProduct.title}
                                     className='w-full h-full object-cover transition-transform duration-300 group-hover:scale-110'
                                 />

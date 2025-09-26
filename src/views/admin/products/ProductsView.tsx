@@ -30,6 +30,14 @@ export default function ProductsView() {
     canSelectMore, 
     getTotalSelected
   } = useCarouselStore();
+  
+  // Debug: Log de funciones del store
+  console.log('📋 ProductsView - Funciones del store:', { 
+    toggleProduct: typeof toggleProduct, 
+    isProductSelected: typeof isProductSelected,
+    canSelectMore: typeof canSelectMore,
+    getTotalSelected: typeof getTotalSelected
+  });
 
   const handleEditProduct = (productId: string) => {
     navigate(`/products/edit/${productId}`);

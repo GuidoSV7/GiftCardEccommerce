@@ -44,24 +44,16 @@ export async function createProduct(formData: ProductFormData) {
 
 export async function getProducts() {
     try {
-        console.log('🔄 Obteniendo productos...');
         const { data } = await api.get('/products');
-        console.log('📦 Datos recibidos del backend:', data);
-        
         const response = dashboardProductSchema.safeParse(data);
-        console.log('✅ Validación del esquema:', response.success);
         
         if(response.success) {
-            console.log('✅ Productos validados correctamente:', response.data.length);
             return response.data;
         }
         
-        console.error('❌ Error en validación del esquema:', response.error);
-        console.log('📦 Datos que fallaron la validación:', data);
         return []; // Return empty array if parsing fails
         
     } catch (error) {
-        console.error('❌ Error al obtener productos:', error);
         if (isAxiosError(error)) {
             throw error.response?.data || error;
         }
@@ -146,12 +138,18 @@ export interface ProductWithOffer {
     id: string;
     title: string;
     imageUrl: string;
+    category?: {
+        id: string;
+        name: string;
+    };
+    state: boolean;
     offerPrice: {
         id: string;
         name: string;
         value: number;
         discountPercentage: number;
         finalPrice: number;
+        state: boolean;
     };
 }
 
@@ -181,26 +179,27 @@ export const getProductsWithOffers = async (): Promise<ProductWithOffer[]> => {
                             id: product.id,
                             title: product.title,
                             imageUrl: product.squareImageUrl || product.rectangularImageUrl || product.smallSquareImageUrl || '',
+                            category: product.category,
+                            state: product.state,
                             offerPrice: {
                                 id: activeOffer.id,
                                 name: activeOffer.name,
                                 value: activeOffer.value,
                                 discountPercentage: activeOffer.discountPercentage,
-                                finalPrice: finalPrice
+                                finalPrice: finalPrice,
+                                state: activeOffer.state
                             }
                         });
                     }
                 }
             } catch (error) {
                 // Si hay error al obtener ofertas de un producto específico, continuar con el siguiente
-                console.warn(`Error fetching offers for product ${product.id}:`, error);
                 continue;
             }
         }
         
         return productsWithOffers;
     } catch (error) {
-        console.error('Error fetching products with offers:', error);
         throw error;
     }
 };

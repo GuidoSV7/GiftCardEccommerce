@@ -23,7 +23,7 @@ export default function OffersView() {
   } = useCarouselStore();
 
   const handleEditOffer = (offerId: number) => {
-    navigate(`/offers/edit/${offerId}`);
+    navigate(`/dashboard/offers/edit/${offerId}`);
   };
 
   // Filtrar ofertas

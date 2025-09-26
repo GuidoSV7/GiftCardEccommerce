@@ -5,7 +5,9 @@ import api from "../lib/axios";
 export interface ProductWithOffer {
   id: string;
   title: string;
-  imageUrl: string;
+  squareImageUrl: string;
+  rectangularImageUrl: string;
+  smallSquareImageUrl: string;
   category?: {
     id: string;
     name: string;
@@ -24,18 +26,9 @@ export interface ProductWithOffer {
 // Función para obtener productos con ofertas activas
 export const getProductsWithOffers = async (): Promise<ProductWithOffer[]> => {
   try {
-    console.log('Fetching products with offers...');
-    console.log('API Base URL:', import.meta.env.VITE_API_URL);
     const response = await api.get('/product-prices/offers');
-    console.log('Products with offers response:', response.data);
-    console.log('Response status:', response.status);
-    console.log('Response headers:', response.headers);
     return response.data;
   } catch (error: any) {
-    console.error('Error fetching products with offers:', error);
-    console.error('Error response:', error.response);
-    console.error('Error status:', error.response?.status);
-    console.error('Error data:', error.response?.data);
     throw error;
   }
 };
@@ -47,7 +40,6 @@ export const getProductOffers = async (productId: string): Promise<ProductWithOf
     const response = await api.get(`/product-prices/product/${productId}/offers`);
     return response.data;
   } catch (error) {
-    console.error('Error fetching product offers:', error);
     throw error;
   }
 };

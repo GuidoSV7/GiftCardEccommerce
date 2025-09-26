@@ -245,7 +245,7 @@ const useImageColors = (imageUrl: string) => {
 
 // Componente para cada tarjeta de producto con color sólido dinámico
 const ProductCard: React.FC<{ product: Product; onClick: () => void }> = ({ product, onClick }) => {
-    const colors = useImageColors(product.imageUrl);
+    const colors = useImageColors(product.squareImageUrl || '');
     
     // Debug: mostrar los colores que se están usando
     console.log('🎯 ProductCard rendering with colors:', colors, 'for product:', product.title);
@@ -266,11 +266,15 @@ const ProductCard: React.FC<{ product: Product; onClick: () => void }> = ({ prod
         >
             <div className="flex h-full">
                 {/* Product Image - Lado izquierdo */}
-                <div className="w-28 h-full flex-shrink-0 relative">
+                <div className="w-32 h-32 flex-shrink-0 relative">
                     <img
-                        src={product.imageUrl}
+                        src={product.squareImageUrl}
                         alt={product.title}
                         className="w-full h-full object-cover rounded-l-xl"
+                        onError={(e) => {
+                            const target = e.target as HTMLImageElement;
+                            target.src = 'https://via.placeholder.com/128x128/6366f1/ffffff?text=No+Image';
+                        }}
                     />
                 </div>
                 

@@ -1,11 +1,21 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import { useAuthStore } from '../stores/authStore';
 
 export default function Sidebar() {
   const [isProductsOpen, setIsProductsOpen] = useState(false);
   const [isOffersOpen, setIsOffersOpen] = useState(false);
   const [isCategoriesOpen, setIsCategoriesOpen] = useState(false);
   const [isMembersOpen, setIsMembersOpen] = useState(false);
+  const [isSmmPanelOpen, setIsSmmPanelOpen] = useState(false);
+  
+  const navigate = useNavigate();
+  const { logout } = useAuthStore();
+
+  const handleLogout = () => {
+    logout();
+    navigate('/');
+  };
 
   return (
     <nav className="bg-gray-800 h-screen w-64 fixed left-0 top-0 pt-20 text-white">
@@ -17,23 +27,17 @@ export default function Sidebar() {
               to="/dashboard"
               className="flex items-center hover:bg-gray-700 rounded-lg p-3 transition-colors duration-200"
             >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-              </svg>
-              <span className="ml-3">Dashboard</span>
+              <span>Dashboard</span>
             </Link>
           </li>
 
           {/* Métricas */}
           <li>
             <Link
-              to="/metrics"
+              to="/dashboard/metrics"
               className="flex items-center hover:bg-gray-700 rounded-lg p-3 transition-colors duration-200"
             >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-              </svg>
-              <span className="ml-3">Métricas</span>
+              <span>Métricas</span>
             </Link>
           </li>
 
@@ -44,10 +48,7 @@ export default function Sidebar() {
               className="flex items-center justify-between w-full hover:bg-gray-700 rounded-lg p-3 transition-colors duration-200"
             >
               <div className="flex items-center">
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
-                </svg>
-                <span className="ml-3">Productos</span>
+                <span>Productos</span>
               </div>
               <svg
                 className={`w-4 h-4 transition-transform duration-200 ${isProductsOpen ? 'transform rotate-180' : ''}`}
@@ -63,7 +64,7 @@ export default function Sidebar() {
             <ul className={`mt-2 space-y-1 ${isProductsOpen ? 'block' : 'hidden'}`}>
               <li>
                 <Link
-                  to="/products"
+                  to="/dashboard/products"
                   className="flex items-center pl-11 pr-3 py-2 text-gray-300 hover:text-white hover:bg-gray-700 rounded-lg transition-colors duration-200"
                 >
                   Ver Productos
@@ -71,7 +72,7 @@ export default function Sidebar() {
               </li>
               <li>
                 <Link
-                  to="/products/create"
+                  to="/dashboard/products/create"
                   className="flex items-center pl-11 pr-3 py-2 text-gray-300 hover:text-white hover:bg-gray-700 rounded-lg transition-colors duration-200"
                 >
                   Crear Productos
@@ -87,10 +88,7 @@ export default function Sidebar() {
               className="flex items-center justify-between w-full hover:bg-gray-700 rounded-lg p-3 transition-colors duration-200"
             >
               <div className="flex items-center">
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
-                </svg>
-                <span className="ml-3">Ofertas</span>
+                <span>Ofertas</span>
               </div>
               <svg
                 className={`w-4 h-4 transition-transform duration-200 ${isOffersOpen ? 'transform rotate-180' : ''}`}
@@ -107,7 +105,7 @@ export default function Sidebar() {
             <ul className={`mt-2 space-y-1 ${isOffersOpen ? 'block' : 'hidden'}`}>
               <li>
                 <Link
-                  to="/offers"
+                  to="/dashboard/offers"
                   className="flex items-center pl-11 pr-3 py-2 text-gray-300 hover:text-white hover:bg-gray-700 rounded-lg transition-colors duration-200"
                 >
                   Ver Ofertas
@@ -123,10 +121,7 @@ export default function Sidebar() {
               className="flex items-center justify-between w-full hover:bg-gray-700 rounded-lg p-3 transition-colors duration-200"
             >
               <div className="flex items-center">
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                </svg>
-                <span className="ml-3">Categorías</span>
+                <span>Categorías</span>
               </div>
               <svg
                 className={`w-4 h-4 transition-transform duration-200 ${isCategoriesOpen ? 'transform rotate-180' : ''}`}
@@ -142,7 +137,7 @@ export default function Sidebar() {
             <ul className={`mt-2 space-y-1 ${isCategoriesOpen ? 'block' : 'hidden'}`}>
               <li>
                 <Link
-                  to="/categories"
+                  to="/dashboard/categories"
                   className="flex items-center pl-11 pr-3 py-2 text-gray-300 hover:text-white hover:bg-gray-700 rounded-lg transition-colors duration-200"
                 >
                   Ver Categorías
@@ -150,7 +145,7 @@ export default function Sidebar() {
               </li>
               <li>
                 <Link
-                  to="/categories/create"
+                  to="/dashboard/categories/create"
                   className="flex items-center pl-11 pr-3 py-2 text-gray-300 hover:text-white hover:bg-gray-700 rounded-lg transition-colors duration-200"
                 >
                   Crear Categoría
@@ -166,10 +161,7 @@ export default function Sidebar() {
               className="flex items-center justify-between w-full hover:bg-gray-700 rounded-lg p-3 transition-colors duration-200"
             >
               <div className="flex items-center">
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z" />
-                </svg>
-                <span className="ml-3">Miembros</span>
+                <span>Miembros</span>
               </div>
               <svg
                 className={`w-4 h-4 transition-transform duration-200 ${isMembersOpen ? 'transform rotate-180' : ''}`}
@@ -185,7 +177,7 @@ export default function Sidebar() {
             <ul className={`mt-2 space-y-1 ${isMembersOpen ? 'block' : 'hidden'}`}>
               <li>
                 <Link
-                  to="/members"
+                  to="/dashboard/members"
                   className="flex items-center pl-11 pr-3 py-2 text-gray-300 hover:text-white hover:bg-gray-700 rounded-lg transition-colors duration-200"
                 >
                   Ver Miembros
@@ -193,7 +185,7 @@ export default function Sidebar() {
               </li>
               <li>
                 <Link
-                  to="/members/create"
+                  to="/dashboard/members/create"
                   className="flex items-center pl-11 pr-3 py-2 text-gray-300 hover:text-white hover:bg-gray-700 rounded-lg transition-colors duration-200"
                 >
                   Crear Miembro
@@ -201,7 +193,75 @@ export default function Sidebar() {
               </li>
             </ul>
           </li>
+
+          {/* SMM Panel Menú */}
+          <li>
+            <button
+              onClick={() => setIsSmmPanelOpen(!isSmmPanelOpen)}
+              className="flex items-center justify-between w-full hover:bg-gray-700 rounded-lg p-3 transition-colors duration-200"
+            >
+              <div className="flex items-center">
+                <span>SMM Panel</span>
+              </div>
+              <svg
+                className={`w-4 h-4 transition-transform duration-200 ${isSmmPanelOpen ? 'transform rotate-180' : ''}`}
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+
+            {/* Submenú de SMM Panel */}
+            <ul className={`mt-2 space-y-1 ${isSmmPanelOpen ? 'block' : 'hidden'}`}>
+              <li>
+                <Link
+                  to="/dashboard/smm/services"
+                  className="flex items-center pl-11 pr-3 py-2 text-gray-300 hover:text-white hover:bg-gray-700 rounded-lg transition-colors duration-200"
+                >
+                  Servicios
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/dashboard/smm/orders"
+                  className="flex items-center pl-11 pr-3 py-2 text-gray-300 hover:text-white hover:bg-gray-700 rounded-lg transition-colors duration-200"
+                >
+                  Órdenes
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/dashboard/smm/tickets"
+                  className="flex items-center pl-11 pr-3 py-2 text-gray-300 hover:text-white hover:bg-gray-700 rounded-lg transition-colors duration-200"
+                >
+                  Tickets
+                </Link>
+              </li>
+            </ul>
+          </li>
+
+          {/* Métodos de Pago */}
+          <li>
+            <Link
+              to="/dashboard/payment-methods"
+              className="flex items-center hover:bg-gray-700 rounded-lg p-3 transition-colors duration-200"
+            >
+              <span>Métodos de Pago</span>
+            </Link>
+          </li>
         </ul>
+        
+        {/* Botón de Cerrar Sesión */}
+        <div className="absolute bottom-4 left-4 right-4">
+          <button
+            onClick={handleLogout}
+            className="w-full flex items-center justify-center bg-red-600 hover:bg-red-700 text-white px-4 py-3 rounded-lg font-medium transition-colors duration-200"
+          >
+            Cerrar Sesión
+          </button>
+        </div>
       </div>
     </nav>
   );

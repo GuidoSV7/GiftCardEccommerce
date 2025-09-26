@@ -2,12 +2,10 @@
 
 import { useState, useEffect } from 'react';
 import { useAuthStore } from '../../stores/authStore';
-import { useNavigate } from 'react-router-dom';
 
 export default function DashboardView() {
   const [editModalOpen, setEditModalOpen] = useState(false);
-  const { user, isAuthenticated, logout } = useAuthStore();
-  const navigate = useNavigate();
+  const { user, isAuthenticated } = useAuthStore();
   
   const [userData, setUserData] = useState({
     name: '',
@@ -45,11 +43,6 @@ export default function DashboardView() {
     setEditModalOpen(false);
   };
 
-  const handleLogout = () => {
-    logout();
-    navigate('/');
-  };
-
   // Si no está autenticado, mostrar mensaje
   if (!isAuthenticated || !user) {
     return (
@@ -69,63 +62,46 @@ export default function DashboardView() {
 
   return (
     <div className="w-full space-y-8">
-      {/* Bienvenida y Perfil del Usuario - Centrado */}
-      <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl p-12 text-white">
-        <div className="flex flex-col items-center text-center space-y-6">
-          {/* Avatar del usuario */}
-          <div className="h-24 w-24 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm">
-            <svg className="h-12 w-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-            </svg>
-          </div>
+      {/* Header de Bienvenida Simplificado */}
+      <div className="bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl p-8">
+        <div className="flex flex-col lg:flex-row items-center lg:items-start lg:justify-between space-y-6 lg:space-y-0">
           
           {/* Información del usuario */}
-          <div>
-            <h1 className="text-4xl font-bold mb-3">
-              ¡Bienvenido de vuelta, {userData.name || 'Usuario'}!
-            </h1>
-            <p className="text-blue-100 text-xl mb-4">{userData.email || 'Cargando...'}</p>
-            <div className="flex items-center justify-center space-x-6 text-blue-100">
-              <span className="flex items-center">
-                <svg className="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                Último acceso: {new Date().toLocaleDateString('es-ES', { 
-                  weekday: 'long', 
-                  year: 'numeric', 
-                  month: 'long', 
-                  day: 'numeric',
-                  hour: '2-digit',
-                  minute: '2-digit'
-                })}
-              </span>
-              <span className="flex items-center">
-                <svg className="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="flex flex-col lg:flex-row items-center lg:items-start space-y-4 lg:space-y-0 lg:space-x-6 text-center lg:text-left">
+            {/* Avatar */}
+            <div className="h-20 w-20 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm border border-white/30">
+              <svg className="h-10 w-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+              </svg>
+            </div>
+            
+            {/* Información del usuario */}
+            <div>
+              <h1 className="text-3xl lg:text-4xl font-bold text-white mb-2">
+                ¡Bienvenido, {userData.name || 'Usuario'}!
+              </h1>
+              <p className="text-blue-100 text-lg mb-3">{userData.email || 'Cargando...'}</p>
+              
+              {/* Badge del rol */}
+              <div className="inline-flex items-center bg-white/20 backdrop-blur-sm rounded-full px-4 py-2 border border-white/30">
+                <svg className="h-4 w-4 mr-2 text-white/80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                Rol: {userData.role || 'Cargando...'}
-              </span>
+                <span className="text-white font-medium">{userData.role || 'Cargando...'}</span>
+              </div>
             </div>
           </div>
           
-          {/* Acciones rápidas */}
-          <div className="flex space-x-4">
+          {/* Botón de editar perfil */}
+          <div>
             <button 
               onClick={() => setEditModalOpen(true)}
-              className="bg-white/20 hover:bg-white/30 backdrop-blur-sm px-6 py-3 rounded-lg font-medium transition-colors"
+              className="bg-white/20 hover:bg-white/30 backdrop-blur-sm px-6 py-3 rounded-xl font-medium transition-all duration-200 border border-white/30 hover:border-white/50 flex items-center space-x-2 text-white"
             >
-              Editar Perfil
-            </button>
-            <button 
-              onClick={handleLogout}
-              className="bg-red-500/20 hover:bg-red-500/30 backdrop-blur-sm px-6 py-3 rounded-lg font-medium transition-colors border border-red-400/30"
-            >
-              <div className="flex items-center gap-2">
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-                </svg>
-                Cerrar Sesión
-              </div>
+              <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+              </svg>
+              <span>Editar Perfil</span>
             </button>
           </div>
         </div>
@@ -133,8 +109,8 @@ export default function DashboardView() {
 
       {/* Modal de Edición de Perfil */}
       {editModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
-          <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-6 w-full max-w-sm mx-4 relative shadow-xl">
+        <div className="fixed inset-0 bg-white/20 backdrop-blur-md flex items-center justify-center z-50 p-4">
+          <div className="bg-white/95 backdrop-blur-lg rounded-2xl p-6 w-full max-w-md mx-4 relative shadow-2xl border border-white/30">
             {/* Botón de cerrar */}
             <button
               onClick={() => setEditModalOpen(false)}
@@ -146,76 +122,76 @@ export default function DashboardView() {
             </button>
 
             {/* Header */}
-            <div className="text-center mb-5">
-              <div className="h-12 w-12 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-3">
-                <svg className="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="text-center mb-6">
+              <div className="h-14 w-14 bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl flex items-center justify-center mx-auto mb-4 shadow-lg">
+                <svg className="h-7 w-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                 </svg>
               </div>
-              <h2 className="text-xl font-bold text-gray-900 mb-1">Editar Perfil</h2>
-              <p className="text-sm text-gray-600">Actualiza tu información</p>
+              <h2 className="text-2xl font-bold text-gray-900 mb-2">Editar Perfil</h2>
+              <p className="text-gray-600">Actualiza tu información personal</p>
             </div>
 
             {/* Formulario */}
-            <form onSubmit={handleSaveProfile} className="space-y-3">
+            <form onSubmit={handleSaveProfile} className="space-y-4">
               {/* Nombre */}
               <div>
-                <label className="block text-xs font-medium text-gray-700 mb-1">
-                  Nombre
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Nombre Completo
                 </label>
                 <input
                   type="text"
                   value={userData.name}
                   onChange={(e) => setUserData({...userData, name: e.target.value})}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors text-sm"
-                  placeholder="Ingresa tu nombre"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-white/80 backdrop-blur-sm"
+                  placeholder="Ingresa tu nombre completo"
                   required
                 />
               </div>
 
               {/* Email */}
               <div>
-                <label className="block text-xs font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
                   Correo Electrónico
                 </label>
                 <input
                   type="email"
                   value={userData.email}
                   onChange={(e) => setUserData({...userData, email: e.target.value})}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors text-sm"
-                  placeholder="Ingresa tu email"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-white/80 backdrop-blur-sm"
+                  placeholder="Ingresa tu correo electrónico"
                   required
                 />
               </div>
 
               {/* Rol (Solo lectura) */}
               <div>
-                <label className="block text-xs font-medium text-gray-700 mb-1">
-                  Rol
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Rol del Usuario
                 </label>
                 <input
                   type="text"
                   value={userData.role}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50 text-gray-500 cursor-not-allowed text-sm"
+                  className="w-full px-4 py-3 border border-gray-200 rounded-xl bg-gray-50/80 text-gray-500 cursor-not-allowed backdrop-blur-sm"
                   disabled
                 />
-                <p className="text-xs text-gray-500 mt-0.5">No modificable</p>
+                <p className="text-xs text-gray-500 mt-1">Este campo no se puede modificar</p>
               </div>
 
               {/* Botones */}
-              <div className="flex space-x-2 pt-3">
+              <div className="flex space-x-3 pt-4">
                 <button
                   type="button"
                   onClick={() => setEditModalOpen(false)}
-                  className="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium py-2 rounded-lg transition-colors text-sm"
+                  className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-3 rounded-xl transition-all duration-200 backdrop-blur-sm"
                 >
                   Cancelar
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-medium py-2 rounded-lg transition-colors text-sm"
+                  className="flex-1 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-medium py-3 rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl"
                 >
-                  Guardar
+                  Guardar Cambios
                 </button>
               </div>
             </form>

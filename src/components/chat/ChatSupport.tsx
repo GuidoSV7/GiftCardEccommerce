@@ -8,7 +8,6 @@ import {
     closeChatSession
 } from '../../services/chatService';
 import { useChatStable } from '../../hooks/useChatStable';
-import { ChatDiagnostics } from './ChatDiagnostics';
 import type { ChatMessageFormData, ChatSession } from '../../types';
 
 interface ChatSupportProps {
@@ -171,9 +170,6 @@ export const ChatSupport = ({ isOpen, onClose }: ChatSupportProps) => {
 
     return (
         <div className="fixed bottom-4 right-4 z-50">
-            {/* Componente de diagnósticos */}
-            <ChatDiagnostics sessionId={currentSession?.id} />
-            
             <div className="bg-white rounded-lg shadow-2xl w-80 h-[400px] flex flex-col border border-gray-200 overflow-hidden">
                 {/* Header */}
                 <div className="bg-blue-600 text-white p-4 rounded-t-lg flex justify-between items-center">

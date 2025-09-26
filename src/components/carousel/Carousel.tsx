@@ -5,33 +5,69 @@ import { useQuery } from '@tanstack/react-query';
 import { getProductsAll } from '../../services/productService';
 import { getOffers } from '../../services/offerService';
 
-
 export const Carousel: React.FC = () => {
     const [currentSlide, setCurrentSlide] = useState(0);
     const [touchStart, setTouchStart] = useState<number>(0);
     const [touchEnd, setTouchEnd] = useState<number>(0);
     const navigate = useNavigate();
     
-    // Obtener configuración del carrusel desde el store
-    const { selectedProducts, selectedOffers } = useCarouselStore();
+    const store = useCarouselStore();
+    const { selectedProducts, selectedOffers, _hasHydrated } = store;
     
-    // Obtener datos de productos y ofertas
-    const { data: allProducts } = useQuery({
+    
+    // Sincronización mejorada del store
+    useEffect(() => {
+        // Esperar a que el store se hidrate completamente
+        const checkHydration = () => {
+            if (!_hasHydrated) {
+                // Forzar hidratación desde localStorage
+                const stored = localStorage.getItem('carousel-config');
+                if (stored) {
+                    try {
+                        const parsed = JSON.parse(stored);
+                        if (parsed.state) {
+                            store.setSelectedProducts(parsed.state.selectedProducts || []);
+                            store.setSelectedOffers(parsed.state.selectedOffers || []);
+                            store.setHasHydrated(true);
+                        }
+                    } catch (error) {
+                        if (import.meta.env.DEV) {
+                            console.error('Error hidratando store:', error);
+                        }
+                        store.setHasHydrated(true); // Marcar como hidratado aunque falle
+                    }
+                } else {
+                    // No hay datos guardados, marcar como hidratado
+                    store.setHasHydrated(true);
+                }
+            }
+        };
+
+        // Verificar hidratación inmediatamente y después de un pequeño delay
+        checkHydration();
+        const timeout = setTimeout(checkHydration, 100);
+        
+        return () => clearTimeout(timeout);
+    }, [_hasHydrated, store]);
+    
+    // Obtener todos los productos y ofertas disponibles
+    const { data: allProducts, isLoading: productsLoading } = useQuery({
         queryKey: ['products'],
         queryFn: getProductsAll,
-        enabled: selectedProducts.length > 0
+        enabled: _hasHydrated
     });
     
-    const { data: allOffers } = useQuery({
+    const { data: allOffers, isLoading: offersLoading } = useQuery({
         queryKey: ['offers'],
         queryFn: getOffers,
-        enabled: selectedOffers.length > 0
+        enabled: _hasHydrated
     });
+
 
     // Imágenes por defecto
     const defaultImages = [
         {
-            id: 1,
+            id: 'default-1',
             image: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?w=800&h=600&fit=crop',
             title: 'Gaming',
             subtitle: 'Descubre los mejores juegos',
@@ -39,7 +75,7 @@ export const Carousel: React.FC = () => {
             type: 'default'
         },
         {
-            id: 2,
+            id: 'default-2',
             image: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?w=800&h=600&fit=crop',
             title: 'Entertainment',
             subtitle: 'Entretenimiento sin límites',
@@ -47,7 +83,7 @@ export const Carousel: React.FC = () => {
             type: 'default'
         },
         {
-            id: 3,
+            id: 'default-3',
             image: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&h=600&fit=crop',
             title: 'Gift Cards',
             subtitle: 'Regalos perfectos para cualquier ocasión',
@@ -60,24 +96,15 @@ export const Carousel: React.FC = () => {
     const carouselItems = useMemo(() => {
         const items: any[] = [];
         
-        // Debug: Log de selecciones
-        console.log('Carousel Debug:', {
-            selectedProducts,
-            selectedOffers,
-            allProductsCount: allProducts?.length || 0,
-            allOffersCount: allOffers?.length || 0,
-            firstProduct: allProducts?.[0] ? { id: allProducts[0].id, type: typeof allProducts[0].id } : null,
-            firstOffer: allOffers?.[0] ? { id: allOffers[0].id, type: typeof allOffers[0].id } : null
-        });
         
-        // Agregar ofertas seleccionadas (solo las que están explícitamente seleccionadas)
-        if (selectedOffers.length > 0 && allOffers) {
+        // Agregar ofertas seleccionadas
+        if (selectedOffers.length > 0 && allOffers && allOffers.length > 0 && !offersLoading) {
             selectedOffers.forEach(offerId => {
-                // Intentar comparación directa primero, luego parseInt si es necesario
-                let offer = allOffers.find(o => o.id.toString() === offerId);
-                if (!offer) {
-                    offer = allOffers.find(o => o.id === parseInt(offerId));
-                }
+                const offer = allOffers.find(o => 
+                    o.id.toString() === offerId.toString() || 
+                    o.id === parseInt(offerId)
+                );
+                
                 if (offer) {
                     items.push({
                         id: `offer-${offer.id}`,
@@ -92,14 +119,19 @@ export const Carousel: React.FC = () => {
             });
         }
         
-        // Agregar productos seleccionados (solo los que están explícitamente seleccionados y activos)
-        if (selectedProducts.length > 0 && allProducts) {
+        // Agregar productos seleccionados
+        if (selectedProducts.length > 0 && allProducts && allProducts.length > 0 && !productsLoading) {
             selectedProducts.forEach(productId => {
-                const product = allProducts.find((p: any) => p.id === productId);
-                if (product && product.state === true) { // state = activo/inactivo del producto
+                const product = allProducts.find((p: any) => 
+                    p.id.toString() === productId.toString() || 
+                    p.id === productId ||
+                    p.id === parseInt(productId)
+                );
+                
+                if (product && product.state === true) {
                     items.push({
                         id: `product-${product.id}`,
-                        image: product.rectangularImageUrl || product.squareImageUrl || product.smallSquareImageUrl || 'https://via.placeholder.com/800x600?text=No+Image',
+                        image: product.rectangularImageUrl || 'https://via.placeholder.com/800x600?text=No+Image',
                         title: product.title,
                         subtitle: product.category?.name || 'Producto destacado',
                         brand: 'PRODUCTO',
@@ -110,23 +142,25 @@ export const Carousel: React.FC = () => {
             });
         }
         
-        // Si no hay elementos seleccionados, mostrar solo imágenes por defecto
+        // Si no hay elementos, usar por defecto
         if (items.length === 0) {
-            console.log('No hay elementos seleccionados, mostrando imágenes por defecto');
             return defaultImages;
         }
         
-        console.log('Elementos del carrusel:', items);
         return items;
-    }, [selectedOffers, selectedProducts, allOffers, allProducts]);
+    }, [selectedOffers, selectedProducts, allOffers, allProducts, productsLoading, offersLoading]);
 
+    // Auto-slide solo si hay elementos
     useEffect(() => {
-        const timer = setInterval(() => {
-            setCurrentSlide((prev) => (prev + 1) % carouselItems.length);
-        }, 8000);
-        return () => clearInterval(timer);
+        if (carouselItems.length > 1) {
+            const timer = setInterval(() => {
+                setCurrentSlide((prev) => (prev + 1) % carouselItems.length);
+            }, 8000);
+            return () => clearInterval(timer);
+        }
     }, [carouselItems.length]);
 
+    // Touch handlers para móvil
     const handleTouchStart = (e: React.TouchEvent) => {
         setTouchStart(e.targetTouches[0].clientX);
     };
@@ -152,6 +186,7 @@ export const Carousel: React.FC = () => {
         setTouchEnd(0);
     };
 
+    // Navegación de slides
     const nextSlide = () => {
         setCurrentSlide((prev) => (prev + 1) % carouselItems.length);
     };
@@ -164,36 +199,51 @@ export const Carousel: React.FC = () => {
     const getNextIndex = () => (currentSlide + 1) % carouselItems.length;
 
     const handleSlideClick = (slide: any) => {
-        // Solo navegar si es un producto
         if (slide.type === 'product') {
             navigate(`/product/${slide.originalId}`);
         }
-        // Las ofertas y elementos por defecto no navegan
     };
+
+
+    // Mostrar loading si está cargando datos necesarios
+    if ((selectedProducts.length > 0 && productsLoading) || (selectedOffers.length > 0 && offersLoading)) {
+        return (
+            <div className="relative w-full aspect-square md:h-80 lg:h-96 mb-4 md:mb-8 flex items-center justify-center bg-gray-100 rounded-lg">
+                <div className="text-center">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto mb-2"></div>
+                    <p className="text-gray-500">Cargando datos del carrusel...</p>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="relative w-full aspect-square md:h-80 lg:h-96 mb-4 md:mb-8">
             <div className="absolute inset-0 flex justify-center items-center">
                 <div className="w-full h-full relative">
                     {/* Slides laterales - solo visibles en desktop */}
-                    <div
-                        className="hidden lg:block absolute left-0 w-[15%] h-[90%] top-[5%] opacity-30 overflow-hidden rounded-lg"
-                        style={{
-                            backgroundImage: `url(${carouselItems[getPrevIndex()].image})`,
-                            backgroundSize: 'cover',
-                            backgroundPosition: 'center',
-                            filter: 'blur(4px)',
-                        }}
-                    />
-                    <div
-                        className="hidden lg:block absolute right-0 w-[15%] h-[90%] top-[5%] opacity-30 overflow-hidden rounded-lg"
-                        style={{
-                            backgroundImage: `url(${carouselItems[getNextIndex()].image})`,
-                            backgroundSize: 'cover',
-                            backgroundPosition: 'center',
-                            filter: 'blur(4px)',
-                        }}
-                    />
+                    {carouselItems.length > 1 && (
+                        <>
+                            <div
+                                className="hidden lg:block absolute left-0 w-[15%] h-[90%] top-[5%] opacity-30 overflow-hidden rounded-lg"
+                                style={{
+                                    backgroundImage: `url(${carouselItems[getPrevIndex()].image})`,
+                                    backgroundSize: 'cover',
+                                    backgroundPosition: 'center',
+                                    filter: 'blur(4px)',
+                                }}
+                            />
+                            <div
+                                className="hidden lg:block absolute right-0 w-[15%] h-[90%] top-[5%] opacity-30 overflow-hidden rounded-lg"
+                                style={{
+                                    backgroundImage: `url(${carouselItems[getNextIndex()].image})`,
+                                    backgroundSize: 'cover',
+                                    backgroundPosition: 'center',
+                                    filter: 'blur(4px)',
+                                }}
+                            />
+                        </>
+                    )}
 
                     {/* Slide principal */}
                     <div className="absolute w-full md:w-[94%] md:left-[3%] lg:w-[70%] lg:left-[15%] h-full md:h-[95%] md:top-[2.5%]">
@@ -219,15 +269,21 @@ export const Carousel: React.FC = () => {
                                             className={`w-full h-full object-cover transform transition-transform duration-[8000ms] ease-linear ${
                                                 currentSlide === index ? 'scale-110' : 'scale-100'
                                             }`}
+                                            onError={(e) => {
+                                                const target = e.target as HTMLImageElement;
+                                                target.src = 'https://via.placeholder.com/800x600?text=No+Image';
+                                            }}
                                         />
+                                        
                                         {/* Overlay con gradiente */}
                                         <div className="absolute inset-0 bg-gradient-to-r from-black/60 to-transparent opacity-80 transition-opacity duration-500" />
                                         
-                                        {/* Contenido del slide */}
+                                        {/* Badge del tipo */}
                                         <div className="absolute top-4 right-4 bg-black/50 backdrop-blur-sm text-white px-3 py-1 rounded-lg text-sm font-bold">
                                             {slide.brand}
                                         </div>
                                         
+                                        {/* Contenido del slide */}
                                         <div className="absolute bottom-6 left-6 text-white">
                                             <h3 className="text-2xl md:text-3xl font-bold mb-2 drop-shadow-lg">
                                                 {slide.title}
@@ -249,40 +305,46 @@ export const Carousel: React.FC = () => {
                         </div>
                     </div>
 
-                    {/* Botones de navegación - ocultos en móvil */}
-                    <button 
-                        onClick={prevSlide}
-                        className="hidden md:block absolute left-[1.5%] lg:left-[15%] top-1/2 transform -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-colors z-10"
-                        aria-label="Slide anterior"
-                    >
-                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                        </svg>
-                    </button>
-                    
-                    <button 
-                        onClick={nextSlide}
-                        className="hidden md:block absolute right-[1.5%] lg:right-[15%] top-1/2 transform -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-colors z-10"
-                        aria-label="Siguiente slide"
-                    >
-                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                        </svg>
-                    </button>
+                    {/* Botones de navegación - solo si hay múltiples slides */}
+                    {carouselItems.length > 1 && (
+                        <>
+                            <button 
+                                onClick={prevSlide}
+                                className="hidden md:block absolute left-[1.5%] lg:left-[15%] top-1/2 transform -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-colors z-10"
+                                aria-label="Slide anterior"
+                            >
+                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                                </svg>
+                            </button>
+                            
+                            <button 
+                                onClick={nextSlide}
+                                className="hidden md:block absolute right-[1.5%] lg:right-[15%] top-1/2 transform -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-colors z-10"
+                                aria-label="Siguiente slide"
+                            >
+                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                                </svg>
+                            </button>
+                        </>
+                    )}
 
-                    {/* Indicadores */}
-                    <div className="absolute bottom-2 md:bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2 z-10">
-                        {carouselItems.map((_, index) => (
-                            <button
-                                key={index}
-                                onClick={() => setCurrentSlide(index)}
-                                className={`w-2 h-2 rounded-full transition-colors ${
-                                    currentSlide === index ? 'bg-white' : 'bg-white/50'
-                                }`}
-                                aria-label={`Ir al slide ${index + 1}`}
-                            />
-                        ))}
-                    </div>
+                    {/* Indicadores - solo si hay múltiples slides */}
+                    {carouselItems.length > 1 && (
+                        <div className="absolute bottom-2 md:bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2 z-10">
+                            {carouselItems.map((_, index) => (
+                                <button
+                                    key={index}
+                                    onClick={() => setCurrentSlide(index)}
+                                    className={`w-2 h-2 rounded-full transition-colors ${
+                                        currentSlide === index ? 'bg-white' : 'bg-white/50'
+                                    }`}
+                                    aria-label={`Ir al slide ${index + 1}`}
+                                />
+                            ))}
+                        </div>
+                    )}
                 </div>
             </div>
         </div>

@@ -286,7 +286,7 @@ export default function ProductOffersView() {
                         <div className="flex-shrink-0 h-12 w-12">
                           <img
                             className="h-12 w-12 rounded-lg object-cover"
-                            src={offer.imageUrl}
+                            src={offer.squareImageUrl}
                             alt={offer.title}
                             onError={(e) => {
                               const target = e.target as HTMLImageElement;

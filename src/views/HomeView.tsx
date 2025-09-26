@@ -12,7 +12,7 @@ import { getProductsWithOffers } from '../services/productOffersService';
 
 import HomeHeader from '../components/home/HomeHeader';
 import { useQuery } from '@tanstack/react-query';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
 
@@ -20,6 +20,7 @@ import { useEffect, useState } from 'react';
 
 export const HomeView = () => {
     const location = useLocation();
+    const navigate = useNavigate();
     const [showErrorMessage, setShowErrorMessage] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
 
@@ -62,14 +63,6 @@ export const HomeView = () => {
         queryFn: getProducts
     });
 
-    // Debug: Log productos cuando cambien
-    useEffect(() => {
-        console.log('🏠 Productos en HomeView:', products);
-        console.log('🏠 Loading productos:', productsLoading);
-        if (productsError) {
-            console.error('❌ Error productos:', productsError);
-        }
-    }, [products, productsLoading, productsError]);
 
     const { data: categories = [], isLoading: categoriesLoading, error: categoriesError } = useQuery({
         queryKey: ['categories'],
@@ -78,16 +71,6 @@ export const HomeView = () => {
         staleTime: 5 * 60 * 1000,
     });
 
-    // Log de errores para debugging (solo en desarrollo)
-    if (offersError) console.error('Error en ofertas:', offersError);
-    if (gameCardsError) console.error('Error en game cards:', gameCardsError);
-    if (productsError) console.error('Error en productos:', productsError);
-    if (categoriesError) console.error('Error en categorías:', categoriesError);
-
-    console.log('Productos:', products);
-    console.log('Ofertas:', offers);
-    console.log('Ofertas loading:', offersLoading);
-    console.log('Ofertas error:', offersError);
 
     return (
         <div style={{fontFamily: 'Manrope, Arial, system-ui, sans-serif'}} className="min-h-screen bg-gradient-to-b from-gray-700 via-gray-800 to-gray-900">
@@ -141,7 +124,10 @@ export const HomeView = () => {
                                 ¡No te pierdas nuestras ofertas por tiempo limitado! ¡Descubre las ofertas actuales hoy!
                             </p>
                         </div>
-                        <button className="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                        <button 
+                            onClick={() => navigate('/offers')}
+                            className="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+                        >
                             Ver más
                         </button>
                     </div>

@@ -37,7 +37,7 @@ export const CardGridSection: React.FC<CardGridSectionProps> = ({ title, product
                 <CardItem
                     key={product.id}
                     id={product.id}
-                    image={product.rectangularImageUrl || product.squareImageUrl || product.smallSquareImageUrl || 'https://via.placeholder.com/200x200?text=No+Image'}
+                    image={product.squareImageUrl || product.rectangularImageUrl || product.smallSquareImageUrl || 'https://via.placeholder.com/200x200?text=No+Image'}
                     title={product.title}
                     alt={product.title}
                 />

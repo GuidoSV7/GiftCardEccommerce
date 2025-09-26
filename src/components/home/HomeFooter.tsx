@@ -28,13 +28,13 @@ export const HomeFooter = () => {
                             className="w-full py-4 flex justify-between items-center text-left"
                             onClick={() => toggleSection('about')}
                         >
-                            <span className="text-white font-semibold">Acerca de GiftCard</span>
+                            <span className="text-white font-semibold">Acerca de VEMPERGAMES</span>
                             <span className="text-xl">{openSection === 'about' ? '-' : '+'}</span>
                         </button>
                         {openSection === 'about' && (
                             <ul className="space-y-2 py-4">
                                 <li><a href="#" className="block hover:text-white transition-colors">Acerca de Nosotros</a></li>
-                                <li><a href="#" className="block hover:text-white transition-colors">Noticias GiftCard</a></li>
+                                <li><a href="#" className="block hover:text-white transition-colors">Noticias VEMPERGAMES</a></li>
                                 <li><a href="#" className="block hover:text-white transition-colors">Apoyo</a></li>
                                 <li><a href="#" className="block hover:text-white transition-colors">Contáctanos</a></li>
                             </ul>
@@ -81,10 +81,10 @@ export const HomeFooter = () => {
                 <div className="hidden md:grid md:grid-cols-4 gap-8 mb-12">
                     {/* Acerca de GiftCard */}
                     <div>
-                        <h3 className="text-white font-semibold mb-4">Acerca de GiftCard</h3>
+                        <h3 className="text-white font-semibold mb-4">Acerca de VEMPERGAMES</h3>
                         <ul className="space-y-2">
                             <li><a href="#" className="hover:text-white transition-colors">Acerca de Nosotros</a></li>
-                            <li><a href="#" className="hover:text-white transition-colors">Noticias GiftCard</a></li>
+                            <li><a href="#" className="hover:text-white transition-colors">Noticias VEMPERGAMES</a></li>
                             <li><a href="#" className="hover:text-white transition-colors">Apoyo</a></li>
                             <li><a href="#" className="hover:text-white transition-colors">Contáctanos</a></li>
                         </ul>
@@ -145,10 +145,10 @@ export const HomeFooter = () => {
                 {/* Copyright */}
                 <div className="pt-8 border-t border-gray-800 text-center space-y-4">
                     <div className="text-2xl font-bold text-white">
-                        GiftCard
+                        VEMPERGAMES
                     </div>
                     <div className="text-sm text-gray-400">
-                        © {new Date().getFullYear()} GiftCard. Todos los derechos reservados.
+                        © {new Date().getFullYear()} VEMPERGAMES. Todos los derechos reservados.
                     </div>
                 </div>
             </div>

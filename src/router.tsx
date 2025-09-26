@@ -42,6 +42,11 @@ import ChatDetailView from "./views/support/ChatDetailView";
 import ActiveChatsView from "./views/support/ActiveChatsView";
 import PendingChatsView from "./views/support/PendingChatsView";
 import ClosedChatsView from "./views/support/ClosedChatsView";
+import SmmServicesView from "./views/smm/SmmServicesView";
+import SmmOrdersView from "./views/smm/SmmOrdersView";
+import SmmTicketsView from "./views/smm/SmmTicketsView";
+import PaymentMethodsView from "./views/admin/payment/PaymentMethodsView";
+import AllOffersView from "./views/AllOffersView";
 import NotFoundView from "./views/NotFoundView";
 
 export default function router() {
@@ -51,11 +56,12 @@ export default function router() {
         <ScrollToTop />
         <Routes>
         <Route path="/" element={<HomeView />} index />
+        <Route path="/product/:id" element={<ProductDetailView />} />
         
         {/* Rutas que requieren autenticación */}
         <Route element={<AuthRequiredRoute />}>
-          <Route path="/product/:id" element={<ProductDetailView />} />
           <Route path="/category/:categoryId" element={<CategoryProductsView />} />
+          <Route path="/offers" element={<AllOffersView />} />
         </Route>
         
         <Route path="/register" element={<RegisterView />} />
@@ -75,20 +81,25 @@ export default function router() {
         {/* Admin routes - Solo para usuarios con rol 'admin' o 'superadmin' */}
         <Route element={<AdminProtectedRoute><AppLayout /></AdminProtectedRoute>}>
           <Route path="/dashboard" element={<DashboardView />} index />
-          <Route path="/metrics" element={<MetricsView />} />
-          <Route path="/products" element={<ProductsView />} />
-          <Route path="/products/create" element={<CreateProductView />} />
-          <Route path="/products/edit/:id" element={<EditProductView />} />
-          <Route path="/products/pricing/:id" element={<ProductPricingView />} />
-          <Route path="/categories" element={<CategoriesView />} />
-          <Route path="/categories/create" element={<CreateCategoryView />} />
-          <Route path="/categories/metrics" element={<CategoriesMetricsView />} />
-          <Route path="/members" element={<MembersView />} />
-          <Route path="/members/create" element={<CreateMemberView />} />
-          <Route path="/offers" element={<ProductOffersView />} />
-          <Route path="/offers/legacy" element={<OffersView />} />
-          <Route path="/offers/create" element={<CreateOfferView />} />
-          <Route path="/offers/active" element={<ActiveOffersView />} />
+          <Route path="/dashboard/metrics" element={<MetricsView />} />
+          <Route path="/dashboard/products" element={<ProductsView />} />
+          <Route path="/dashboard/products/create" element={<CreateProductView />} />
+          <Route path="/dashboard/products/edit/:id" element={<EditProductView />} />
+          <Route path="/dashboard/products/pricing/:id" element={<ProductPricingView />} />
+          <Route path="/dashboard/categories" element={<CategoriesView />} />
+          <Route path="/dashboard/categories/create" element={<CreateCategoryView />} />
+          <Route path="/dashboard/categories/metrics" element={<CategoriesMetricsView />} />
+          <Route path="/dashboard/members" element={<MembersView />} />
+          <Route path="/dashboard/members/create" element={<CreateMemberView />} />
+          <Route path="/dashboard/offers" element={<ProductOffersView />} />
+          <Route path="/dashboard/offers/legacy" element={<OffersView />} />
+          <Route path="/dashboard/offers/create" element={<CreateOfferView />} />
+          <Route path="/dashboard/offers/active" element={<ActiveOffersView />} />
+          <Route path="/dashboard/smm/services" element={<SmmServicesView />} />
+          <Route path="/dashboard/smm/orders" element={<SmmOrdersView />} />
+          <Route path="/dashboard/smm/tickets" element={<SmmTicketsView />} />
+          <Route path="/dashboard/payment-methods" element={<PaymentMethodsView />} />
+          <Route path="/dashboard/payment-methods/create" element={<PaymentMethodsView />} />
         </Route>
 
         {/* Support routes - Solo para usuarios con rol 'support' */}

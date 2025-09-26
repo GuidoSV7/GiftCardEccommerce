@@ -30,7 +30,7 @@ export default function EditProductView() {
       toast.success('Producto actualizado exitosamente');
       queryClient.invalidateQueries({ queryKey: ['products'] });
       queryClient.invalidateQueries({ queryKey: ['product', id] });
-      navigate('/products');
+      navigate('/dashboard/products');
     },
     onError: (error: any) => {
       const errorMessage = error.response?.data?.message || 'Error al actualizar el producto';
@@ -87,7 +87,7 @@ export default function EditProductView() {
           <h2 className="text-2xl font-bold text-gray-800 mb-2">Producto no encontrado</h2>
           <p className="text-gray-600 mb-4">El producto que buscas no existe o ha sido eliminado</p>
           <button
-            onClick={() => navigate('/products')}
+            onClick={() => navigate('/dashboard/products')}
             className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors"
           >
             Volver a Productos
@@ -131,7 +131,7 @@ export default function EditProductView() {
           <div className="flex gap-4 pt-6 border-t border-gray-200">
             <button
               type="button"
-              onClick={() => navigate('/products')}
+              onClick={() => navigate('/dashboard/products')}
               className="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium py-3 px-6 rounded-lg transition-colors"
             >
               Cancelar
